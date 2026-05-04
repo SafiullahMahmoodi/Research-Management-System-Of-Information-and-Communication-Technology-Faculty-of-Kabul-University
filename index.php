@@ -1,6 +1,7 @@
 <?php
 // index.php
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Management System</title>
 
+    <!-- Bootstrap Local CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
     <style>
+
         *{
             margin:0;
             padding:0;
@@ -17,86 +22,111 @@
         }
 
         body{
-            height:100vh;
+            min-height:100vh;
             display:flex;
             flex-direction:column;
             background:#f4f6f9;
         }
 
         /* Header */
-        header{
+
+        .main-header{
+
             background:#0f9d58;
             color:white;
+            padding:18px 10px;
             text-align:center;
-            padding:20px;
             font-size:28px;
             font-weight:bold;
-            box-shadow:0 2px 8px rgba(0,0,0,0.2);
+            box-shadow:0 2px 10px rgba(0,0,0,0.15);
         }
 
-        /* Main Section */
-        .hero{
+        /* Hero Section */
+
+        .hero-section{
+
             flex:1;
             position:relative;
-            background:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop') no-repeat center center/cover;
+
+            background:
+            linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+            url('images/research-bg.jpg');
+
+            background-size:cover;
+            background-position:center;
+
             display:flex;
             justify-content:center;
             align-items:center;
+            padding:20px;
         }
 
-        /* Dark Overlay */
-        .overlay{
-            position:absolute;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,0.45);
+        /* Content */
+
+        .hero-content{
+            text-align:center;
         }
 
-        /* Buttons Container */
-        .buttons{
-            position:relative;
-            z-index:2;
-            display:flex;
-            gap:20px;
-        }
+        .hero-title{
 
-        .btn{
-            text-decoration:none;
-            padding:15px 35px;
-            font-size:20px;
-            border-radius:10px;
+            color:white;
+            font-size:42px;
             font-weight:bold;
-            transition:0.3s;
-            border:none;
-            cursor:pointer;
-            box-shadow:0 4px 10px rgba(0,0,0,0.3);
+            margin-bottom:20px;
         }
 
-        /* Color style inspired from your system */
-        .signin{
+        .hero-text{
+
+            color:#f1f5f9;
+            font-size:18px;
+            margin-bottom:35px;
+        }
+
+        /* Buttons */
+
+        .btn-custom{
+
+            width:180px;
+            padding:12px;
+            font-size:18px;
+            font-weight:600;
+            border-radius:10px;
+            transition:0.3s;
+            margin:10px;
+        }
+
+        .btn-signin{
+
             background:#1d4ed8;
             color:white;
+            border:none;
         }
 
-        .signin:hover{
+        .btn-signin:hover{
+
             background:#163fb3;
             transform:translateY(-3px);
-        }
-
-        .signup{
-            background:#0f9d58;
             color:white;
         }
 
-        .signup:hover{
+        .btn-signup{
+
+            background:#0f9d58;
+            color:white;
+            border:none;
+        }
+
+        .btn-signup:hover{
+
             background:#0c7c45;
             transform:translateY(-3px);
+            color:white;
         }
 
         /* Footer */
-        footer{
+
+        .main-footer{
+
             background:#1f2937;
             color:white;
             text-align:center;
@@ -104,44 +134,86 @@
             font-size:15px;
         }
 
+        /* Responsive */
+
         @media(max-width:768px){
-            header{
+
+            .main-header{
                 font-size:20px;
                 padding:15px;
             }
 
-            .buttons{
-                flex-direction:column;
+            .hero-title{
+                font-size:28px;
             }
 
-            .btn{
-                width:220px;
-                text-align:center;
+            .hero-text{
+                font-size:15px;
+            }
+
+            .btn-custom{
+
+                width:100%;
+                max-width:250px;
+                font-size:16px;
             }
         }
+
     </style>
+
 </head>
 <body>
 
     <!-- Header -->
-    <header>
-        Research Management System of Information & Communication Technology
+
+    <header class="main-header">
+
+        Research Management System for Information & Communication Technology
+
     </header>
 
-    <!-- Main Body -->
-    <section class="hero">
-        <div class="overlay"></div>
+    <!-- Hero Section -->
 
-        <div class="buttons">
-            <a href="login.php" class="btn signin">Sign in</a>
-            <a href="signup.php" class="btn signup">Sign up</a>
+    <section class="hero-section">
+
+        <div class="hero-content">
+
+            <h1 class="hero-title">
+                Welcome to Research Management System
+            </h1>
+
+            <p class="hero-text">
+                Manage Researches, Users and Academic Information Easily
+            </p>
+
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+
+                <a href="login.php" class="btn btn-custom btn-signin">
+                    Sign In
+                </a>
+
+                <a href="signup.php" class="btn btn-custom btn-signup">
+                    Sign Up
+                </a>
+
+            </div>
+
         </div>
+
     </section>
 
     <!-- Footer -->
-    <footer>
-        &copy; <?php echo date("Y"); ?> Information & Communication Technology Faculty of Kabul University
+
+    <footer class="main-footer">
+
+        &copy; <?php echo date("Y"); ?>
+        Information & Communication Technology Faculty of Kabul University
+
     </footer>
+
+    <!-- Bootstrap Local JS -->
+
+    <script src="css/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -13,6 +13,7 @@ if(isset($_POST['check_email'])){
     $email = trim($_POST['email']);
 
     // Check Email
+
     $sql = "SELECT * FROM users WHERE email='$email'";
 
     $result = $conn->query($sql);
@@ -20,9 +21,11 @@ if(isset($_POST['check_email'])){
     if($result->num_rows > 0){
 
         // Save Email In Session
+
         $_SESSION['reset_email'] = $email;
 
         // Redirect To Update Password Page
+
         header("Location: updatepassword.php");
         exit();
 
@@ -36,150 +39,289 @@ if(isset($_POST['check_email'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
-<link rel="stylesheet" href="Css/style.css">
-    <!-- <style>
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Segoe UI, sans-serif;
-        }
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Local Bootstrap CSS -->
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <title>Forgot Password</title>
+
+    <style>
 
         body{
+
             background:#ffffff;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* Header */
+
+        .main-header{
+
+            background:#0f9d58;
+            color:white;
+            padding:10px 18px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .header-title{
+
+            font-size:16px;
+            font-weight:600;
+        }
+
+        .home-btn{
+
+            background:white;
+            color:#0f9d58;
+            border-radius:6px;
+            padding:5px 14px;
+            font-size:13px;
+            font-weight:600;
+            border:none;
+            text-decoration:none;
+            transition:0.3s;
+        }
+
+        .home-btn:hover{
+
+            background:#e5e7eb;
+            color:#0c7c45;
         }
 
         /* Main Container */
 
         .main-container{
 
-            height:calc(100vh - 65px);
+            flex:1;
             display:flex;
             justify-content:center;
             align-items:center;
+            padding:20px;
         }
 
-        /* Forgot Password Container */
+        /* Card */
 
-        .login-container{
+        .forgot-card{
 
-            width:320px;
+            width:100%;
+            max-width:420px;
             background:#f1f3f5;
-            padding:22px;
             border:1px solid #d1d5db;
-            border-radius:12px;
-            box-shadow:0 4px 10px rgba(0,0,0,0.08);
-
+            border-radius:15px;
+            padding:25px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);
         }
 
         /* Title */
 
-        .login-container h2{
+        .forgot-title{
 
             text-align:center;
-            margin-bottom:18px;
+            font-weight:bold;
+            font-size:24px;
+            margin-bottom:22px;
             color:#1f2937;
-            font-size:20px;
         }
 
-        /* Input Groups */
+        /* Labels */
 
-        .input-group{
-            margin-bottom:14px;
-        }
+        .form-label{
 
-        .input-group label{
-
-            display:block;
-            margin-bottom:4px;
             font-weight:600;
+            font-size:14px;
             color:#374151;
-            font-size:13px;
+            margin-bottom:6px;
         }
 
-        .input-group input{
+        /* Inputs */
+
+        .custom-input{
 
             width:100%;
-            padding:9px;
+            height:42px;
+            border-radius:8px;
             border:1px solid #cbd5e1;
-            border-radius:7px;
-            outline:none;
+            padding:8px 12px;
             font-size:13px;
-            background:white;
+            background:#fff;
         }
 
-        .input-group input:focus{
+        .custom-input:focus{
 
-            border-color:#2563eb;
+            border-color:#0f9d58;
+            box-shadow:0 0 5px rgba(15,157,88,0.3);
+            outline:none;
         }
 
         /* Button */
 
-        .login-btn{
+        .continue-btn{
 
-            width:100%;
-            padding:10px;
             background:#0f9d58;
-            color:white;
             border:none;
-            border-radius:7px;
-            font-size:14px;
-            cursor:pointer;
-            transition:0.3s;
-            margin-top:6px;
+            border-radius:8px;
+            padding:9px;
+            font-size:16px;
+            font-weight:600;
+            margin-top:5px;
         }
 
-        .login-btn:hover{
-            background:#0b7d46;
+        .continue-btn:hover{
+
+            background:#0c7c45;
         }
 
-        /* Error Message */
+        /* Footer */
 
-        .error{
+        .main-footer{
 
-            background:#fee2e2;
-            color:#b91c1c;
-            padding:8px;
-            border-radius:6px;
-            margin-bottom:12px;
+            background:#1f2937;
+            color:white;
             text-align:center;
+            padding:10px;
             font-size:12px;
         }
 
+        /* Responsive */
+
+        @media(max-width:768px){
+
+            .header-title{
+
+                font-size:12px;
+                width:70%;
+                line-height:18px;
+            }
+
+            .home-btn{
+
+                font-size:11px;
+                padding:4px 10px;
+            }
+
+            .forgot-card{
+
+                padding:20px;
+            }
+
+            .forgot-title{
+
+                font-size:20px;
+            }
+
+            .custom-input{
+
+                height:40px;
+                font-size:12px;
+            }
+
+            .continue-btn{
+
+                font-size:14px;
+            }
+        }
+
     </style>
-      -->
+
 </head>
+
 <body>
 
     <!-- Header -->
-    <?php include('loginheader.php'); ?>
 
-    <!-- Main Content -->
+    <header class="main-header">
+
+        <div class="container-fluid">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <!-- Left Text -->
+
+                <div class="header-title">
+
+                    Research Management of Information and Communication Technology Faculty
+
+                </div>
+
+                <!-- Right Button -->
+
+                <a href="index.php" class="btn home-btn">
+
+                    Home
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Main Container -->
+
     <div class="main-container">
 
-        <div class="login-container">
+        <!-- Forgot Password Card -->
 
-            <h2>Forgot Password</h2>
+        <div class="forgot-card">
+
+            <!-- Title -->
+
+            <h2 class="forgot-title">
+
+                Forgot Password
+
+            </h2>
+
+            <!-- Error Message -->
 
             <?php
                 if($error != ""){
-                    echo "<div class='error'>$error</div>";
+                    echo "<div class='alert alert-danger text-center'>$error</div>";
                 }
             ?>
 
+            <!-- Form -->
+
             <form method="POST">
 
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" name="email" required>
+                <!-- Email -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Email Address
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control custom-input"
+                        placeholder="Enter your email"
+                        required
+                    >
+
                 </div>
 
-                <button type="submit" name="check_email" class="login-btn">
+                <!-- Button -->
+
+                <button
+                    type="submit"
+                    name="check_email"
+                    class="btn btn-success w-100 continue-btn"
+                >
+
                     Continue
+
                 </button>
 
             </form>
@@ -187,6 +329,19 @@ if(isset($_POST['check_email'])){
         </div>
 
     </div>
+
+    <!-- Footer -->
+
+    <footer class="main-footer">
+
+        &copy; <?php echo date("Y"); ?>
+        Information & Communication Technology Faculty of Kabul University
+
+    </footer>
+
+    <!-- Bootstrap JS -->
+
+    <script src="css/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
