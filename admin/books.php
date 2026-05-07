@@ -13,82 +13,40 @@ if(!file_exists("../PDF_File")){
 }
 
 // ===========================
-// INSERT ARTICLE
+// INSERT BOOK
 // ===========================
 
-if(isset($_POST['save_article'])){
+if(isset($_POST['save_book'])){
 
-    $id          = mysqli_real_escape_string($conn,$_POST['id']);
-    $title       = mysqli_real_escape_string($conn,$_POST['title']);
-    $description = mysqli_real_escape_string($conn,$_POST['description']);
-    $category    = mysqli_real_escape_string($conn,$_POST['category']);
-    $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
-    $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
-    $department  = mysqli_real_escape_string($conn,$_POST['department']);
-    $date        = mysqli_real_escape_string($conn,$_POST['date']);
+    $id            = mysqli_real_escape_string($conn,$_POST['id']);
+    $title         = mysqli_real_escape_string($conn,$_POST['title']);
+    $description   = mysqli_real_escape_string($conn,$_POST['description']);
+    $category      = mysqli_real_escape_string($conn,$_POST['category']);
+    $author        = mysqli_real_escape_string($conn,$_POST['author']);
+    $department_id = mysqli_real_escape_string($conn,$_POST['department']);
+    $pages         = mysqli_real_escape_string($conn,$_POST['pages']);
+    $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
 
     // ===========================
-    // CHECK TEACHER OR STUDENT
+    // CHECK AUTHOR
     // ===========================
 
-    if(empty($teacher_id) && empty($student_id)){
+    $check_teacher = $conn->query("
+    SELECT ID
+    FROM teacher
+    WHERE ID='$author'
+    ");
 
-        die("Please select Teacher or Student.");
+    if($check_teacher->num_rows == 0){
+
+        die("Selected Author does not exist.");
     }
 
     // ===========================
-    // CHECK TEACHER
+    // PDF FILE
     // ===========================
-
-    if(!empty($teacher_id)){
-
-        $check_teacher = $conn->query("
-        SELECT ID
-        FROM teacher
-        WHERE ID='$teacher_id'
-        ");
-
-        if($check_teacher->num_rows == 0){
-
-            die("Selected Teacher does not exist.");
-        }
-    }
-
-    // ===========================
-    // CHECK STUDENT
-    // ===========================
-
-    if(!empty($student_id)){
-
-        $check_student = $conn->query("
-        SELECT ID
-        FROM students
-        WHERE ID='$student_id'
-        ");
-
-        if($check_student->num_rows == 0){
-
-            die("Selected Student does not exist.");
-        }
-    }
-
-    // ===========================
-    // NULL VALUES
-    // ===========================
-
-    $teacher_value = !empty($teacher_id)
-    ? "'$teacher_id'"
-    : "NULL";
-
-    $student_value = !empty($student_id)
-    ? "'$student_id'"
-    : "NULL";
 
     $pdf_file = "";
-
-    // ===========================
-    // UPLOAD PDF
-    // ===========================
 
     if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
 
@@ -104,8 +62,6 @@ if(isset($_POST['save_article'])){
 
             die("Only PDF files are allowed.");
         }
-
-        // MAX 200MB
 
         if($file_size > 209715200){
 
@@ -125,17 +81,17 @@ if(isset($_POST['save_article'])){
     // ===========================
 
     $conn->query("
-    INSERT INTO articles
+    INSERT INTO books
     (
         ID,
         Title,
         Description,
         Category,
-        Teacher_ID,
-        Student_ID,
+        Author,
         Department,
+        pages,
         PDF_File,
-        Date
+        Publish_Date
     )
 
     VALUES
@@ -144,20 +100,20 @@ if(isset($_POST['save_article'])){
         '$title',
         '$description',
         '$category',
-        $teacher_value,
-        $student_value,
-        '$department',
+        '$author',
+        '$department_id',
+        '$pages',
         '$pdf_file',
-        '$date'
+        '$publish_date'
     )
     ");
 
-    header("Location: articles.php");
+    header("Location: books.php");
     exit();
 }
 
 // ===========================
-// DELETE ARTICLE
+// DELETE BOOK
 // ===========================
 
 if(isset($_GET['delete'])){
@@ -166,7 +122,7 @@ if(isset($_GET['delete'])){
 
     $pdf = $conn->query("
     SELECT PDF_File
-    FROM articles
+    FROM books
     WHERE ID='$id'
     ");
 
@@ -185,26 +141,26 @@ if(isset($_GET['delete'])){
     }
 
     $conn->query("
-    DELETE FROM articles
+    DELETE FROM books
     WHERE ID='$id'
     ");
 
-    header("Location: articles.php");
+    header("Location: books.php");
     exit();
 }
 
 // ===========================
-// EDIT ARTICLE
+// EDIT BOOK
 // ===========================
 
-$edit_id          = "";
-$edit_title       = "";
-$edit_description = "";
-$edit_category    = "";
-$edit_teacher     = "";
-$edit_student     = "";
-$edit_department  = "";
-$edit_date        = "";
+$edit_id            = "";
+$edit_title         = "";
+$edit_description   = "";
+$edit_category      = "";
+$edit_author        = "";
+$edit_department_id = "";
+$edit_pages         = "";
+$edit_publish_date  = "";
 
 if(isset($_GET['edit'])){
 
@@ -212,7 +168,7 @@ if(isset($_GET['edit'])){
 
     $res = $conn->query("
     SELECT *
-    FROM articles
+    FROM books
     WHERE ID='$id'
     ");
 
@@ -220,55 +176,42 @@ if(isset($_GET['edit'])){
 
         $row = $res->fetch_assoc();
 
-        $edit_id          = $row['ID'];
-        $edit_title       = $row['Title'];
-        $edit_description = $row['Description'];
-        $edit_category    = $row['Category'];
-        $edit_teacher     = $row['Teacher_ID'];
-        $edit_student     = $row['Student_ID'];
-        $edit_department  = $row['Department'];
-        $edit_date        = $row['Date'];
+        $edit_id            = $row['ID'];
+        $edit_title         = $row['Title'];
+        $edit_description   = $row['Description'];
+        $edit_category      = $row['Category'];
+        $edit_author        = $row['Author'];
+        $edit_department_id = $row['department'];
+        $edit_pages         = $row['pages'];
+        $edit_publish_date  = $row['Publish_Date'];
     }
 }
 
 // ===========================
-// UPDATE ARTICLE
+// UPDATE BOOK
 // ===========================
 
-if(isset($_POST['update_article'])){
+if(isset($_POST['update_book'])){
 
-    $id          = mysqli_real_escape_string($conn,$_POST['id']);
-    $title       = mysqli_real_escape_string($conn,$_POST['title']);
-    $description = mysqli_real_escape_string($conn,$_POST['description']);
-    $category    = mysqli_real_escape_string($conn,$_POST['category']);
-    $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
-    $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
-    $department  = mysqli_real_escape_string($conn,$_POST['department']);
-    $date        = mysqli_real_escape_string($conn,$_POST['date']);
-
-    if(empty($teacher_id) && empty($student_id)){
-
-        die("Please select Teacher or Student.");
-    }
-
-    $teacher_value = !empty($teacher_id)
-    ? "'$teacher_id'"
-    : "NULL";
-
-    $student_value = !empty($student_id)
-    ? "'$student_id'"
-    : "NULL";
+    $id            = mysqli_real_escape_string($conn,$_POST['id']);
+    $title         = mysqli_real_escape_string($conn,$_POST['title']);
+    $description   = mysqli_real_escape_string($conn,$_POST['description']);
+    $category      = mysqli_real_escape_string($conn,$_POST['category']);
+    $author        = mysqli_real_escape_string($conn,$_POST['author']);
+    $department_id = mysqli_real_escape_string($conn,$_POST['department']);
+    $pages         = mysqli_real_escape_string($conn,$_POST['pages']);
+    $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
 
     $query = "
-    UPDATE articles SET
+    UPDATE books SET
 
     Title='$title',
     Description='$description',
     Category='$category',
-    Teacher_ID=$teacher_value,
-    Student_ID=$student_value,
-    Department='$department',
-    Date='$date'
+    Author='$author',
+    department='$department_id',
+    pages='$pages',
+    Publish_Date='$publish_date'
     ";
 
     // ===========================
@@ -295,11 +238,11 @@ if(isset($_POST['update_article'])){
             die("File size must be less than 200MB.");
         }
 
-        // DELETE OLD PDF
+        // DELETE OLD FILE
 
         $old = $conn->query("
         SELECT PDF_File
-        FROM articles
+        FROM books
         WHERE ID='$id'
         ");
 
@@ -331,12 +274,12 @@ if(isset($_POST['update_article'])){
 
     $conn->query($query);
 
-    header("Location: articles.php");
+    header("Location: books.php");
     exit();
 }
 
 // ===========================
-// SEARCH ARTICLES
+// SEARCH BOOKS
 // ===========================
 
 $search = "";
@@ -348,60 +291,52 @@ if(isset($_GET['search'])){
         $_GET['search']
     );
 
-    $article_result = $conn->query("
+    $book_result = $conn->query("
 
-    SELECT articles.*,
-    teacher.Name AS teacher_name,
-    students.Name AS student_name,
+    SELECT books.*,
+    teacher.Name AS author_name,
     department.Name AS department_name
 
-    FROM articles
+    FROM books
 
     LEFT JOIN teacher
-    ON articles.Teacher_ID = teacher.ID
-
-    LEFT JOIN students
-    ON articles.Student_ID = students.ID
+    ON books.Author = teacher.ID
 
     LEFT JOIN department
-    ON articles.Department = department.ID
+    ON books.Department = department.ID
 
     WHERE
 
-    articles.ID LIKE '%$search%'
-    OR articles.Title LIKE '%$search%'
-    OR articles.Category LIKE '%$search%'
+    books.ID LIKE '%$search%'
+    OR books.Title LIKE '%$search%'
+    OR books.Category LIKE '%$search%'
     OR teacher.Name LIKE '%$search%'
-    OR students.Name LIKE '%$search%'
     OR department.Name LIKE '%$search%'
 
-    ORDER BY articles.ID DESC
+    ORDER BY books.ID DESC
     ");
 
 }else{
 
-    $article_result = $conn->query("
+    $book_result = $conn->query("
 
-    SELECT articles.*,
-    teacher.Name AS teacher_name,
-    students.Name AS student_name,
+    SELECT books.*,
+    teacher.Name AS author_name,
     department.Name AS department_name
 
-    FROM articles
+    FROM books
 
     LEFT JOIN teacher
-    ON articles.Teacher_ID = teacher.ID
-
-    LEFT JOIN students
-    ON articles.Student_ID = students.ID
+    ON books.Author = teacher.ID
 
     LEFT JOIN department
-    ON articles.Department = department.ID
+    ON books.Department = department.ID
 
-    ORDER BY articles.ID DESC
+    ORDER BY books.ID DESC
     ");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -412,7 +347,7 @@ if(isset($_GET['search'])){
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Articles</title>
+<title>Books</title>
 
 <link rel="stylesheet"
 href="../css/bootstrap.min.css">
@@ -432,8 +367,6 @@ body{
     font-family:Segoe UI;
     overflow:hidden;
 }
-
-/* HEADER */
 
 .main-header{
 
@@ -514,8 +447,6 @@ body{
     font-weight:700;
 }
 
-/* MAIN */
-
 .main-wrapper{
 
     display:flex;
@@ -526,8 +457,6 @@ body{
 
     height:calc(100vh - 65px);
 }
-
-/* TABLE */
 
 .table-section{
 
@@ -575,8 +504,6 @@ body{
     background:white;
 
     font-size:13px;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
 .search-btn{
@@ -594,8 +521,6 @@ body{
     font-size:13px;
 
     font-weight:700;
-
-    cursor:pointer;
 }
 
 .table-card{
@@ -611,11 +536,6 @@ body{
     box-shadow:0 5px 18px rgba(0,0,0,0.08);
 
     flex:1;
-}
-
-.table{
-
-    border:1px solid #d1d5db;
 }
 
 .table thead{
@@ -636,8 +556,6 @@ body{
 
     padding:10px;
 }
-
-/* BUTTONS */
 
 .action-icons{
 
@@ -697,8 +615,6 @@ body{
     font-weight:700;
 }
 
-/* FORM */
-
 .form-section{
 
     width:22%;
@@ -742,8 +658,6 @@ body{
     border:1px solid #d1d5db;
 
     font-size:12px;
-
-    background:#ffffff;
 
     padding:8px;
 }
@@ -811,9 +725,9 @@ textarea{
 
 <a href="students.php">Students</a>
 
-<a href="articles.php" class="active">Articles</a>
+<a href="articles.php">Articles</a>
 
-<a href="books.php">Books</a>
+<a href="books.php" class="active">Books</a>
 
 <a href="translatedbooks.php">Translated Books</a>
 
@@ -843,8 +757,6 @@ Logout
 
 <div class="main-wrapper">
 
-<!-- TABLE -->
-
 <div class="table-section">
 
 <div class="search-wrapper">
@@ -858,7 +770,7 @@ name="search"
 
 class="search-input"
 
-placeholder="Search articles..."
+placeholder="Search books..."
 
 value="<?php echo $search; ?>">
 
@@ -884,10 +796,10 @@ Search
 <th>ID</th>
 <th>Title</th>
 <th>Category</th>
-<th>Teacher</th>
-<th>Student</th>
+<th>Author</th>
 <th>Department</th>
-<th>Date</th>
+<th>Pages</th>
+<th>Publish Date</th>
 <th>PDF File</th>
 <th width="160">Action</th>
 
@@ -897,7 +809,7 @@ Search
 
 <tbody>
 
-<?php while($row = $article_result->fetch_assoc()){ ?>
+<?php while($row = $book_result->fetch_assoc()){ ?>
 
 <tr>
 
@@ -907,13 +819,13 @@ Search
 
 <td><?php echo $row['Category']; ?></td>
 
-<td><?php echo $row['teacher_name']; ?></td>
-
-<td><?php echo $row['student_name']; ?></td>
+<td><?php echo $row['author_name']; ?></td>
 
 <td><?php echo $row['department_name']; ?></td>
 
-<td><?php echo $row['Date']; ?></td>
+<td><?php echo $row['page']; ?></td>
+
+<td><?php echo $row['Publish_Date']; ?></td>
 
 <td>
 
@@ -939,17 +851,17 @@ No File
 
 <div class="action-icons">
 
-<a href="articles.php?edit=<?php echo $row['ID']; ?>"
+<a href="books.php?edit=<?php echo $row['ID']; ?>"
 class="edit-btn">
 
 Edit
 
 </a>
 
-<a href="articles.php?delete=<?php echo $row['ID']; ?>"
+<a href="books.php?delete=<?php echo $row['ID']; ?>"
 class="delete-btn"
 
-onclick="return confirm('Delete this article?')">
+onclick="return confirm('Delete this book?')">
 
 Delete
 
@@ -971,8 +883,6 @@ Delete
 
 </div>
 
-<!-- FORM -->
-
 <div class="form-section">
 
 <div class="form-card">
@@ -981,8 +891,8 @@ Delete
 
 <?php
 echo isset($_GET['edit'])
-? "Edit Article"
-: "Add Article";
+? "Edit Book"
+: "Add Book";
 ?>
 
 </div>
@@ -1027,9 +937,7 @@ value="<?php echo $edit_title; ?>">
 <label class="form-label">Description</label>
 
 <textarea name="description"
-
 class="form-control"
-
 required><?php echo $edit_description; ?></textarea>
 
 </div>
@@ -1052,13 +960,13 @@ value="<?php echo $edit_category; ?>">
 
 <div class="mb-2">
 
-<label class="form-label">Teacher</label>
+<label class="form-label">Author</label>
 
-<select name="teacher_id"
-class="custom-select">
-<option value="">
-    
-</option>
+<select name="author"
+class="custom-select"
+required>
+
+<option value="">Select Author</option>
 
 <?php
 
@@ -1071,7 +979,7 @@ while($t = $teacher->fetch_assoc()){
 <option value="<?php echo $t['ID']; ?>"
 
 <?php
-if($edit_teacher == $t['ID'])
+if($edit_author == $t['ID'])
 echo "selected";
 ?>>
 
@@ -1087,45 +995,11 @@ echo "selected";
 
 <div class="mb-2">
 
-<label class="form-label">Student</label>
-
-<select name="student_id"
-class="custom-select">
-<option value="">
-
-</option>
-
-<?php
-
-$student = $conn->query("SELECT * FROM students");
-
-while($s = $student->fetch_assoc()){
-
-?>
-
-<option value="<?php echo $s['ID']; ?>"
-
-<?php
-if($edit_student == $s['ID'])
-echo "selected";
-?>>
-
-<?php echo $s['Name']; ?>
-
-</option>
-
-<?php } ?>
-
-</select>
-
-</div>
-
-<div class="mb-2">
-
 <label class="form-label">Department</label>
 
 <select name="department"
-class="custom-select">
+class="custom-select"
+required>
 
 <?php
 
@@ -1138,7 +1012,7 @@ while($d = $dep->fetch_assoc()){
 <option value="<?php echo $d['ID']; ?>"
 
 <?php
-if($edit_department == $d['ID'])
+if($edit_department_id == $d['ID'])
 echo "selected";
 ?>>
 
@@ -1149,6 +1023,22 @@ echo "selected";
 <?php } ?>
 
 </select>
+
+</div>
+
+<div class="mb-2">
+
+<label class="form-label">Pages</label>
+
+<input type="number"
+
+name="pages"
+
+class="form-control"
+
+required
+
+value="<?php echo $edit_pages; ?>">
 
 </div>
 
@@ -1166,17 +1056,17 @@ class="form-control">
 
 <div class="mb-3">
 
-<label class="form-label">Date</label>
+<label class="form-label">Publish Date</label>
 
 <input type="date"
 
-name="date"
+name="publish_date"
 
 class="form-control"
 
 required
 
-value="<?php echo $edit_date; ?>">
+value="<?php echo $edit_publish_date; ?>">
 
 </div>
 
@@ -1186,14 +1076,14 @@ class="save-btn"
 
 name="<?php
 echo isset($_GET['edit'])
-? 'update_article'
-: 'save_article';
+? 'update_book'
+: 'save_book';
 ?>">
 
 <?php
 echo isset($_GET['edit'])
-? 'Update Article'
-: 'Save Article';
+? 'Update Book'
+: 'Save Book';
 ?>
 
 </button>
