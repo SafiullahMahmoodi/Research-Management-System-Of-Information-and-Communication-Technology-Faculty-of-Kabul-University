@@ -12,7 +12,7 @@ include('../db_connection.php');
 // Insert Department
 // ===========================
 
-if(isset($_POST['save_department'])){
+if (isset($_POST['save_department'])) {
 
     $id         = $_POST['id'];
     $department = $_POST['department'];
@@ -34,7 +34,7 @@ if(isset($_POST['save_department'])){
 // Delete Department
 // ===========================
 
-if(isset($_GET['delete'])){
+if (isset($_GET['delete'])) {
 
     $delete_id = $_GET['delete'];
 
@@ -54,7 +54,7 @@ if(isset($_GET['delete'])){
 $edit_id         = "";
 $edit_department = "";
 
-if(isset($_GET['edit'])){
+if (isset($_GET['edit'])) {
 
     $edit_id = $_GET['edit'];
 
@@ -63,7 +63,7 @@ if(isset($_GET['edit'])){
 
     $edit_result = $conn->query($edit_query);
 
-    if($edit_result->num_rows > 0){
+    if ($edit_result->num_rows > 0) {
 
         $edit_row = $edit_result->fetch_assoc();
 
@@ -75,7 +75,7 @@ if(isset($_GET['edit'])){
 // Update Department
 // ===========================
 
-if(isset($_POST['update_department'])){
+if (isset($_POST['update_department'])) {
 
     $id         = $_POST['id'];
     $department = $_POST['department'];
@@ -98,7 +98,7 @@ if(isset($_POST['update_department'])){
 
 $search = "";
 
-if(isset($_GET['search'])){
+if (isset($_GET['search'])) {
 
     $search = $_GET['search'];
 
@@ -108,8 +108,7 @@ if(isset($_GET['search'])){
 
     ID LIKE '%$search%'
     OR Name LIKE '%$search%'";
-
-}else{
+} else {
 
     $department_query = "SELECT * FROM department";
 }
@@ -123,18 +122,18 @@ $department_result = $conn->query($department_query);
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Departments</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet"
-href="../css/bootstrap.min.css">
+    <title>Departments</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="../css/bootstrap.min.css">
 
-<script src="../js/bootstrap.bundle.min.js"></script>
-<!-- 
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- 
 <style>
 
 *{
@@ -527,198 +526,199 @@ body{
 </head>
 
 <body>
-<?php include('header.php'); ?>
-<div class="main-wrapper">
+    <?php include('header.php'); ?>
+    <div class="main-wrapper">
 
-    <!-- TABLE SECTION -->
+        <!-- TABLE SECTION -->
 
-    <div class="table-section">
+        <div class="table-section">
 
-        <div class="search-wrapper">
+            <div class="search-wrapper">
 
-            <form method="GET"
-            class="search-form">
+                <form method="GET"
+                    class="search-form">
 
-                <input type="text"
+                    <input type="text"
 
-                name="search"
+                        name="search"
 
-                class="search-input"
+                        class="search-input"
 
-                placeholder="Search departments..."
+                        placeholder="Search departments..."
 
-                value="<?php echo $search; ?>">
+                        value="<?php echo $search; ?>">
 
-                <button type="submit"
-                class="search-btn">
+                    <button type="submit"
+                        class="search-btn">
 
-                    Search
+                        Search
 
-                </button>
+                    </button>
 
-            </form>
-
-        </div>
-
-        <div class="table-card">
-
-            <table class="table table-hover">
-
-                <thead>
-
-                    <tr>
-
-                        <th width="100">ID</th>
-
-                        <th>Department Name</th>
-
-                        <th width="180">Action</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                <?php while($row = $department_result->fetch_assoc()){ ?>
-
-                    <tr>
-
-                        <td><?php echo $row['ID']; ?></td>
-
-                        <td><?php echo $row['Name']; ?></td>
-
-                        <td>
-
-                            <div class="action-icons">
-
-                                <a href="departments.php?edit=<?php echo $row['ID']; ?>"
-                                class="edit-btn">
-
-                                    Edit
-
-                                </a>
-
-                                <a href="departments.php?delete=<?php echo $row['ID']; ?>"
-                                class="delete-btn"
-
-                                onclick="return confirm('Are you sure to delete this department?')">
-
-                                    Delete
-
-                                </a>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                <?php } ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <!-- FORM SECTION -->
-
-    <div class="form-section">
-
-        <div class="form-card">
-
-            <div class="form-title">
-
-                <?php
-                echo isset($_GET['edit'])
-                ? "Edit Department"
-                : "Add Department";
-                ?>
+                </form>
 
             </div>
 
-            <form method="POST">
+            <div class="table-card">
 
-                <!-- ID -->
+                <table class="table table-hover">
 
-                <div class="mb-3">
+                    <thead>
 
-                    <label class="form-label">
+                        <tr>
 
-                        ID
+                            <th width="100">ID</th>
 
-                    </label>
+                            <th>Department Name</th>
 
-                    <input type="text"
+                            <th width="180">Action</th>
 
-                    name="id"
+                        </tr>
 
-                    class="form-control"
+                    </thead>
 
-                    placeholder="Enter department ID"
+                    <tbody>
 
-                    required
+                        <?php while ($row = $department_result->fetch_assoc()) { ?>
 
-                    value="<?php echo $edit_id; ?>"
+                            <tr>
 
-                    <?php if(isset($_GET['edit'])) echo "readonly"; ?>>
+                                <td><?php echo $row['ID']; ?></td>
 
-                </div>
+                                <td><?php echo $row['Name']; ?></td>
 
-                <!-- Department Name -->
+                                <td>
 
-                <div class="mb-4">
+                                    <div class="action-icons">
 
-                    <label class="form-label">
+                                        <a href="departments.php?edit=<?php echo $row['ID']; ?>"
+                                            class="edit-btn">
 
-                        Department Name
+                                            Edit
 
-                    </label>
+                                        </a>
 
-                    <input type="text"
+                                        <a href="departments.php?delete=<?php echo $row['ID']; ?>"
+                                            class="delete-btn"
 
-                    name="department"
+                                            onclick="return confirm('Are you sure to delete this department?')">
 
-                    class="form-control"
+                                            Delete
 
-                    placeholder="Enter department name"
+                                        </a>
 
-                    required
+                                    </div>
 
-                    value="<?php echo $edit_department; ?>">
+                                </td>
 
-                </div>
+                            </tr>
 
-                <!-- Save Button -->
+                        <?php } ?>
 
-                <button type="submit"
+                    </tbody>
 
-                class="save-btn"
+                </table>
 
-                name="<?php
-                echo isset($_GET['edit'])
-                ? 'update_department'
-                : 'save_department';
-                ?>">
+            </div>
+
+        </div>
+
+        <!-- FORM SECTION -->
+
+        <div class="form-section">
+
+            <div class="form-card">
+
+                <div class="form-title">
 
                     <?php
                     echo isset($_GET['edit'])
-                    ? 'Update Department'
-                    : 'Save Department';
+                        ? "Edit Department"
+                        : "Add Department";
                     ?>
 
-                </button>
+                </div>
 
-            </form>
+                <form method="POST">
+
+                    <!-- ID -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            ID
+
+                        </label>
+
+                        <input type="text"
+
+                            name="id"
+
+                            class="form-control"
+
+                            placeholder="Enter department ID"
+
+                            required
+
+                            value="<?php echo $edit_id; ?>"
+
+                            <?php if (isset($_GET['edit'])) echo "readonly"; ?>>
+
+                    </div>
+
+                    <!-- Department Name -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+
+                            Department Name
+
+                        </label>
+
+                        <input type="text"
+
+                            name="department"
+
+                            class="form-control"
+
+                            placeholder="Enter department name"
+
+                            required
+
+                            value="<?php echo $edit_department; ?>">
+
+                    </div>
+
+                    <!-- Save Button -->
+
+                    <button type="submit"
+
+                        class="save-btn"
+
+                        name="<?php
+                                echo isset($_GET['edit'])
+                                    ? 'update_department'
+                                    : 'save_department';
+                                ?>">
+
+                        <?php
+                        echo isset($_GET['edit'])
+                            ? 'Update Department'
+                            : 'Save Department';
+                        ?>
+
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>

@@ -6,205 +6,203 @@
 ?>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    background:#eef2f7;
-    font-family:Segoe UI;
-    overflow:hidden;
-}
-
-/* HEADER */
-
-.main-header{
-
-    background:#0f9d58;
-
-    height:65px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:0 22px;
-}
-
-.header-menu{
-
-    display:flex;
-
-    gap:18px;
-}
-
-.header-menu a{
-
-    color:#d1fae5;
-
-    text-decoration:none;
-
-    font-size:13px;
-
-    font-weight:600;
-
-    padding:8px 14px;
-
-    border-radius:8px;
-
-    transition:0.3s;
-}
-
-.header-menu a:hover{
-
-    background:white;
-
-    color:#0f9d58;
-}
-
-.header-menu a.active{
-
-    background:white;
-
-    color:#0f9d58;
-
-    font-weight:700;
-}
-
-.header-buttons{
-
-    display:flex;
-
-    gap:10px;
-}
-
-.header-btn{
-
-    background:white;
-
-    color:#0f9d58;
-
-    padding:7px 16px;
-
-    border-radius:10px;
-
-    text-decoration:none;
-
-    font-size:12px;
-
-    font-weight:700;
-}
-
-@media(max-width:992px){
-
-    body{
-        overflow:auto;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    .main-header{
-
-        flex-direction:column;
-
-        height:auto;
-
-        padding:15px;
+    body {
+        background: #eef2f7;
+        font-family: Segoe UI;
+        overflow: hidden;
     }
 
-    .header-menu{
+    /* HEADER */
 
-        flex-wrap:wrap;
+    .main-header {
 
-        justify-content:center;
+        background: #0f9d58;
 
-        margin-bottom:12px;
+        height: 65px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 0 22px;
     }
-}
 
+    .header-menu {
+
+        display: flex;
+
+        gap: 18px;
+    }
+
+    .header-menu a {
+
+        color: #d1fae5;
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        padding: 8px 14px;
+
+        border-radius: 8px;
+
+        transition: 0.3s;
+    }
+
+    .header-menu a:hover {
+
+        background: white;
+
+        color: #0f9d58;
+    }
+
+    .header-menu a.active {
+
+        background: white;
+
+        color: #0f9d58;
+
+        font-weight: 700;
+    }
+
+    .header-buttons {
+
+        display: flex;
+
+        gap: 10px;
+    }
+
+    .header-btn {
+
+        background: white;
+
+        color: #0f9d58;
+
+        padding: 7px 16px;
+
+        border-radius: 10px;
+
+        text-decoration: none;
+
+        font-size: 12px;
+
+        font-weight: 700;
+    }
+
+    @media(max-width:992px) {
+
+        body {
+            overflow: auto;
+        }
+
+        .main-header {
+
+            flex-direction: column;
+
+            height: auto;
+
+            padding: 15px;
+        }
+
+        .header-menu {
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            margin-bottom: 12px;
+        }
+    }
 </style>
 
 <header class="main-header">
 
-<div class="header-menu">
+    <div class="header-menu">
 
-<a href="users.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'users.php' ? 'active' : ''; ?>">
+        <a href="users.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'users.php' ? 'active' : ''; ?>">
 
-Users
+            Users
 
-</a>
+        </a>
 
-<a href="departments.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'departments.php' ? 'active' : ''; ?>">
+        <a href="departments.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'departments.php' ? 'active' : ''; ?>">
 
-Departments
+            Departments
 
-</a>
+        </a>
 
-<a href="teachers.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'teachers.php' ? 'active' : ''; ?>">
+        <a href="teachers.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'teachers.php' ? 'active' : ''; ?>">
 
-Teachers
+            Teachers
 
-</a>
+        </a>
 
-<a href="students.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'students.php' ? 'active' : ''; ?>">
+        <a href="students.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'students.php' ? 'active' : ''; ?>">
 
-Students
+            Students
 
-</a>
+        </a>
 
-<a href="articles.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'articles.php' ? 'active' : ''; ?>">
+        <a href="articles.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'articles.php' ? 'active' : ''; ?>">
 
-Articles
+            Articles
 
-</a>
+        </a>
 
-<a href="books.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'books.php' ? 'active' : ''; ?>">
+        <a href="books.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'books.php' ? 'active' : ''; ?>">
 
-Books
+            Books
 
-</a>
+        </a>
 
-<a href="translatedbooks.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'translatedbooks.php' ? 'active' : ''; ?>">
+        <a href="translatedbooks.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'translatedbooks.php' ? 'active' : ''; ?>">
 
-Translated Books
+            Translated Books
 
-</a>
+        </a>
 
-<a href="thesises.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
+        <a href="thesises.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
 
-Thesises
+            Thesises
 
-</a>
+        </a>
 
-</div>
+    </div>
 
-<div class="header-buttons">
+    <div class="header-buttons">
 
-<a href="dashboard.php"
-class="header-btn">
+        <a href="dashboard.php"
+            class="header-btn">
 
-Dashboard
+            Dashboard
 
-</a>
+        </a>
 
-<a href="../logout.php"
-class="header-btn">
+        <a href="../logout.php"
+            class="header-btn">
 
-Logout
+            Logout
 
-</a>
+        </a>
 
-</div>
+    </div>
 
 </header>

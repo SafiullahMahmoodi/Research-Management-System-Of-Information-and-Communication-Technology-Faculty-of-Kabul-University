@@ -4,35 +4,36 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Management System</title>
-<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Bootstrap Local CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <style>
-        body{
-            background-image:url("") ;
+        body {
+            background-image: url("");
         }
 
-        <!-- .main-header{
+        .main-header {
 
-            background:#0f9d58;
-            color:white;
-            padding:18px 10px;
-            text-align:center;
-            font-size:28px;
-            font-weight:bold;
-            box-shadow:0 2px 10px rgba(0,0,0,0.15);
-        } -->
+            background: #0f9d58;
+            color: white;
+            padding: 18px 10px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
 
-
-
+        -->
     </style>
 
 </head>
+
 <body>
 
     <!-- Header -->
@@ -87,4 +88,5 @@
     <script src="css/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

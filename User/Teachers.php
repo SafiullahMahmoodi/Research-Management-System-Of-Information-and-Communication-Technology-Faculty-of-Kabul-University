@@ -8,7 +8,7 @@ include('../db_connection.php');
 // ===========================
 // Insert Teacher
 // ===========================
-if(isset($_POST['save_teacher'])){
+if (isset($_POST['save_teacher'])) {
 
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
@@ -31,13 +31,13 @@ if(isset($_POST['save_teacher'])){
 // ===========================
 // Search
 // ===========================
-$search="";
+$search = "";
 
-if(isset($_GET['search'])){
+if (isset($_GET['search'])) {
 
-    $search=$_GET['search'];
+    $search = $_GET['search'];
 
-    $teacher_result=$conn->query("
+    $teacher_result = $conn->query("
 
     SELECT teacher.*, department.Name AS department_name
 
@@ -54,10 +54,9 @@ if(isset($_GET['search'])){
     OR teacher.Contact LIKE '%$search%'
     OR teacher.Education LIKE '%$search%'
     ");
+} else {
 
-}else{
-
-    $teacher_result=$conn->query("
+    $teacher_result = $conn->query("
 
     SELECT teacher.*, department.Name AS department_name
 
@@ -74,291 +73,292 @@ if(isset($_GET['search'])){
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Teachers</title>
-<link rel="stylesheet" href="style.css">
+    <title>Teachers</title>
+    <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet"
-href="../css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="../css/bootstrap.min.css">
 
-<script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
 </head>
 
 <body>
 
-<?php include('header.php'); ?>
+    <?php include('header.php'); ?>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-    <!-- TABLE -->
+        <!-- TABLE -->
 
-    <div class="table-section">
+        <div class="table-section">
 
-        <div class="search-wrapper">
+            <div class="search-wrapper">
 
-            <form method="GET"
-            class="search-form">
+                <form method="GET"
+                    class="search-form">
 
-                <input type="text"
+                    <input type="text"
 
-                name="search"
+                        name="search"
 
-                class="search-input"
+                        class="search-input"
 
-                placeholder="Search teachers..."
+                        placeholder="Search teachers..."
 
-                value="<?php echo $search; ?>">
+                        value="<?php echo $search; ?>">
 
-                <button type="submit"
-                class="search-btn">
+                    <button type="submit"
+                        class="search-btn">
 
-                    Search
+                        Search
 
-                </button>
+                    </button>
 
-            </form>
+                </form>
+
+            </div>
+
+            <div class="table-card">
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Last Name</th>
+
+                            <th>Email</th>
+
+                            <th>Contact</th>
+
+                            <th>Education</th>
+
+                            <th>Department</th>
+
+
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <?php while ($row = $teacher_result->fetch_assoc()) { ?>
+
+                            <tr>
+
+                                <td><?php echo $row['ID']; ?></td>
+
+                                <td><?php echo $row['Name']; ?></td>
+
+                                <td><?php echo $row['Last_Name']; ?></td>
+
+                                <td><?php echo $row['Email']; ?></td>
+
+                                <td><?php echo $row['Contact']; ?></td>
+
+                                <td><?php echo $row['Education']; ?></td>
+
+                                <td><?php echo $row['department_name']; ?></td>
+
+
+                            </tr>
+
+                        <?php } ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
+        <!-- FORM -->
 
-        <div class="table-card">
+        <div class="form-section">
 
-            <table class="table table-hover">
+            <div class="form-card">
 
-                <thead>
+                <div class="form-title">
 
-                    <tr>
+                    Add Teacher
 
-                        <th>ID</th>
+                </div>
 
-                        <th>Name</th>
+                <form method="POST">
 
-                        <th>Last Name</th>
+                    <!-- Name -->
 
-                        <th>Email</th>
+                    <div class="mb-3">
 
-                        <th>Contact</th>
+                        <label class="form-label">
 
-                        <th>Education</th>
+                            Name
 
-                        <th>Department</th>
+                        </label>
 
-                    
+                        <input type="text"
 
-                    </tr>
+                            name="name"
 
-                </thead>
+                            class="form-control"
 
-                <tbody>
+                            placeholder="Enter teacher name"
 
-                <?php while($row=$teacher_result->fetch_assoc()){ ?>
+                            required>
 
-                <tr>
+                    </div>
 
-                    <td><?php echo $row['ID']; ?></td>
+                    <!-- Last Name -->
 
-                    <td><?php echo $row['Name']; ?></td>
+                    <div class="mb-3">
 
-                    <td><?php echo $row['Last_Name']; ?></td>
+                        <label class="form-label">
 
-                    <td><?php echo $row['Email']; ?></td>
+                            Last Name
 
-                    <td><?php echo $row['Contact']; ?></td>
+                        </label>
 
-                    <td><?php echo $row['Education']; ?></td>
+                        <input type="text"
 
-                    <td><?php echo $row['department_name']; ?></td>
+                            name="lastname"
 
+                            class="form-control"
 
-                </tr>
+                            placeholder="Enter last name"
 
-                <?php } ?>
+                            required>
 
-                </tbody>
+                    </div>
 
-            </table>
+                    <!-- Email -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Email
+
+                        </label>
+
+                        <input type="email"
+
+                            name="email"
+
+                            class="form-control"
+
+                            placeholder="Enter email"
+
+                            required>
+
+                    </div>
+
+                    <!-- Contact -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Contact
+
+                        </label>
+
+                        <input type="text"
+
+                            name="contact"
+
+                            class="form-control"
+
+                            placeholder="Enter contact"
+
+                            required>
+
+                    </div>
+
+                    <!-- Education -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Education
+
+                        </label>
+
+                        <input type="text"
+
+                            name="education"
+
+                            class="form-control"
+
+                            placeholder="Enter education"
+
+                            required>
+
+                    </div>
+
+                    <!-- Department -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+
+                            Department
+
+                        </label>
+
+                        <select name="department"
+                            class="custom-select">
+
+                            <?php
+
+                            $d = $conn->query("SELECT * FROM department");
+
+                            while ($dep = $d->fetch_assoc()) {
+
+                            ?>
+
+                                <option value="<?php echo $dep['ID']; ?>">
+
+                                    <?php echo $dep['Name']; ?>
+
+                                </option>
+
+                            <?php } ?>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Button -->
+
+                    <button class="save-btn"
+
+                        name="save_teacher">
+
+                        Save Teacher
+
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
-<!-- FORM -->
-
-<div class="form-section">
-
-    <div class="form-card">
-
-        <div class="form-title">
-
-            Add Teacher
-
-        </div>
-
-        <form method="POST">
-
-            <!-- Name -->
-
-            <div class="mb-3">
-
-                <label class="form-label">
-
-                    Name
-
-                </label>
-
-                <input type="text"
-
-                name="name"
-
-                class="form-control"
-
-                placeholder="Enter teacher name"
-
-                required>
-
-            </div>
-
-            <!-- Last Name -->
-
-            <div class="mb-3">
-
-                <label class="form-label">
-
-                    Last Name
-
-                </label>
-
-                <input type="text"
-
-                name="lastname"
-
-                class="form-control"
-
-                placeholder="Enter last name"
-
-                required>
-
-            </div>
-
-            <!-- Email -->
-
-            <div class="mb-3">
-
-                <label class="form-label">
-
-                    Email
-
-                </label>
-
-                <input type="email"
-
-                name="email"
-
-                class="form-control"
-
-                placeholder="Enter email"
-
-                required>
-
-            </div>
-
-            <!-- Contact -->
-
-            <div class="mb-3">
-
-                <label class="form-label">
-
-                    Contact
-
-                </label>
-
-                <input type="text"
-
-                name="contact"
-
-                class="form-control"
-
-                placeholder="Enter contact"
-
-                required>
-
-            </div>
-
-            <!-- Education -->
-
-            <div class="mb-3">
-
-                <label class="form-label">
-
-                    Education
-
-                </label>
-
-                <input type="text"
-
-                name="education"
-
-                class="form-control"
-
-                placeholder="Enter education"
-
-                required>
-
-            </div>
-
-            <!-- Department -->
-
-            <div class="mb-4">
-
-                <label class="form-label">
-
-                    Department
-
-                </label>
-
-                <select name="department"
-                class="custom-select">
-
-                    <?php
-
-                    $d = $conn->query("SELECT * FROM department");
-
-                    while($dep = $d->fetch_assoc()){
-
-                    ?>
-
-                    <option value="<?php echo $dep['ID']; ?>">
-
-                        <?php echo $dep['Name']; ?>
-
-                    </option>
-
-                    <?php } ?>
-
-                </select>
-
-            </div>
-
-            <!-- Button -->
-
-            <button class="save-btn"
-
-            name="save_teacher">
-
-                Save Teacher
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-
-</div>
 
 </body>
+
 </html>

@@ -8,7 +8,7 @@ include('../db_connection.php');
 // Insert Student
 // ===========================
 
-if(isset($_POST['save_student'])){
+if (isset($_POST['save_student'])) {
 
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
@@ -33,7 +33,7 @@ if(isset($_POST['save_student'])){
 // Delete Student
 // ===========================
 
-if(isset($_GET['delete'])){
+if (isset($_GET['delete'])) {
 
     $delete_id = $_GET['delete'];
 
@@ -57,7 +57,7 @@ $edit_email      = "";
 $edit_contact    = "";
 $edit_department = "";
 
-if(isset($_GET['edit'])){
+if (isset($_GET['edit'])) {
 
     $edit_id = $_GET['edit'];
 
@@ -66,7 +66,7 @@ if(isset($_GET['edit'])){
 
     $edit_result = $conn->query($edit_query);
 
-    if($edit_result->num_rows > 0){
+    if ($edit_result->num_rows > 0) {
 
         $edit_row = $edit_result->fetch_assoc();
 
@@ -82,7 +82,7 @@ if(isset($_GET['edit'])){
 // Update Student
 // ===========================
 
-if(isset($_POST['update_student'])){
+if (isset($_POST['update_student'])) {
 
     $id          = $_POST['id'];
     $name        = $_POST['name'];
@@ -113,7 +113,7 @@ if(isset($_POST['update_student'])){
 
 $search = "";
 
-if(isset($_GET['search'])){
+if (isset($_GET['search'])) {
 
     $search = $_GET['search'];
 
@@ -132,8 +132,7 @@ if(isset($_GET['search'])){
     OR students.Email LIKE '%$search%'
     OR students.Contact LIKE '%$search%'
     OR department.Name LIKE '%$search%'";
-
-}else{
+} else {
 
     $student_query = "SELECT students.*, department.Name AS department_name
 
@@ -152,393 +151,394 @@ $student_result = $conn->query($student_query);
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Students</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet"
-href="../css/bootstrap.min.css">
+    <title>Students</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="../css/bootstrap.min.css">
 
-<script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
 </head>
 
 <body>
-<?php include('header.php'); ?>
+    <?php include('header.php'); ?>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-    <!-- TABLE SECTION -->
+        <!-- TABLE SECTION -->
 
-    <div class="table-section">
+        <div class="table-section">
 
-        <!-- SEARCH -->
+            <!-- SEARCH -->
 
-        <div class="search-wrapper">
+            <div class="search-wrapper">
 
-            <form method="GET"
-            class="search-form">
+                <form method="GET"
+                    class="search-form">
 
-                <input type="text"
+                    <input type="text"
 
-                name="search"
+                        name="search"
 
-                class="search-input"
+                        class="search-input"
 
-                placeholder="Search students..."
+                        placeholder="Search students..."
 
-                value="<?php echo $search; ?>">
+                        value="<?php echo $search; ?>">
 
-                <button type="submit"
-                class="search-btn">
+                    <button type="submit"
+                        class="search-btn">
 
-                    Search
+                        Search
 
-                </button>
+                    </button>
 
-            </form>
-
-        </div>
-
-        <!-- TABLE -->
-
-        <div class="table-card">
-
-            <table class="table table-hover">
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Name</th>
-
-                        <th>Last Name</th>
-
-                        <th>Email</th>
-
-                        <th>Contact</th>
-
-                        <th>Department</th>
-
-                        <th width="160">Action</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                <?php while($row = $student_result->fetch_assoc()){ ?>
-
-                <tr>
-
-                    <td><?php echo $row['ID']; ?></td>
-
-                    <td><?php echo $row['Name']; ?></td>
-
-                    <td><?php echo $row['Last_Name']; ?></td>
-
-                    <td><?php echo $row['Email']; ?></td>
-
-                    <td><?php echo $row['Contact']; ?></td>
-
-                    <td><?php echo $row['department_name']; ?></td>
-
-                    <td>
-
-                        <div class="action-icons">
-
-                            <a href="students.php?edit=<?php echo $row['ID']; ?>"
-                            class="edit-btn">
-
-                                Edit
-
-                            </a>
-
-                            <button type="button"
-
-                            class="delete-btn"
-
-                            data-bs-toggle="modal"
-
-                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
-
-                                Delete
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                <!-- DELETE MODAL -->
-
-                <div class="modal fade"
-
-                id="deleteModal<?php echo $row['ID']; ?>">
-
-                    <div class="modal-dialog modal-dialog-centered">
-
-                        <div class="modal-content"
-                        style="border-radius:16px;">
-
-                            <div class="modal-header bg-danger text-white">
-
-                                <h5 class="modal-title">
-
-                                    Delete Student
-
-                                </h5>
-
-                                <button class="btn-close btn-close-white"
-                                data-bs-dismiss="modal">
-
-                                </button>
-
-                            </div>
-
-                            <div class="modal-body text-center">
-
-                                Delete
-
-                                <strong>
-
-                                    <?php echo $row['Name']; ?>
-
-                                </strong>
-
-                                ?
-
-                            </div>
-
-                            <div class="modal-footer">
-
-                                <button class="btn btn-secondary"
-                                data-bs-dismiss="modal">
-
-                                    Cancel
-
-                                </button>
-
-                                <a href="students.php?delete=<?php echo $row['ID']; ?>"
-
-                                class="btn btn-danger">
-
-                                    Delete
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <?php } ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <!-- FORM SECTION -->
-
-    <div class="form-section">
-
-        <div class="form-card">
-
-            <div class="form-title">
-
-                <?php
-                echo isset($_GET['edit'])
-                ? "Edit Student"
-                : "Add Student";
-                ?>
+                </form>
 
             </div>
 
-            <form method="POST">
+            <!-- TABLE -->
 
-                <input type="hidden"
+            <div class="table-card">
 
-                name="id"
+                <table class="table table-hover">
 
-                value="<?php echo $edit_id; ?>">
+                    <thead>
 
-                <!-- Name -->
+                        <tr>
 
-                <div class="mb-3">
+                            <th>ID</th>
 
-                    <label class="form-label">
+                            <th>Name</th>
 
-                        Name
+                            <th>Last Name</th>
 
-                    </label>
+                            <th>Email</th>
 
-                    <input type="text"
+                            <th>Contact</th>
 
-                    name="name"
+                            <th>Department</th>
 
-                    class="form-control"
+                            <th width="160">Action</th>
 
-                    placeholder="Enter student name"
+                        </tr>
 
-                    value="<?php echo $edit_name; ?>"
+                    </thead>
 
-                    required>
+                    <tbody>
 
-                </div>
+                        <?php while ($row = $student_result->fetch_assoc()) { ?>
 
-                <!-- Last Name -->
+                            <tr>
 
-                <div class="mb-3">
+                                <td><?php echo $row['ID']; ?></td>
 
-                    <label class="form-label">
+                                <td><?php echo $row['Name']; ?></td>
 
-                        Last Name
+                                <td><?php echo $row['Last_Name']; ?></td>
 
-                    </label>
+                                <td><?php echo $row['Email']; ?></td>
 
-                    <input type="text"
+                                <td><?php echo $row['Contact']; ?></td>
 
-                    name="lastname"
+                                <td><?php echo $row['department_name']; ?></td>
 
-                    class="form-control"
+                                <td>
 
-                    placeholder="Enter last name"
+                                    <div class="action-icons">
 
-                    value="<?php echo $edit_lastname; ?>"
+                                        <a href="students.php?edit=<?php echo $row['ID']; ?>"
+                                            class="edit-btn">
 
-                    required>
+                                            Edit
 
-                </div>
+                                        </a>
 
-                <!-- Email -->
+                                        <button type="button"
 
-                <div class="mb-3">
+                                            class="delete-btn"
 
-                    <label class="form-label">
+                                            data-bs-toggle="modal"
 
-                        Email
+                                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
 
-                    </label>
+                                            Delete
 
-                    <input type="email"
+                                        </button>
 
-                    name="email"
+                                    </div>
 
-                    class="form-control"
+                                </td>
 
-                    placeholder="Enter email"
+                            </tr>
 
-                    value="<?php echo $edit_email; ?>"
+                            <!-- DELETE MODAL -->
 
-                    required>
+                            <div class="modal fade"
 
-                </div>
+                                id="deleteModal<?php echo $row['ID']; ?>">
 
-                <!-- Contact -->
+                                <div class="modal-dialog modal-dialog-centered">
 
-                <div class="mb-3">
+                                    <div class="modal-content"
+                                        style="border-radius:16px;">
 
-                    <label class="form-label">
+                                        <div class="modal-header bg-danger text-white">
 
-                        Contact
+                                            <h5 class="modal-title">
 
-                    </label>
+                                                Delete Student
 
-                    <input type="text"
+                                            </h5>
 
-                    name="contact"
+                                            <button class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal">
 
-                    class="form-control"
+                                            </button>
 
-                    placeholder="Enter contact"
+                                        </div>
 
-                    value="<?php echo $edit_contact; ?>"
+                                        <div class="modal-body text-center">
 
-                    required>
+                                            Delete
 
-                </div>
+                                            <strong>
 
-                <!-- Department -->
+                                                <?php echo $row['Name']; ?>
 
-                <div class="mb-4">
+                                            </strong>
 
-                    <label class="form-label">
+                                            ?
 
-                        Department
+                                        </div>
 
-                    </label>
+                                        <div class="modal-footer">
 
-                    <select name="department"
-                    class="custom-select">
+                                            <button class="btn btn-secondary"
+                                                data-bs-dismiss="modal">
 
-                        <?php
+                                                Cancel
 
-                        $department_query = "SELECT * FROM department";
+                                            </button>
 
-                        $department_result = $conn->query($department_query);
+                                            <a href="students.php?delete=<?php echo $row['ID']; ?>"
 
-                        while($department = $department_result->fetch_assoc()){
+                                                class="btn btn-danger">
 
-                        ?>
+                                                Delete
 
-                        <option value="<?php echo $department['ID']; ?>"
+                                            </a>
 
-                        <?php
-                        if($edit_department == $department['ID']){
-                            echo "selected";
-                        }
-                        ?>>
+                                        </div>
 
-                            <?php echo $department['Name']; ?>
+                                    </div>
 
-                        </option>
+                                </div>
+
+                            </div>
 
                         <?php } ?>
 
-                    </select>
+                    </tbody>
 
-                </div>
+                </table>
 
-                <!-- BUTTON -->
+            </div>
 
-                <button class="save-btn"
+        </div>
 
-                name="<?php
-                echo isset($_GET['edit'])
-                ? 'update_student'
-                : 'save_student';
-                ?>">
+        <!-- FORM SECTION -->
+
+        <div class="form-section">
+
+            <div class="form-card">
+
+                <div class="form-title">
 
                     <?php
                     echo isset($_GET['edit'])
-                    ? 'Update Student'
-                    : 'Save Student';
+                        ? "Edit Student"
+                        : "Add Student";
                     ?>
 
-                </button>
+                </div>
 
-            </form>
+                <form method="POST">
+
+                    <input type="hidden"
+
+                        name="id"
+
+                        value="<?php echo $edit_id; ?>">
+
+                    <!-- Name -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Name
+
+                        </label>
+
+                        <input type="text"
+
+                            name="name"
+
+                            class="form-control"
+
+                            placeholder="Enter student name"
+
+                            value="<?php echo $edit_name; ?>"
+
+                            required>
+
+                    </div>
+
+                    <!-- Last Name -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Last Name
+
+                        </label>
+
+                        <input type="text"
+
+                            name="lastname"
+
+                            class="form-control"
+
+                            placeholder="Enter last name"
+
+                            value="<?php echo $edit_lastname; ?>"
+
+                            required>
+
+                    </div>
+
+                    <!-- Email -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Email
+
+                        </label>
+
+                        <input type="email"
+
+                            name="email"
+
+                            class="form-control"
+
+                            placeholder="Enter email"
+
+                            value="<?php echo $edit_email; ?>"
+
+                            required>
+
+                    </div>
+
+                    <!-- Contact -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Contact
+
+                        </label>
+
+                        <input type="text"
+
+                            name="contact"
+
+                            class="form-control"
+
+                            placeholder="Enter contact"
+
+                            value="<?php echo $edit_contact; ?>"
+
+                            required>
+
+                    </div>
+
+                    <!-- Department -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+
+                            Department
+
+                        </label>
+
+                        <select name="department"
+                            class="custom-select">
+
+                            <?php
+
+                            $department_query = "SELECT * FROM department";
+
+                            $department_result = $conn->query($department_query);
+
+                            while ($department = $department_result->fetch_assoc()) {
+
+                            ?>
+
+                                <option value="<?php echo $department['ID']; ?>"
+
+                                    <?php
+                                    if ($edit_department == $department['ID']) {
+                                        echo "selected";
+                                    }
+                                    ?>>
+
+                                    <?php echo $department['Name']; ?>
+
+                                </option>
+
+                            <?php } ?>
+
+                        </select>
+
+                    </div>
+
+                    <!-- BUTTON -->
+
+                    <button class="save-btn"
+
+                        name="<?php
+                                echo isset($_GET['edit'])
+                                    ? 'update_student'
+                                    : 'save_student';
+                                ?>">
+
+                        <?php
+                        echo isset($_GET['edit'])
+                            ? 'Update Student'
+                            : 'Save Student';
+                        ?>
+
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>

@@ -1,43 +1,41 @@
 <!-- header.php -->
 
 <style>
+    .header {
 
-.header{
+        width: 100%;
+        height: 65px;
+        background: #0f9d58;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 25px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
 
-    width:100%;
-    height:65px;
-    background:#0f9d58;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 25px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
+    .header-title {
 
-.header-title{
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+    }
 
-    color:white;
-    font-size:22px;
-    font-weight:bold;
-}
+    .home-btn {
 
-.home-btn{
+        text-decoration: none;
+        background: white;
+        color: #0f9d58;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
 
-    text-decoration:none;
-    background:white;
-    color:#0f9d58;
-    padding:8px 16px;
-    border-radius:6px;
-    font-size:14px;
-    font-weight:600;
-    transition:0.3s;
-}
+    .home-btn:hover {
 
-.home-btn:hover{
-
-    background:#e5e7eb;
-}
-
+        background: #e5e7eb;
+    }
 </style>
 
 <div class="header">

@@ -10,7 +10,7 @@ include('../db_connection.php');
 // Insert User
 // ===========================
 
-if(isset($_POST['save_user'])){
+if (isset($_POST['save_user'])) {
 
     $username  = $_POST['username'];
     $email     = $_POST['email'];
@@ -34,7 +34,7 @@ if(isset($_POST['save_user'])){
 // Delete User
 // ===========================
 
-if(isset($_GET['delete'])){
+if (isset($_GET['delete'])) {
 
     $delete_id = $_GET['delete'];
 
@@ -56,7 +56,7 @@ $edit_username = "";
 $edit_email    = "";
 $edit_type     = "";
 
-if(isset($_GET['edit'])){
+if (isset($_GET['edit'])) {
 
     $edit_id = $_GET['edit'];
 
@@ -65,7 +65,7 @@ if(isset($_GET['edit'])){
 
     $edit_result = $conn->query($edit_query);
 
-    if($edit_result->num_rows > 0){
+    if ($edit_result->num_rows > 0) {
 
         $edit_row = $edit_result->fetch_assoc();
 
@@ -79,7 +79,7 @@ if(isset($_GET['edit'])){
 // Update User
 // ===========================
 
-if(isset($_POST['update_user'])){
+if (isset($_POST['update_user'])) {
 
     $id         = $_POST['id'];
     $username   = $_POST['username'];
@@ -106,7 +106,7 @@ if(isset($_POST['update_user'])){
 
 $search = "";
 
-if(isset($_GET['search'])){
+if (isset($_GET['search'])) {
 
     $search = $_GET['search'];
 
@@ -118,8 +118,7 @@ if(isset($_GET['search'])){
     OR Username LIKE '%$search%'
     OR Email LIKE '%$search%'
     OR usertype LIKE '%$search%'";
-
-}else{
+} else {
 
     $user_query = "SELECT * FROM users";
 }
@@ -133,354 +132,355 @@ $user_result = $conn->query($user_query);
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Users</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet"
-href="../css/bootstrap.min.css">
+    <title>Users</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="../css/bootstrap.min.css">
 
-<script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
 
 </head>
 
 <body>
-<?php include('header.php'); ?>
+    <?php include('header.php'); ?>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-    <!-- TABLE SECTION -->
+        <!-- TABLE SECTION -->
 
-    <div class="table-section">
+        <div class="table-section">
 
-        <!-- SEARCH -->
+            <!-- SEARCH -->
 
-        <div class="search-wrapper">
+            <div class="search-wrapper">
 
-            <form method="GET"
-            class="search-form">
-
-                <input type="text"
-
-                name="search"
-
-                class="search-input"
-
-                placeholder="Search users..."
-
-                value="<?php echo $search; ?>">
-
-                <button type="submit"
-                class="search-btn">
-
-                    Search
-
-                </button>
-
-            </form>
-
-        </div>
-
-        <!-- TABLE -->
-
-        <div class="table-card">
-
-            <table class="table table-hover">
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Username</th>
-
-                        <th>Email</th>
-
-                        <th>User Type</th>
-
-                        <th width="160">Action</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                <?php while($row = $user_result->fetch_assoc()){ ?>
-
-                <tr>
-
-                    <td><?php echo $row['ID']; ?></td>
-
-                    <td><?php echo $row['Username']; ?></td>
-
-                    <td><?php echo $row['Email']; ?></td>
-
-                    <td><?php echo $row['usertype']; ?></td>
-
-                    <td>
-
-                        <div class="action-icons">
-
-                            <a href="users.php?edit=<?php echo $row['ID']; ?>"
-                            class="edit-btn">
-
-                                Edit
-
-                            </a>
-
-                            <button type="button"
-
-                            class="delete-btn"
-
-                            data-bs-toggle="modal"
-
-                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
-
-                                Delete
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                <!-- DELETE MODAL -->
-
-                <div class="modal fade"
-
-                id="deleteModal<?php echo $row['ID']; ?>">
-
-                    <div class="modal-dialog modal-dialog-centered">
-
-                        <div class="modal-content"
-                        style="border-radius:16px;">
-
-                            <div class="modal-header bg-danger text-white">
-
-                                <h5 class="modal-title">
-
-                                    Delete User
-
-                                </h5>
-
-                                <button class="btn-close btn-close-white"
-                                data-bs-dismiss="modal">
-
-                                </button>
-
-                            </div>
-
-                            <div class="modal-body text-center">
-
-                                Delete
-
-                                <strong>
-
-                                    <?php echo $row['Username']; ?>
-
-                                </strong>
-
-                                ?
-
-                            </div>
-
-                            <div class="modal-footer">
-
-                                <button class="btn btn-secondary"
-                                data-bs-dismiss="modal">
-
-                                    Cancel
-
-                                </button>
-
-                                <a href="users.php?delete=<?php echo $row['ID']; ?>"
-
-                                class="btn btn-danger">
-
-                                    Delete
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <?php } ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <!-- FORM SECTION -->
-
-    <div class="form-section">
-
-        <div class="form-card">
-
-            <div class="form-title">
-
-                <?php
-                echo isset($_GET['edit'])
-                ? "Edit User"
-                : "Add User";
-                ?>
-
-            </div>
-
-            <form method="POST">
-
-                <input type="hidden"
-
-                name="id"
-
-                value="<?php echo $edit_id; ?>">
-
-                <!-- Username -->
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Username
-
-                    </label>
+                <form method="GET"
+                    class="search-form">
 
                     <input type="text"
 
-                    name="username"
+                        name="search"
 
-                    class="form-control"
+                        class="search-input"
 
-                    placeholder="Enter username"
+                        placeholder="Search users..."
 
-                    value="<?php echo $edit_username; ?>"
+                        value="<?php echo $search; ?>">
 
-                    required>
+                    <button type="submit"
+                        class="search-btn">
 
-                </div>
+                        Search
 
-                <!-- Email -->
+                    </button>
 
-                <div class="mb-3">
+                </form>
 
-                    <label class="form-label">
+            </div>
 
-                        Email
+            <!-- TABLE -->
 
-                    </label>
+            <div class="table-card">
 
-                    <input type="email"
+                <table class="table table-hover">
 
-                    name="email"
+                    <thead>
 
-                    class="form-control"
+                        <tr>
 
-                    placeholder="Enter email"
+                            <th>ID</th>
 
-                    value="<?php echo $edit_email; ?>"
+                            <th>Username</th>
 
-                    required>
+                            <th>Email</th>
 
-                </div>
+                            <th>User Type</th>
 
-                <!-- User Type -->
+                            <th width="160">Action</th>
 
-                <div class="mb-3">
+                        </tr>
 
-                    <label class="form-label">
+                    </thead>
 
-                        User Type
+                    <tbody>
 
-                    </label>
+                        <?php while ($row = $user_result->fetch_assoc()) { ?>
 
-                    <select name="user_type"
-                    class="custom-select">
+                            <tr>
 
-                        <option value="Admin"
-                        <?php if($edit_type=="Admin") echo "selected"; ?>>
+                                <td><?php echo $row['ID']; ?></td>
 
-                            Admin
+                                <td><?php echo $row['Username']; ?></td>
 
-                        </option>
+                                <td><?php echo $row['Email']; ?></td>
 
-                        <option value="User"
-                        <?php if($edit_type=="User") echo "selected"; ?>>
+                                <td><?php echo $row['usertype']; ?></td>
 
-                            User
+                                <td>
 
-                        </option>
+                                    <div class="action-icons">
 
-                    </select>
+                                        <a href="users.php?edit=<?php echo $row['ID']; ?>"
+                                            class="edit-btn">
 
-                </div>
+                                            Edit
 
-                <!-- Password -->
+                                        </a>
 
-                <?php if(!isset($_GET['edit'])){ ?>
+                                        <button type="button"
 
-                <div class="mb-4">
+                                            class="delete-btn"
 
-                    <label class="form-label">
+                                            data-bs-toggle="modal"
 
-                        Password
+                                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
 
-                    </label>
+                                            Delete
 
-                    <input type="password"
+                                        </button>
 
-                    name="password"
+                                    </div>
 
-                    class="form-control"
+                                </td>
 
-                    placeholder="Enter password"
+                            </tr>
 
-                    required>
+                            <!-- DELETE MODAL -->
 
-                </div>
+                            <div class="modal fade"
 
-                <?php } ?>
+                                id="deleteModal<?php echo $row['ID']; ?>">
 
-                <!-- BUTTON -->
+                                <div class="modal-dialog modal-dialog-centered">
 
-                <button class="save-btn"
+                                    <div class="modal-content"
+                                        style="border-radius:16px;">
 
-                name="<?php
-                echo isset($_GET['edit'])
-                ? 'update_user'
-                : 'save_user';
-                ?>">
+                                        <div class="modal-header bg-danger text-white">
+
+                                            <h5 class="modal-title">
+
+                                                Delete User
+
+                                            </h5>
+
+                                            <button class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal">
+
+                                            </button>
+
+                                        </div>
+
+                                        <div class="modal-body text-center">
+
+                                            Delete
+
+                                            <strong>
+
+                                                <?php echo $row['Username']; ?>
+
+                                            </strong>
+
+                                            ?
+
+                                        </div>
+
+                                        <div class="modal-footer">
+
+                                            <button class="btn btn-secondary"
+                                                data-bs-dismiss="modal">
+
+                                                Cancel
+
+                                            </button>
+
+                                            <a href="users.php?delete=<?php echo $row['ID']; ?>"
+
+                                                class="btn btn-danger">
+
+                                                Delete
+
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        <?php } ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- FORM SECTION -->
+
+        <div class="form-section">
+
+            <div class="form-card">
+
+                <div class="form-title">
 
                     <?php
                     echo isset($_GET['edit'])
-                    ? 'Update User'
-                    : 'Save User';
+                        ? "Edit User"
+                        : "Add User";
                     ?>
 
-                </button>
+                </div>
 
-            </form>
+                <form method="POST">
+
+                    <input type="hidden"
+
+                        name="id"
+
+                        value="<?php echo $edit_id; ?>">
+
+                    <!-- Username -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Username
+
+                        </label>
+
+                        <input type="text"
+
+                            name="username"
+
+                            class="form-control"
+
+                            placeholder="Enter username"
+
+                            value="<?php echo $edit_username; ?>"
+
+                            required>
+
+                    </div>
+
+                    <!-- Email -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Email
+
+                        </label>
+
+                        <input type="email"
+
+                            name="email"
+
+                            class="form-control"
+
+                            placeholder="Enter email"
+
+                            value="<?php echo $edit_email; ?>"
+
+                            required>
+
+                    </div>
+
+                    <!-- User Type -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            User Type
+
+                        </label>
+
+                        <select name="user_type"
+                            class="custom-select">
+
+                            <option value="Admin"
+                                <?php if ($edit_type == "Admin") echo "selected"; ?>>
+
+                                Admin
+
+                            </option>
+
+                            <option value="User"
+                                <?php if ($edit_type == "User") echo "selected"; ?>>
+
+                                User
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Password -->
+
+                    <?php if (!isset($_GET['edit'])) { ?>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+
+                                Password
+
+                            </label>
+
+                            <input type="password"
+
+                                name="password"
+
+                                class="form-control"
+
+                                placeholder="Enter password"
+
+                                required>
+
+                        </div>
+
+                    <?php } ?>
+
+                    <!-- BUTTON -->
+
+                    <button class="save-btn"
+
+                        name="<?php
+                                echo isset($_GET['edit'])
+                                    ? 'update_user'
+                                    : 'save_user';
+                                ?>">
+
+                        <?php
+                        echo isset($_GET['edit'])
+                            ? 'Update User'
+                            : 'Save User';
+                        ?>
+
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
-
 </body>
+
 </html>

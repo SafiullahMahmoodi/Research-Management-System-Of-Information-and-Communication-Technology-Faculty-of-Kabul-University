@@ -1,6 +1,6 @@
 <?php
 
-if(session_status() == PHP_SESSION_NONE){
+if (session_status() == PHP_SESSION_NONE) {
 
     session_start();
 }
@@ -13,10 +13,8 @@ header("Expires: 0");
 
 // چک login
 
-if(!isset($_SESSION['user'])){
+if (!isset($_SESSION['user'])) {
 
     header("Location: ../login.php");
     exit();
 }
-
-?>

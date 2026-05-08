@@ -8,7 +8,7 @@ include('db_connection.php');
 
 $error = "";
 
-if(isset($_POST['check_email'])){
+if (isset($_POST['check_email'])) {
 
     $email = trim($_POST['email']);
 
@@ -18,7 +18,7 @@ if(isset($_POST['check_email'])){
 
     $result = $conn->query($sql);
 
-    if($result->num_rows > 0){
+    if ($result->num_rows > 0) {
 
         // Save Email In Session
 
@@ -28,8 +28,7 @@ if(isset($_POST['check_email'])){
 
         header("Location: updatepassword.php");
         exit();
-
-    }else{
+    } else {
 
         $error = "Email not found!";
     }
@@ -38,12 +37,13 @@ if(isset($_POST['check_email'])){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Local Bootstrap CSS -->
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -103,9 +103,9 @@ if(isset($_POST['check_email'])){
             <!-- Error Message -->
 
             <?php
-                if($error != ""){
-                    echo "<div class='alert alert-danger text-center'>$error</div>";
-                }
+            if ($error != "") {
+                echo "<div class='alert alert-danger text-center'>$error</div>";
+            }
             ?>
 
             <!-- Form -->
@@ -127,8 +127,7 @@ if(isset($_POST['check_email'])){
                         name="email"
                         class="form-control custom-input"
                         placeholder="Enter your email"
-                        required
-                    >
+                        required>
 
                 </div>
 
@@ -137,8 +136,7 @@ if(isset($_POST['check_email'])){
                 <button
                     type="submit"
                     name="check_email"
-                    class="btn btn-success w-100 continue-btn"
-                >
+                    class="btn btn-success w-100 continue-btn">
 
                     Continue
 
@@ -164,4 +162,5 @@ if(isset($_POST['check_email'])){
     <script src="css/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

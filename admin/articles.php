@@ -11,31 +11,31 @@ include('../db_connection.php');
 // CREATE PDF FOLDER
 // ===========================
 
-if(!file_exists("../PDF_File")){
+if (!file_exists("../PDF_File")) {
 
-    mkdir("../PDF_File",0777,true);
+    mkdir("../PDF_File", 0777, true);
 }
 
 // ===========================
 // INSERT ARTICLE
 // ===========================
 
-if(isset($_POST['save_article'])){
+if (isset($_POST['save_article'])) {
 
-    $id          = mysqli_real_escape_string($conn,$_POST['id']);
-    $title       = mysqli_real_escape_string($conn,$_POST['title']);
-    $description = mysqli_real_escape_string($conn,$_POST['description']);
-    $category    = mysqli_real_escape_string($conn,$_POST['category']);
-    $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
-    $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
-    $department  = mysqli_real_escape_string($conn,$_POST['department']);
-    $date        = mysqli_real_escape_string($conn,$_POST['date']);
+    $id          = mysqli_real_escape_string($conn, $_POST['id']);
+    $title       = mysqli_real_escape_string($conn, $_POST['title']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $category    = mysqli_real_escape_string($conn, $_POST['category']);
+    $teacher_id  = mysqli_real_escape_string($conn, $_POST['teacher_id']);
+    $student_id  = mysqli_real_escape_string($conn, $_POST['student_id']);
+    $department  = mysqli_real_escape_string($conn, $_POST['department']);
+    $date        = mysqli_real_escape_string($conn, $_POST['date']);
 
     // ===========================
     // CHECK TEACHER OR STUDENT
     // ===========================
 
-    if(empty($teacher_id) && empty($student_id)){
+    if (empty($teacher_id) && empty($student_id)) {
 
         die("Please select Teacher or Student.");
     }
@@ -44,7 +44,7 @@ if(isset($_POST['save_article'])){
     // CHECK TEACHER
     // ===========================
 
-    if(!empty($teacher_id)){
+    if (!empty($teacher_id)) {
 
         $check_teacher = $conn->query("
         SELECT ID
@@ -52,7 +52,7 @@ if(isset($_POST['save_article'])){
         WHERE ID='$teacher_id'
         ");
 
-        if($check_teacher->num_rows == 0){
+        if ($check_teacher->num_rows == 0) {
 
             die("Selected Teacher does not exist.");
         }
@@ -62,7 +62,7 @@ if(isset($_POST['save_article'])){
     // CHECK STUDENT
     // ===========================
 
-    if(!empty($student_id)){
+    if (!empty($student_id)) {
 
         $check_student = $conn->query("
         SELECT ID
@@ -70,7 +70,7 @@ if(isset($_POST['save_article'])){
         WHERE ID='$student_id'
         ");
 
-        if($check_student->num_rows == 0){
+        if ($check_student->num_rows == 0) {
 
             die("Selected Student does not exist.");
         }
@@ -81,12 +81,12 @@ if(isset($_POST['save_article'])){
     // ===========================
 
     $teacher_value = !empty($teacher_id)
-    ? "'$teacher_id'"
-    : "NULL";
+        ? "'$teacher_id'"
+        : "NULL";
 
     $student_value = !empty($student_id)
-    ? "'$student_id'"
-    : "NULL";
+        ? "'$student_id'"
+        : "NULL";
 
     $pdf_file = "";
 
@@ -94,7 +94,7 @@ if(isset($_POST['save_article'])){
     // UPLOAD PDF
     // ===========================
 
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
+    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != "") {
 
         $file_name = $_FILES['pdf_file']['name'];
         $file_tmp  = $_FILES['pdf_file']['tmp_name'];
@@ -104,14 +104,14 @@ if(isset($_POST['save_article'])){
             pathinfo($file_name, PATHINFO_EXTENSION)
         );
 
-        if($extension != "pdf"){
+        if ($extension != "pdf") {
 
             die("Only PDF files are allowed.");
         }
 
         // MAX 200MB
 
-        if($file_size > 209715200){
+        if ($file_size > 209715200) {
 
             die("File size must be less than 200MB.");
         }
@@ -164,7 +164,7 @@ if(isset($_POST['save_article'])){
 // DELETE ARTICLE
 // ===========================
 
-if(isset($_GET['delete'])){
+if (isset($_GET['delete'])) {
 
     $id = $_GET['delete'];
 
@@ -174,17 +174,17 @@ if(isset($_GET['delete'])){
     WHERE ID='$id'
     ");
 
-    if($pdf->num_rows > 0){
+    if ($pdf->num_rows > 0) {
 
         $p = $pdf->fetch_assoc();
 
-        if(
+        if (
             $p['PDF_File'] != ""
             &&
-            file_exists("../PDF_File/".$p['PDF_File'])
-        ){
+            file_exists("../PDF_File/" . $p['PDF_File'])
+        ) {
 
-            unlink("../PDF_File/".$p['PDF_File']);
+            unlink("../PDF_File/" . $p['PDF_File']);
         }
     }
 
@@ -210,7 +210,7 @@ $edit_student     = "";
 $edit_department  = "";
 $edit_date        = "";
 
-if(isset($_GET['edit'])){
+if (isset($_GET['edit'])) {
 
     $id = $_GET['edit'];
 
@@ -220,7 +220,7 @@ if(isset($_GET['edit'])){
     WHERE ID='$id'
     ");
 
-    if($res->num_rows > 0){
+    if ($res->num_rows > 0) {
 
         $row = $res->fetch_assoc();
 
@@ -239,29 +239,29 @@ if(isset($_GET['edit'])){
 // UPDATE ARTICLE
 // ===========================
 
-if(isset($_POST['update_article'])){
+if (isset($_POST['update_article'])) {
 
-    $id          = mysqli_real_escape_string($conn,$_POST['id']);
-    $title       = mysqli_real_escape_string($conn,$_POST['title']);
-    $description = mysqli_real_escape_string($conn,$_POST['description']);
-    $category    = mysqli_real_escape_string($conn,$_POST['category']);
-    $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
-    $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
-    $department  = mysqli_real_escape_string($conn,$_POST['department']);
-    $date        = mysqli_real_escape_string($conn,$_POST['date']);
+    $id          = mysqli_real_escape_string($conn, $_POST['id']);
+    $title       = mysqli_real_escape_string($conn, $_POST['title']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $category    = mysqli_real_escape_string($conn, $_POST['category']);
+    $teacher_id  = mysqli_real_escape_string($conn, $_POST['teacher_id']);
+    $student_id  = mysqli_real_escape_string($conn, $_POST['student_id']);
+    $department  = mysqli_real_escape_string($conn, $_POST['department']);
+    $date        = mysqli_real_escape_string($conn, $_POST['date']);
 
-    if(empty($teacher_id) && empty($student_id)){
+    if (empty($teacher_id) && empty($student_id)) {
 
         die("Please select Teacher or Student.");
     }
 
     $teacher_value = !empty($teacher_id)
-    ? "'$teacher_id'"
-    : "NULL";
+        ? "'$teacher_id'"
+        : "NULL";
 
     $student_value = !empty($student_id)
-    ? "'$student_id'"
-    : "NULL";
+        ? "'$student_id'"
+        : "NULL";
 
     $query = "
     UPDATE articles SET
@@ -279,7 +279,7 @@ if(isset($_POST['update_article'])){
     // UPDATE PDF
     // ===========================
 
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
+    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != "") {
 
         $file_name = $_FILES['pdf_file']['name'];
         $file_tmp  = $_FILES['pdf_file']['tmp_name'];
@@ -289,12 +289,12 @@ if(isset($_POST['update_article'])){
             pathinfo($file_name, PATHINFO_EXTENSION)
         );
 
-        if($extension != "pdf"){
+        if ($extension != "pdf") {
 
             die("Only PDF files are allowed.");
         }
 
-        if($file_size > 209715200){
+        if ($file_size > 209715200) {
 
             die("File size must be less than 200MB.");
         }
@@ -307,17 +307,17 @@ if(isset($_POST['update_article'])){
         WHERE ID='$id'
         ");
 
-        if($old->num_rows > 0){
+        if ($old->num_rows > 0) {
 
             $o = $old->fetch_assoc();
 
-            if(
+            if (
                 $o['PDF_File'] != ""
                 &&
-                file_exists("../PDF_File/".$o['PDF_File'])
-            ){
+                file_exists("../PDF_File/" . $o['PDF_File'])
+            ) {
 
-                unlink("../PDF_File/".$o['PDF_File']);
+                unlink("../PDF_File/" . $o['PDF_File']);
             }
         }
 
@@ -345,7 +345,7 @@ if(isset($_POST['update_article'])){
 
 $search = "";
 
-if(isset($_GET['search'])){
+if (isset($_GET['search'])) {
 
     $search = mysqli_real_escape_string(
         $conn,
@@ -381,8 +381,7 @@ if(isset($_GET['search'])){
 
     ORDER BY articles.ID DESC
     ");
-
-}else{
+} else {
 
     $article_result = $conn->query("
 
@@ -414,393 +413,394 @@ if(isset($_GET['search'])){
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Articles</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet"
-href="../css/bootstrap.min.css">
+    <title>Articles</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="../css/bootstrap.min.css">
 
-<script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
 
 </head>
 
 <body>
-<?php include('header.php'); ?>
+    <?php include('header.php'); ?>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-<!-- TABLE -->
+        <!-- TABLE -->
 
-<div class="table-section">
+        <div class="table-section">
 
-<div class="search-wrapper">
+            <div class="search-wrapper">
 
-<form method="GET"
-class="search-form">
+                <form method="GET"
+                    class="search-form">
 
-<input type="text"
+                    <input type="text"
 
-name="search"
+                        name="search"
 
-class="search-input"
+                        class="search-input"
 
-placeholder="Search articles..."
+                        placeholder="Search articles..."
 
-value="<?php echo $search; ?>">
+                        value="<?php echo $search; ?>">
 
-<button type="submit"
-class="search-btn">
+                    <button type="submit"
+                        class="search-btn">
 
-Search
+                        Search
 
-</button>
+                    </button>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-<div class="table-card">
+            <div class="table-card">
 
-<table class="table table-hover">
+                <table class="table table-hover">
 
-<thead>
+                    <thead>
 
-<tr>
+                        <tr>
 
-<th>ID</th>
-<th>Title</th>
-<th>Description</th>
-<th>Category</th>
-<th>Teacher</th>
-<th>Student</th>
-<th>Department</th>
-<th>Date</th>
-<th>PDF File</th>
-<th width="160">Action</th>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Teacher</th>
+                            <th>Student</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>PDF File</th>
+                            <th width="160">Action</th>
 
-</tr>
+                        </tr>
 
-</thead>
+                    </thead>
 
-<tbody>
+                    <tbody>
 
-<?php while($row = $article_result->fetch_assoc()){ ?>
+                        <?php while ($row = $article_result->fetch_assoc()) { ?>
 
-<tr>
+                            <tr>
 
-<td><?php echo $row['ID']; ?></td>
+                                <td><?php echo $row['ID']; ?></td>
 
-<td><?php echo $row['Title']; ?></td>
-<td><?php echo $row['Description']; ?></td>
+                                <td><?php echo $row['Title']; ?></td>
+                                <td><?php echo $row['Description']; ?></td>
 
-<td><?php echo $row['Category']; ?></td>
+                                <td><?php echo $row['Category']; ?></td>
 
-<td><?php echo $row['teacher_name']; ?></td>
+                                <td><?php echo $row['teacher_name']; ?></td>
 
-<td><?php echo $row['student_name']; ?></td>
+                                <td><?php echo $row['student_name']; ?></td>
 
-<td><?php echo $row['department_name']; ?></td>
+                                <td><?php echo $row['department_name']; ?></td>
 
-<td><?php echo $row['Date']; ?></td>
+                                <td><?php echo $row['Date']; ?></td>
 
-<td>
+                                <td>
 
-<?php if($row['PDF_File'] != ""){ ?>
+                                    <?php if ($row['PDF_File'] != "") { ?>
 
-<a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
-target="_blank"
-class="pdf-btn">
+                                        <a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
+                                            target="_blank"
+                                            class="pdf-btn">
 
-View PDF
+                                            View PDF
 
-</a>
+                                        </a>
 
-<?php }else{ ?>
+                                    <?php } else { ?>
 
-No File
+                                        No File
 
-<?php } ?>
+                                    <?php } ?>
 
-</td>
+                                </td>
 
-<td>
+                                <td>
 
-<div class="action-icons">
+                                    <div class="action-icons">
 
-<a href="articles.php?edit=<?php echo $row['ID']; ?>"
-class="edit-btn">
+                                        <a href="articles.php?edit=<?php echo $row['ID']; ?>"
+                                            class="edit-btn">
 
-Edit
+                                            Edit
 
-</a>
+                                        </a>
 
-<a href="articles.php?delete=<?php echo $row['ID']; ?>"
-class="delete-btn"
+                                        <a href="articles.php?delete=<?php echo $row['ID']; ?>"
+                                            class="delete-btn"
 
-onclick="return confirm('Delete this article?')">
+                                            onclick="return confirm('Delete this article?')">
 
-Delete
+                                            Delete
 
-</a>
+                                        </a>
 
-</div>
+                                    </div>
 
-</td>
+                                </td>
 
-</tr>
+                            </tr>
 
-<?php } ?>
+                        <?php } ?>
 
-</tbody>
+                    </tbody>
 
-</table>
+                </table>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<!-- FORM -->
+        <!-- FORM -->
 
-<div class="form-section">
+        <div class="form-section">
 
-<div class="form-card">
+            <div class="form-card">
 
-<div class="form-title">
+                <div class="form-title">
 
-<?php
-echo isset($_GET['edit'])
-? "Edit Article"
-: "Add Article";
-?>
+                    <?php
+                    echo isset($_GET['edit'])
+                        ? "Edit Article"
+                        : "Add Article";
+                    ?>
 
-</div>
+                </div>
 
-<form method="POST"
-enctype="multipart/form-data">
+                <form method="POST"
+                    enctype="multipart/form-data">
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">ID</label>
+                        <label class="form-label">ID</label>
 
-<input type="text"
+                        <input type="text"
 
-name="id"
+                            name="id"
 
-class="form-control"
+                            class="form-control"
 
-required
+                            required
 
-value="<?php echo $edit_id; ?>">
+                            value="<?php echo $edit_id; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Title</label>
+                        <label class="form-label">Title</label>
 
-<input type="text"
+                        <input type="text"
 
-name="title"
+                            name="title"
 
-class="form-control"
+                            class="form-control"
 
-required
+                            required
 
-value="<?php echo $edit_title; ?>">
+                            value="<?php echo $edit_title; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Description</label>
+                        <label class="form-label">Description</label>
 
-<textarea name="description"
+                        <textarea name="description"
 
-class="form-control"
+                            class="form-control"
 
-required><?php echo $edit_description; ?></textarea>
+                            required><?php echo $edit_description; ?></textarea>
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Category</label>
+                        <label class="form-label">Category</label>
 
-<input type="text"
+                        <input type="text"
 
-name="category"
+                            name="category"
 
-class="form-control"
+                            class="form-control"
 
-required
+                            required
 
-value="<?php echo $edit_category; ?>">
+                            value="<?php echo $edit_category; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Teacher</label>
+                        <label class="form-label">Teacher</label>
 
-<select name="teacher_id"
-class="custom-select">
-<option value="">
-    
-</option>
+                        <select name="teacher_id"
+                            class="custom-select">
+                            <option value="">
 
-<?php
+                            </option>
 
-$teacher = $conn->query("SELECT * FROM teacher");
+                            <?php
 
-while($t = $teacher->fetch_assoc()){
+                            $teacher = $conn->query("SELECT * FROM teacher");
 
-?>
+                            while ($t = $teacher->fetch_assoc()) {
 
-<option value="<?php echo $t['ID']; ?>"
+                            ?>
 
-<?php
-if($edit_teacher == $t['ID'])
-echo "selected";
-?>>
+                                <option value="<?php echo $t['ID']; ?>"
 
-<?php echo $t['Name']; ?>
+                                    <?php
+                                    if ($edit_teacher == $t['ID'])
+                                        echo "selected";
+                                    ?>>
 
-</option>
+                                    <?php echo $t['Name']; ?>
 
-<?php } ?>
+                                </option>
 
-</select>
+                            <?php } ?>
 
-</div>
+                        </select>
 
-<div class="mb-2">
+                    </div>
 
-<label class="form-label">Student</label>
+                    <div class="mb-2">
 
-<select name="student_id"
-class="custom-select">
-<option value="">
+                        <label class="form-label">Student</label>
 
-</option>
+                        <select name="student_id"
+                            class="custom-select">
+                            <option value="">
 
-<?php
+                            </option>
 
-$student = $conn->query("SELECT * FROM students");
+                            <?php
 
-while($s = $student->fetch_assoc()){
+                            $student = $conn->query("SELECT * FROM students");
 
-?>
+                            while ($s = $student->fetch_assoc()) {
 
-<option value="<?php echo $s['ID']; ?>"
+                            ?>
 
-<?php
-if($edit_student == $s['ID'])
-echo "selected";
-?>>
+                                <option value="<?php echo $s['ID']; ?>"
 
-<?php echo $s['Name']; ?>
+                                    <?php
+                                    if ($edit_student == $s['ID'])
+                                        echo "selected";
+                                    ?>>
 
-</option>
+                                    <?php echo $s['Name']; ?>
 
-<?php } ?>
+                                </option>
 
-</select>
+                            <?php } ?>
 
-</div>
+                        </select>
 
-<div class="mb-2">
+                    </div>
 
-<label class="form-label">Department</label>
+                    <div class="mb-2">
 
-<select name="department"
-class="custom-select">
+                        <label class="form-label">Department</label>
 
-<?php
+                        <select name="department"
+                            class="custom-select">
 
-$dep = $conn->query("SELECT * FROM department");
+                            <?php
 
-while($d = $dep->fetch_assoc()){
+                            $dep = $conn->query("SELECT * FROM department");
 
-?>
-<option value="">
-    Select Department
-</option>
+                            while ($d = $dep->fetch_assoc()) {
 
-<option value="<?php echo $d['ID']; ?>"
+                            ?>
+                                <option value="">
+                                    Select Department
+                                </option>
 
-<?php
-if($edit_department == $d['ID'])
-echo "selected";
-?>>
+                                <option value="<?php echo $d['ID']; ?>"
 
-<?php echo $d['Name']; ?>
+                                    <?php
+                                    if ($edit_department == $d['ID'])
+                                        echo "selected";
+                                    ?>>
 
-</option>
+                                    <?php echo $d['Name']; ?>
 
-<?php } ?>
+                                </option>
 
-</select>
+                            <?php } ?>
 
-</div>
+                        </select>
 
-<div class="mb-2">
+                    </div>
 
-<label class="form-label">PDF File</label>
+                    <div class="mb-2">
 
-<input type="file"
+                        <label class="form-label">PDF File</label>
 
-name="pdf_file"
+                        <input type="file"
 
-class="form-control">
+                            name="pdf_file"
 
-</div>
+                            class="form-control">
 
-<div class="mb-3">
+                    </div>
 
-<label class="form-label">Date</label>
+                    <div class="mb-3">
 
-<input type="date"
+                        <label class="form-label">Date</label>
 
-name="date"
+                        <input type="date"
 
-class="form-control"
+                            name="date"
 
-required
+                            class="form-control"
 
-value="<?php echo $edit_date; ?>">
+                            required
 
-</div>
+                            value="<?php echo $edit_date; ?>">
 
-<button type="submit"
+                    </div>
 
-class="save-btn"
+                    <button type="submit"
 
-name="<?php
-echo isset($_GET['edit'])
-? 'update_article'
-: 'save_article';
-?>">
+                        class="save-btn"
 
-<?php
-echo isset($_GET['edit'])
-? 'Update Article'
-: 'Save Article';
-?>
+                        name="<?php
+                                echo isset($_GET['edit'])
+                                    ? 'update_article'
+                                    : 'save_article';
+                                ?>">
 
-</button>
+                        <?php
+                        echo isset($_GET['edit'])
+                            ? 'Update Article'
+                            : 'Save Article';
+                        ?>
 
-</form>
+                    </button>
 
-</div>
+                </form>
 
-</div>
+            </div>
 
-</div>
+        </div>
+
+    </div>
 
 </body>
+
 </html>

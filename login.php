@@ -15,7 +15,7 @@ include('db_connection.php');
 
 $error = "";
 
-if(isset($_POST['login'])){
+if (isset($_POST['login'])) {
 
     $username_email = trim($_POST['username_email']);
     $usertype       = trim($_POST['user_type']);
@@ -29,13 +29,13 @@ if(isset($_POST['login'])){
 
     $result = $conn->query($sql);
 
-    if($result->num_rows > 0){
+    if ($result->num_rows > 0) {
 
         $row = $result->fetch_assoc();
 
         // Verify Password
 
-        if(password_verify($password, $row['Password'])){
+        if (password_verify($password, $row['Password'])) {
 
             // =========================
             // CREATE SESSION
@@ -50,23 +50,20 @@ if(isset($_POST['login'])){
             // REDIRECT
             // =========================
 
-            if($row['usertype'] == "admin"){
+            if ($row['usertype'] == "admin") {
 
                 header("Location: admin/dashboard.php");
                 exit();
-
-            }elseif($row['usertype'] == "user"){
+            } elseif ($row['usertype'] == "user") {
 
                 header("Location: user/dashboard.php");
                 exit();
             }
-
-        }else{
+        } else {
 
             $error = "Incorrect Password!";
         }
-
-    }else{
+    } else {
 
         $error = "User not found!";
     }
@@ -78,351 +75,350 @@ if(isset($_POST['login'])){
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Login</title>
+    <title>Login</title>
 
-<link rel="stylesheet"
-href="css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="css/bootstrap.min.css">
 
-<link rel="stylesheet"
-href="css/style.css">
+    <link rel="stylesheet"
+        href="css/style.css">
 
-<style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        body {
 
-body{
+            background: #f3f6fb;
 
-    background:#f3f6fb;
+            font-family: Segoe UI;
 
-    font-family:Segoe UI;
+            min-height: 100vh;
 
-    min-height:100vh;
+            display: flex;
 
-    display:flex;
+            flex-direction: column;
+        }
 
-    flex-direction:column;
-}
+        .main-header {
 
-.main-header{
+            background: #0f9d58;
 
-    background:#0f9d58;
+            color: white;
 
-    color:white;
+            padding: 16px 25px;
+        }
 
-    padding:16px 25px;
-}
+        .header-title {
 
-.header-title{
+            font-size: 18px;
 
-    font-size:18px;
+            font-weight: 700;
+        }
 
-    font-weight:700;
-}
+        .home-btn {
 
-.home-btn{
+            background: white;
 
-    background:white;
+            color: #0f9d58;
 
-    color:#0f9d58;
+            font-weight: 700;
 
-    font-weight:700;
+            border-radius: 8px;
 
-    border-radius:8px;
+            padding: 8px 18px;
+        }
 
-    padding:8px 18px;
-}
+        .home-btn:hover {
 
-.home-btn:hover{
+            background: #e8fff3;
 
-    background:#e8fff3;
+            color: #0f9d58;
+        }
 
-    color:#0f9d58;
-}
+        .main-container {
 
-.main-container{
+            flex: 1;
 
-    flex:1;
+            display: flex;
 
-    display:flex;
+            justify-content: center;
 
-    justify-content:center;
+            align-items: center;
 
-    align-items:center;
+            padding: 30px;
+        }
 
-    padding:30px;
-}
+        .login-card {
 
-.login-card{
+            width: 100%;
 
-    width:100%;
+            max-width: 430px;
 
-    max-width:430px;
+            background: white;
 
-    background:white;
+            border-radius: 18px;
 
-    border-radius:18px;
+            padding: 30px;
 
-    padding:30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
 
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
-}
+        .login-title {
 
-.login-title{
+            text-align: center;
 
-    text-align:center;
+            margin-bottom: 25px;
 
-    margin-bottom:25px;
+            color: #0f9d58;
 
-    color:#0f9d58;
+            font-weight: 700;
+        }
 
-    font-weight:700;
-}
+        .custom-input {
 
-.custom-input{
+            border-radius: 10px;
 
-    border-radius:10px;
+            padding: 12px;
 
-    padding:12px;
+            font-size: 14px;
+        }
 
-    font-size:14px;
-}
+        .login-btn {
 
-.login-btn{
+            border-radius: 10px;
 
-    border-radius:10px;
+            padding: 12px;
 
-    padding:12px;
+            font-size: 15px;
 
-    font-size:15px;
+            font-weight: 700;
 
-    font-weight:700;
+            background: #0f9d58;
 
-    background:#0f9d58;
+            border: none;
+        }
 
-    border:none;
-}
+        .login-btn:hover {
 
-.login-btn:hover{
+            background: #0c8047;
+        }
 
-    background:#0c8047;
-}
+        .links {
 
-.links{
+            margin-top: 18px;
+        }
 
-    margin-top:18px;
-}
+        .links a {
 
-.links a{
+            text-decoration: none;
 
-    text-decoration:none;
+            font-size: 13px;
 
-    font-size:13px;
+            color: #0f9d58;
 
-    color:#0f9d58;
+            font-weight: 600;
+        }
 
-    font-weight:600;
-}
+        .main-footer {
 
-.main-footer{
+            background: #0f9d58;
 
-    background:#0f9d58;
+            color: white;
 
-    color:white;
+            text-align: center;
 
-    text-align:center;
+            padding: 14px;
 
-    padding:14px;
-
-    font-size:14px;
-}
-
-</style>
+            font-size: 14px;
+        }
+    </style>
 
 </head>
 
 <body>
 
-<!-- Header -->
+    <!-- Header -->
 
-<header class="main-header">
+    <header class="main-header">
 
-<div class="container-fluid">
+        <div class="container-fluid">
 
-<div class="d-flex
+            <div class="d-flex
 justify-content-between
 align-items-center">
 
-<div class="header-title">
+                <div class="header-title">
 
-Research Management of Information
-and Communication Technology Faculty
+                    Research Management of Information
+                    and Communication Technology Faculty
 
-</div>
+                </div>
 
-<a href="index.php"
-class="btn home-btn">
+                <a href="index.php"
+                    class="btn home-btn">
 
-Home Page
+                    Home Page
 
-</a>
+                </a>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</header>
+    </header>
 
-<!-- Main Container -->
+    <!-- Main Container -->
 
-<div class="main-container">
+    <div class="main-container">
 
-<div class="login-card">
+        <div class="login-card">
 
-<h2 class="login-title">
+            <h2 class="login-title">
 
-Login Form
+                Login Form
 
-</h2>
+            </h2>
 
-<!-- Error -->
+            <!-- Error -->
 
-<?php
+            <?php
 
-if($error != ""){
+            if ($error != "") {
 
-    echo "
+                echo "
     <div class='alert alert-danger text-center'>
     $error
     </div>";
-}
+            }
 
-?>
+            ?>
 
-<!-- Form -->
+            <!-- Form -->
 
-<form method="POST">
+            <form method="POST">
 
-<div class="mb-3">
+                <div class="mb-3">
 
-<label class="form-label">
+                    <label class="form-label">
 
-Username or Email
+                        Username or Email
 
-</label>
+                    </label>
 
-<input
-type="text"
-name="username_email"
-class="form-control custom-input"
-placeholder="Enter username or email"
-required>
+                    <input
+                        type="text"
+                        name="username_email"
+                        class="form-control custom-input"
+                        placeholder="Enter username or email"
+                        required>
 
-</div>
+                </div>
 
-<div class="mb-3">
+                <div class="mb-3">
 
-<label class="form-label">
+                    <label class="form-label">
 
-User Type
+                        User Type
 
-</label>
+                    </label>
 
-<select
-name="user_type"
-class="form-select custom-input"
-required>
+                    <select
+                        name="user_type"
+                        class="form-select custom-input"
+                        required>
 
-<option value="">
+                        <option value="">
 
-Select User Type
+                            Select User Type
 
-</option>
+                        </option>
 
-<option value="admin">
+                        <option value="admin">
 
-Admin
+                            Admin
 
-</option>
+                        </option>
 
-<option value="user">
+                        <option value="user">
 
-User
+                            User
 
-</option>
+                        </option>
 
-</select>
+                    </select>
 
-</div>
+                </div>
 
-<div class="mb-3">
+                <div class="mb-3">
 
-<label class="form-label">
+                    <label class="form-label">
 
-Password
+                        Password
 
-</label>
+                    </label>
 
-<input
-type="password"
-name="password"
-class="form-control custom-input"
-placeholder="Enter password"
-required>
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control custom-input"
+                        placeholder="Enter password"
+                        required>
 
-</div>
+                </div>
 
-<button
-type="submit"
-name="login"
-class="btn btn-success w-100 login-btn">
+                <button
+                    type="submit"
+                    name="login"
+                    class="btn btn-success w-100 login-btn">
 
-Login
+                    Login
 
-</button>
+                </button>
 
-</form>
+            </form>
 
-<div class="links d-flex justify-content-between">
+            <div class="links d-flex justify-content-between">
 
-<a href="signup.php">
+                <a href="signup.php">
 
-Don't have account?
+                    Don't have account?
 
-</a>
+                </a>
 
-<a href="forgotpassword.php">
+                <a href="forgotpassword.php">
 
-Forgot Password
+                    Forgot Password
 
-</a>
+                </a>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<!-- Footer -->
+    <!-- Footer -->
 
-<footer class="main-footer">
+    <footer class="main-footer">
 
-&copy; <?php echo date("Y"); ?>
+        &copy; <?php echo date("Y"); ?>
 
-Information & Communication Technology
-Faculty of Kabul University
+        Information & Communication Technology
+        Faculty of Kabul University
 
-</footer>
+    </footer>
 
-<script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

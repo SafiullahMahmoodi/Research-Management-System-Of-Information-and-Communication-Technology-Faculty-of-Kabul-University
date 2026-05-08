@@ -9,7 +9,7 @@ include('db_connection.php');
 $message = "";
 $error   = "";
 
-if(isset($_POST['signup'])){
+if (isset($_POST['signup'])) {
 
     $username  = trim($_POST['username']);
     $email     = trim($_POST['email']);
@@ -26,22 +26,20 @@ if(isset($_POST['signup'])){
 
     $result = $conn->query($check);
 
-    if($result->num_rows > 0){
+    if ($result->num_rows > 0) {
 
         $error = "Username or Email already exists!";
-
-    }else{
+    } else {
 
         // Insert User
 
         $sql = "INSERT INTO users(username, email, usertype, password)
                 VALUES('$username', '$email', '$user_type', '$password')";
 
-        if($conn->query($sql) === TRUE){
+        if ($conn->query($sql) === TRUE) {
 
             $message = "Registration Successfully Completed!";
-
-        }else{
+        } else {
 
             $error = "Something went wrong!";
         }
@@ -51,12 +49,13 @@ if(isset($_POST['signup'])){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Local Bootstrap CSS -->
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -115,13 +114,13 @@ if(isset($_POST['signup'])){
             <!-- Error Message -->
 
             <?php
-                if($error != ""){
-                    echo "<div class='alert alert-danger text-center'>$error</div>";
-                }
+            if ($error != "") {
+                echo "<div class='alert alert-danger text-center'>$error</div>";
+            }
 
-                if($message != ""){
-                    echo "<div class='alert alert-success text-center'>$message</div>";
-                }
+            if ($message != "") {
+                echo "<div class='alert alert-success text-center'>$message</div>";
+            }
             ?>
 
             <!-- Signup Form -->
@@ -143,8 +142,7 @@ if(isset($_POST['signup'])){
                         name="username"
                         class="form-control custom-input"
                         placeholder="Enter username"
-                        required
-                    >
+                        required>
 
                 </div>
 
@@ -163,8 +161,7 @@ if(isset($_POST['signup'])){
                         name="email"
                         class="form-control custom-input"
                         placeholder="Enter email"
-                        required
-                    >
+                        required>
 
                 </div>
 
@@ -181,8 +178,7 @@ if(isset($_POST['signup'])){
                     <select
                         name="user_type"
                         class="form-select custom-input"
-                        required
-                    >
+                        required>
 
                         <option value="">
 
@@ -221,8 +217,7 @@ if(isset($_POST['signup'])){
                         name="password"
                         class="form-control custom-input"
                         placeholder="Enter password"
-                        required
-                    >
+                        required>
 
                 </div>
 
@@ -231,8 +226,7 @@ if(isset($_POST['signup'])){
                 <button
                     type="submit"
                     name="signup"
-                    class="btn btn-success w-100 signup-btn"
-                >
+                    class="btn btn-success w-100 signup-btn">
 
                     Sign Up
 
@@ -270,4 +264,5 @@ if(isset($_POST['signup'])){
     <script src="css/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

@@ -9,26 +9,26 @@ include('../db_connection.php');
 // CREATE PDF FOLDER
 // ===========================
 
-if(!file_exists("../PDF_File")){
+if (!file_exists("../PDF_File")) {
 
-    mkdir("../PDF_File",0777,true);
+    mkdir("../PDF_File", 0777, true);
 }
 
 // ===========================
 // INSERT TRANSLATED BOOK
 // ===========================
 
-if(isset($_POST['save_book'])){
+if (isset($_POST['save_book'])) {
 
-    $id             = mysqli_real_escape_string($conn,$_POST['id']);
-    $title          = mysqli_real_escape_string($conn,$_POST['title']);
-    $description    = mysqli_real_escape_string($conn,$_POST['description']);
-    $author         = mysqli_real_escape_string($conn,$_POST['author']);
-    $translated_by  = mysqli_real_escape_string($conn,$_POST['translated_by']);
-    $category       = mysqli_real_escape_string($conn,$_POST['category']);
-    $department     = mysqli_real_escape_string($conn,$_POST['department']);
+    $id             = mysqli_real_escape_string($conn, $_POST['id']);
+    $title          = mysqli_real_escape_string($conn, $_POST['title']);
+    $description    = mysqli_real_escape_string($conn, $_POST['description']);
+    $author         = mysqli_real_escape_string($conn, $_POST['author']);
+    $translated_by  = mysqli_real_escape_string($conn, $_POST['translated_by']);
+    $category       = mysqli_real_escape_string($conn, $_POST['category']);
+    $department     = mysqli_real_escape_string($conn, $_POST['department']);
     $pages          = (int)$_POST['pages'];
-    $publish_date   = mysqli_real_escape_string($conn,$_POST['publish_date']);
+    $publish_date   = mysqli_real_escape_string($conn, $_POST['publish_date']);
 
     // CHECK TRANSLATOR
 
@@ -38,7 +38,7 @@ if(isset($_POST['save_book'])){
     WHERE ID='$translated_by'
     ");
 
-    if($check_teacher->num_rows == 0){
+    if ($check_teacher->num_rows == 0) {
 
         die("Selected Translator does not exist.");
     }
@@ -47,7 +47,7 @@ if(isset($_POST['save_book'])){
 
     $pdf_file = "";
 
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
+    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != "") {
 
         $file_name = $_FILES['pdf_file']['name'];
         $file_tmp  = $_FILES['pdf_file']['tmp_name'];
@@ -57,12 +57,12 @@ if(isset($_POST['save_book'])){
             pathinfo($file_name, PATHINFO_EXTENSION)
         );
 
-        if($extension != "pdf"){
+        if ($extension != "pdf") {
 
             die("Only PDF files are allowed.");
         }
 
-        if($file_size > 209715200){
+        if ($file_size > 209715200) {
 
             die("File size must be less than 200MB.");
         }
@@ -115,7 +115,7 @@ if(isset($_POST['save_book'])){
 // DELETE BOOK
 // ===========================
 
-if(isset($_GET['delete'])){
+if (isset($_GET['delete'])) {
 
     $id = $_GET['delete'];
 
@@ -125,17 +125,17 @@ if(isset($_GET['delete'])){
     WHERE ID='$id'
     ");
 
-    if($pdf->num_rows > 0){
+    if ($pdf->num_rows > 0) {
 
         $p = $pdf->fetch_assoc();
 
-        if(
+        if (
             $p['PDF_File'] != ""
             &&
-            file_exists("../PDF_File/".$p['PDF_File'])
-        ){
+            file_exists("../PDF_File/" . $p['PDF_File'])
+        ) {
 
-            unlink("../PDF_File/".$p['PDF_File']);
+            unlink("../PDF_File/" . $p['PDF_File']);
         }
     }
 
@@ -162,7 +162,7 @@ $edit_department    = "";
 $edit_pages         = "";
 $edit_publish_date  = "";
 
-if(isset($_GET['edit'])){
+if (isset($_GET['edit'])) {
 
     $id = $_GET['edit'];
 
@@ -172,7 +172,7 @@ if(isset($_GET['edit'])){
     WHERE ID='$id'
     ");
 
-    if($res->num_rows > 0){
+    if ($res->num_rows > 0) {
 
         $row = $res->fetch_assoc();
 
@@ -192,17 +192,17 @@ if(isset($_GET['edit'])){
 // UPDATE BOOK
 // ===========================
 
-if(isset($_POST['update_book'])){
+if (isset($_POST['update_book'])) {
 
-    $id             = mysqli_real_escape_string($conn,$_POST['id']);
-    $title          = mysqli_real_escape_string($conn,$_POST['title']);
-    $description    = mysqli_real_escape_string($conn,$_POST['description']);
-    $author         = mysqli_real_escape_string($conn,$_POST['author']);
-    $translated_by  = mysqli_real_escape_string($conn,$_POST['translated_by']);
-    $category       = mysqli_real_escape_string($conn,$_POST['category']);
-    $department     = mysqli_real_escape_string($conn,$_POST['department']);
+    $id             = mysqli_real_escape_string($conn, $_POST['id']);
+    $title          = mysqli_real_escape_string($conn, $_POST['title']);
+    $description    = mysqli_real_escape_string($conn, $_POST['description']);
+    $author         = mysqli_real_escape_string($conn, $_POST['author']);
+    $translated_by  = mysqli_real_escape_string($conn, $_POST['translated_by']);
+    $category       = mysqli_real_escape_string($conn, $_POST['category']);
+    $department     = mysqli_real_escape_string($conn, $_POST['department']);
     $pages          = (int)$_POST['pages'];
-    $publish_date   = mysqli_real_escape_string($conn,$_POST['publish_date']);
+    $publish_date   = mysqli_real_escape_string($conn, $_POST['publish_date']);
 
     $query = "
     UPDATE translated_books SET
@@ -219,7 +219,7 @@ if(isset($_POST['update_book'])){
 
     // UPDATE PDF
 
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
+    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != "") {
 
         $file_name = $_FILES['pdf_file']['name'];
         $file_tmp  = $_FILES['pdf_file']['tmp_name'];
@@ -229,12 +229,12 @@ if(isset($_POST['update_book'])){
             pathinfo($file_name, PATHINFO_EXTENSION)
         );
 
-        if($extension != "pdf"){
+        if ($extension != "pdf") {
 
             die("Only PDF files are allowed.");
         }
 
-        if($file_size > 209715200){
+        if ($file_size > 209715200) {
 
             die("File size must be less than 200MB.");
         }
@@ -247,17 +247,17 @@ if(isset($_POST['update_book'])){
         WHERE ID='$id'
         ");
 
-        if($old->num_rows > 0){
+        if ($old->num_rows > 0) {
 
             $o = $old->fetch_assoc();
 
-            if(
+            if (
                 $o['PDF_File'] != ""
                 &&
-                file_exists("../PDF_File/".$o['PDF_File'])
-            ){
+                file_exists("../PDF_File/" . $o['PDF_File'])
+            ) {
 
-                unlink("../PDF_File/".$o['PDF_File']);
+                unlink("../PDF_File/" . $o['PDF_File']);
             }
         }
 
@@ -285,7 +285,7 @@ if(isset($_POST['update_book'])){
 
 $search = "";
 
-if(isset($_GET['search'])){
+if (isset($_GET['search'])) {
 
     $search = mysqli_real_escape_string(
         $conn,
@@ -317,8 +317,7 @@ if(isset($_GET['search'])){
 
     ORDER BY translated_books.ID DESC
     ");
-
-}else{
+} else {
 
     $book_result = $conn->query("
 
@@ -344,348 +343,349 @@ if(isset($_GET['search'])){
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>Translated Books</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet"
-href="../css/bootstrap.min.css">
+    <title>Translated Books</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="../css/bootstrap.min.css">
 
-<script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
 
 
 </head>
 
 <body>
-<?php include('header.php'); ?>
+    <?php include('header.php'); ?>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-<div class="table-section">
+        <div class="table-section">
 
-<div class="search-wrapper">
+            <div class="search-wrapper">
 
-<form method="GET"
-class="search-form">
+                <form method="GET"
+                    class="search-form">
 
-<input type="text"
-name="search"
-class="search-input"
-placeholder="Search translated books..."
-value="<?php echo $search; ?>">
+                    <input type="text"
+                        name="search"
+                        class="search-input"
+                        placeholder="Search translated books..."
+                        value="<?php echo $search; ?>">
 
-<button type="submit"
-class="search-btn">
+                    <button type="submit"
+                        class="search-btn">
 
-Search
+                        Search
 
-</button>
+                    </button>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-<div class="table-card">
+            <div class="table-card">
 
-<table class="table table-hover">
+                <table class="table table-hover">
 
-<thead>
+                    <thead>
 
-<tr>
+                        <tr>
 
-<th>ID</th>
-<th>Title</th>
-<th>Description</th>
-<th>Author</th>
-<th>Translator</th>
-<th>Category</th>
-<th>Department</th>
-<th>Pages</th>
-<th>Publish Date</th>
-<th>PDF</th>
-<th>Action</th>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Author</th>
+                            <th>Translator</th>
+                            <th>Category</th>
+                            <th>Department</th>
+                            <th>Pages</th>
+                            <th>Publish Date</th>
+                            <th>PDF</th>
+                            <th>Action</th>
 
-</tr>
+                        </tr>
 
-</thead>
+                    </thead>
 
-<tbody>
+                    <tbody>
 
-<?php while($row = $book_result->fetch_assoc()){ ?>
+                        <?php while ($row = $book_result->fetch_assoc()) { ?>
 
-<tr>
+                            <tr>
 
-<td><?php echo $row['ID']; ?></td>
-<td><?php echo $row['Title']; ?></td>
-<td><?php echo $row['Description']; ?></td>
-<td><?php echo $row['Author']; ?></td>
-<td><?php echo $row['translator_name']; ?></td>
-<td><?php echo $row['Category']; ?></td>
-<td><?php echo $row['department_name']; ?></td>
-<td><?php echo $row['Pages']; ?></td>
-<td><?php echo $row['Publish_Date']; ?></td>
+                                <td><?php echo $row['ID']; ?></td>
+                                <td><?php echo $row['Title']; ?></td>
+                                <td><?php echo $row['Description']; ?></td>
+                                <td><?php echo $row['Author']; ?></td>
+                                <td><?php echo $row['translator_name']; ?></td>
+                                <td><?php echo $row['Category']; ?></td>
+                                <td><?php echo $row['department_name']; ?></td>
+                                <td><?php echo $row['Pages']; ?></td>
+                                <td><?php echo $row['Publish_Date']; ?></td>
 
-<td>
+                                <td>
 
-<?php if($row['PDF_File'] != ""){ ?>
+                                    <?php if ($row['PDF_File'] != "") { ?>
 
-<a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
-target="_blank"
-class="pdf-btn">
+                                        <a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
+                                            target="_blank"
+                                            class="pdf-btn">
 
-PDF
+                                            PDF
 
-</a>
+                                        </a>
 
-<?php }else{ ?>
+                                    <?php } else { ?>
 
-No File
+                                        No File
 
-<?php } ?>
+                                    <?php } ?>
 
-</td>
+                                </td>
 
-<td>
+                                <td>
 
-<div class="action-icons">
+                                    <div class="action-icons">
 
-<a href="translatedbooks.php?edit=<?php echo $row['ID']; ?>"
-class="edit-btn">
+                                        <a href="translatedbooks.php?edit=<?php echo $row['ID']; ?>"
+                                            class="edit-btn">
 
-Edit
+                                            Edit
 
-</a>
+                                        </a>
 
-<a href="translatedbooks.php?delete=<?php echo $row['ID']; ?>"
-class="delete-btn"
-onclick="return confirm('Delete this book?')">
+                                        <a href="translatedbooks.php?delete=<?php echo $row['ID']; ?>"
+                                            class="delete-btn"
+                                            onclick="return confirm('Delete this book?')">
 
-Delete
+                                            Delete
 
-</a>
+                                        </a>
 
-</div>
+                                    </div>
 
-</td>
+                                </td>
 
-</tr>
+                            </tr>
 
-<?php } ?>
+                        <?php } ?>
 
-</tbody>
+                    </tbody>
 
-</table>
+                </table>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<div class="form-section">
+        <div class="form-section">
 
-<div class="form-card">
+            <div class="form-card">
 
-<div class="form-title">
+                <div class="form-title">
 
-<?php
-echo isset($_GET['edit'])
-? "Edit Translated Book"
-: "Add Translated Book";
-?>
+                    <?php
+                    echo isset($_GET['edit'])
+                        ? "Edit Translated Book"
+                        : "Add Translated Book";
+                    ?>
 
-</div>
+                </div>
 
-<form method="POST"
-enctype="multipart/form-data">
+                <form method="POST"
+                    enctype="multipart/form-data">
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">ID</label>
+                        <label class="form-label">ID</label>
 
-<input type="text"
-name="id"
-class="form-control"
-required
-value="<?php echo $edit_id; ?>">
+                        <input type="text"
+                            name="id"
+                            class="form-control"
+                            required
+                            value="<?php echo $edit_id; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Title</label>
+                        <label class="form-label">Title</label>
 
-<input type="text"
-name="title"
-class="form-control"
-required
-value="<?php echo $edit_title; ?>">
+                        <input type="text"
+                            name="title"
+                            class="form-control"
+                            required
+                            value="<?php echo $edit_title; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Description</label>
+                        <label class="form-label">Description</label>
 
-<textarea name="description"
-class="form-control"
-required><?php echo $edit_description; ?></textarea>
+                        <textarea name="description"
+                            class="form-control"
+                            required><?php echo $edit_description; ?></textarea>
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Author</label>
+                        <label class="form-label">Author</label>
 
-<input type="text"
-name="author"
-class="form-control"
-required
-value="<?php echo $edit_author; ?>">
+                        <input type="text"
+                            name="author"
+                            class="form-control"
+                            required
+                            value="<?php echo $edit_author; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Translated By</label>
+                        <label class="form-label">Translated By</label>
 
-<select name="translated_by"
-class="custom-select"
-required>
+                        <select name="translated_by"
+                            class="custom-select"
+                            required>
 
-<option value="">Select Translator</option>
+                            <option value="">Select Translator</option>
 
-<?php
+                            <?php
 
-$teacher = $conn->query("SELECT * FROM teacher");
+                            $teacher = $conn->query("SELECT * FROM teacher");
 
-while($t = $teacher->fetch_assoc()){
+                            while ($t = $teacher->fetch_assoc()) {
 
-?>
+                            ?>
 
-<option value="<?php echo $t['ID']; ?>"
+                                <option value="<?php echo $t['ID']; ?>"
 
-<?php
-if($edit_translated_by == $t['ID'])
-echo "selected";
-?>>
+                                    <?php
+                                    if ($edit_translated_by == $t['ID'])
+                                        echo "selected";
+                                    ?>>
 
-<?php echo $t['Name']; ?>
+                                    <?php echo $t['Name']; ?>
 
-</option>
+                                </option>
 
-<?php } ?>
+                            <?php } ?>
 
-</select>
+                        </select>
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Category</label>
+                        <label class="form-label">Category</label>
 
-<input type="text"
-name="category"
-class="form-control"
-required
-value="<?php echo $edit_category; ?>">
+                        <input type="text"
+                            name="category"
+                            class="form-control"
+                            required
+                            value="<?php echo $edit_category; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Department</label>
+                        <label class="form-label">Department</label>
 
-<select name="department"
-class="custom-select"
-required>
+                        <select name="department"
+                            class="custom-select"
+                            required>
 
-<option value="">Select Department</option>
+                            <option value="">Select Department</option>
 
-<?php
+                            <?php
 
-$dep = $conn->query("SELECT * FROM department");
+                            $dep = $conn->query("SELECT * FROM department");
 
-while($d = $dep->fetch_assoc()){
+                            while ($d = $dep->fetch_assoc()) {
 
-?>
+                            ?>
 
-<option value="<?php echo $d['ID']; ?>"
+                                <option value="<?php echo $d['ID']; ?>"
 
-<?php
-if($edit_department == $d['ID'])
-echo "selected";
-?>>
+                                    <?php
+                                    if ($edit_department == $d['ID'])
+                                        echo "selected";
+                                    ?>>
 
-<?php echo $d['Name']; ?>
+                                    <?php echo $d['Name']; ?>
 
-</option>
+                                </option>
 
-<?php } ?>
+                            <?php } ?>
 
-</select>
+                        </select>
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">Pages</label>
+                        <label class="form-label">Pages</label>
 
-<input type="number"
-name="pages"
-class="form-control"
-required
-value="<?php echo $edit_pages; ?>">
+                        <input type="number"
+                            name="pages"
+                            class="form-control"
+                            required
+                            value="<?php echo $edit_pages; ?>">
 
-</div>
+                    </div>
 
-<div class="mb-2">
+                    <div class="mb-2">
 
-<label class="form-label">PDF File</label>
+                        <label class="form-label">PDF File</label>
 
-<input type="file"
-name="pdf_file"
-class="form-control">
+                        <input type="file"
+                            name="pdf_file"
+                            class="form-control">
 
-</div>
+                    </div>
 
-<div class="mb-3">
+                    <div class="mb-3">
 
-<label class="form-label">Publish Date</label>
+                        <label class="form-label">Publish Date</label>
 
-<input type="date"
-name="publish_date"
-class="form-control"
-required
-value="<?php echo $edit_publish_date; ?>">
+                        <input type="date"
+                            name="publish_date"
+                            class="form-control"
+                            required
+                            value="<?php echo $edit_publish_date; ?>">
 
-</div>
+                    </div>
 
-<button type="submit"
-class="save-btn"
+                    <button type="submit"
+                        class="save-btn"
 
-name="<?php
-echo isset($_GET['edit'])
-? 'update_book'
-: 'save_book';
-?>">
+                        name="<?php
+                                echo isset($_GET['edit'])
+                                    ? 'update_book'
+                                    : 'save_book';
+                                ?>">
 
-<?php
-echo isset($_GET['edit'])
-? 'Update Book'
-: 'Save Book';
-?>
+                        <?php
+                        echo isset($_GET['edit'])
+                            ? 'Update Book'
+                            : 'Save Book';
+                        ?>
 
-</button>
+                    </button>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
 </body>
+
 </html>
