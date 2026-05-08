@@ -2,7 +2,6 @@
 
 include('../auth.php');
 
-
 include('../db_connection.php');
 
 // ===========================
@@ -26,7 +25,7 @@ if(isset($_POST['save_book'])){
     $category      = mysqli_real_escape_string($conn,$_POST['category']);
     $author        = mysqli_real_escape_string($conn,$_POST['author']);
     $department_id = mysqli_real_escape_string($conn,$_POST['department']);
-    $pages = isset($_POST['pages']) ? (int)$_POST['pages'] : 0;
+    $pages         = isset($_POST['pages']) ? (int)$_POST['pages'] : 0;
     $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
 
     // ===========================
@@ -86,12 +85,12 @@ if(isset($_POST['save_book'])){
     INSERT INTO books
     (
         ID,
-        title,
+        Title,
         Description,
         Category,
         Author,
         Department,
-        pages,
+        Pages,
         PDF_File,
         Publish_Date
     )
@@ -114,171 +113,6 @@ if(isset($_POST['save_book'])){
     exit();
 }
 
-// ===========================
-// DELETE BOOK
-// ===========================
-
-if(isset($_GET['delete'])){
-
-    $id = $_GET['delete'];
-
-    $pdf = $conn->query("
-    SELECT PDF_File
-    FROM books
-    WHERE ID='$id'
-    ");
-
-    if($pdf->num_rows > 0){
-
-        $p = $pdf->fetch_assoc();
-
-        if(
-            $p['PDF_File'] != ""
-            &&
-            file_exists("../PDF_File/".$p['PDF_File'])
-        ){
-
-            unlink("../PDF_File/".$p['PDF_File']);
-        }
-    }
-
-    $conn->query("
-    DELETE FROM books
-    WHERE ID='$id'
-    ");
-
-    header("Location: books.php");
-    exit();
-}
-
-// ===========================
-// EDIT BOOK
-// ===========================
-
-$edit_id            = "";
-$edit_title         = "";
-$edit_description   = "";
-$edit_category      = "";
-$edit_author        = "";
-$edit_department_id = "";
-$edit_pages         = "";
-$edit_publish_date  = "";
-
-if(isset($_GET['edit'])){
-
-    $id = $_GET['edit'];
-
-    $res = $conn->query("
-    SELECT *
-    FROM books
-    WHERE ID='$id'
-    ");
-
-    if($res->num_rows > 0){
-
-        $row = $res->fetch_assoc();
-
-        $edit_id            = $row['ID'];
-        $edit_title         = $row['title'];
-        $edit_description   = $row['Description'];
-        $edit_category      = $row['Category'];
-        $edit_author        = $row['Author'];
-        $edit_department_id = $row['Department'];
-        $edit_pages         = $row['Pages'];
-        $edit_publish_date  = $row['Publish_Date'];
-    }
-}
-
-// ===========================
-// UPDATE BOOK
-// ===========================
-
-if(isset($_POST['update_book'])){
-
-    $id            = mysqli_real_escape_string($conn,$_POST['id']);
-    $title         = mysqli_real_escape_string($conn,$_POST['title']);
-    $description   = mysqli_real_escape_string($conn,$_POST['description']);
-    $category      = mysqli_real_escape_string($conn,$_POST['category']);
-    $author        = mysqli_real_escape_string($conn,$_POST['author']);
-    $department_id = mysqli_real_escape_string($conn,$_POST['department']);
-    $pages = isset($_POST['pages']) ? (int)$_POST['pages'] : 0;
-    $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
-
-    $query = "
-    UPDATE books SET
-
-    title='$title',
-    Description='$description',
-    Category='$category',
-    Author='$author',
-    department='$department_id',
-    pages='$pages',
-    Publish_Date='$publish_date'
-    ";
-
-    // ===========================
-    // UPDATE PDF
-    // ===========================
-
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
-
-        $file_name = $_FILES['pdf_file']['name'];
-        $file_tmp  = $_FILES['pdf_file']['tmp_name'];
-        $file_size = $_FILES['pdf_file']['size'];
-
-        $extension = strtolower(
-            pathinfo($file_name, PATHINFO_EXTENSION)
-        );
-
-        if($extension != "pdf"){
-
-            die("Only PDF files are allowed.");
-        }
-
-        if($file_size > 209715200){
-
-            die("File size must be less than 200MB.");
-        }
-
-        // DELETE OLD FILE
-
-        $old = $conn->query("
-        SELECT PDF_File
-        FROM books
-        WHERE ID='$id'
-        ");
-
-        if($old->num_rows > 0){
-
-            $o = $old->fetch_assoc();
-
-            if(
-                $o['PDF_File'] != ""
-                &&
-                file_exists("../PDF_File/".$o['PDF_File'])
-            ){
-
-                unlink("../PDF_File/".$o['PDF_File']);
-            }
-        }
-
-        $pdf_file = time() . "_" . $file_name;
-
-        move_uploaded_file(
-            $file_tmp,
-            "../PDF_File/" . $pdf_file
-        );
-
-        $query .= ", PDF_File='$pdf_file'";
-    }
-
-    $query .= " WHERE ID='$id'";
-
-    $conn->query($query);
-
-    header("Location: books.php");
-    exit();
-}
 
 // ===========================
 // SEARCH BOOKS
@@ -350,6 +184,7 @@ if(isset($_GET['search'])){
 content="width=device-width, initial-scale=1.0">
 
 <title>Books</title>
+
 <link rel="stylesheet" href="style.css">
 
 <link rel="stylesheet"
@@ -357,10 +192,10 @@ href="../css/bootstrap.min.css">
 
 <script src="../js/bootstrap.bundle.min.js"></script>
 
-
 </head>
 
 <body>
+
 <?php include('header.php'); ?>
 
 <div class="main-wrapper">
@@ -410,7 +245,7 @@ Search
 <th>Pages</th>
 <th>Publish Date</th>
 <th>PDF File</th>
-<th width="160">Action</th>
+
 
 </tr>
 
@@ -425,6 +260,7 @@ Search
 <td><?php echo $row['ID']; ?></td>
 
 <td><?php echo $row['Title']; ?></td>
+
 <td><?php echo $row['Description']; ?></td>
 
 <td><?php echo $row['Category']; ?></td>
@@ -457,29 +293,7 @@ No File
 
 </td>
 
-<td>
 
-<div class="action-icons">
-
-<a href="books.php?edit=<?php echo $row['ID']; ?>"
-class="edit-btn">
-
-Edit
-
-</a>
-
-<a href="books.php?delete=<?php echo $row['ID']; ?>"
-class="delete-btn"
-
-onclick="return confirm('Delete this book?')">
-
-Delete
-
-</a>
-
-</div>
-
-</td>
 
 </tr>
 
@@ -493,18 +307,14 @@ Delete
 
 </div>
 
+<!-- FORM -->
+
 <div class="form-section">
 
 <div class="form-card">
 
 <div class="form-title">
-
-<?php
-echo isset($_GET['edit'])
-? "Edit Book"
-: "Add Book";
-?>
-
+Add Book
 </div>
 
 <form method="POST"
@@ -515,14 +325,9 @@ enctype="multipart/form-data">
 <label class="form-label">ID</label>
 
 <input type="text"
-
 name="id"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_id; ?>">
+required>
 
 </div>
 
@@ -531,14 +336,9 @@ value="<?php echo $edit_id; ?>">
 <label class="form-label">Title</label>
 
 <input type="text"
-
 name="title"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_title; ?>">
+required>
 
 </div>
 
@@ -548,7 +348,7 @@ value="<?php echo $edit_title; ?>">
 
 <textarea name="description"
 class="form-control"
-required><?php echo $edit_description; ?></textarea>
+required></textarea>
 
 </div>
 
@@ -557,14 +357,9 @@ required><?php echo $edit_description; ?></textarea>
 <label class="form-label">Category</label>
 
 <input type="text"
-
 name="category"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_category; ?>">
+required>
 
 </div>
 
@@ -576,7 +371,9 @@ value="<?php echo $edit_category; ?>">
 class="custom-select"
 required>
 
-<option value="">Select Author</option>
+<option value="">
+Select Author
+</option>
 
 <?php
 
@@ -586,12 +383,7 @@ while($t = $teacher->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $t['ID']; ?>"
-
-<?php
-if($edit_author == $t['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $t['ID']; ?>">
 
 <?php echo $t['Name']; ?>
 
@@ -611,6 +403,10 @@ echo "selected";
 class="custom-select"
 required>
 
+<option value="">
+Select Department
+</option>
+
 <?php
 
 $dep = $conn->query("SELECT * FROM department");
@@ -618,16 +414,8 @@ $dep = $conn->query("SELECT * FROM department");
 while($d = $dep->fetch_assoc()){
 
 ?>
-<option value="">
-    Select Department
-</option>
 
-<option value="<?php echo $d['ID']; ?>"
-
-<?php
-if($edit_department_id == $d['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $d['ID']; ?>">
 
 <?php echo $d['Name']; ?>
 
@@ -644,14 +432,9 @@ echo "selected";
 <label class="form-label">Pages</label>
 
 <input type="number"
-
 name="pages"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_pages; ?>">
+required>
 
 </div>
 
@@ -660,9 +443,7 @@ value="<?php echo $edit_pages; ?>">
 <label class="form-label">PDF File</label>
 
 <input type="file"
-
 name="pdf_file"
-
 class="form-control">
 
 </div>
@@ -672,32 +453,17 @@ class="form-control">
 <label class="form-label">Publish Date</label>
 
 <input type="date"
-
 name="publish_date"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_publish_date; ?>">
+required>
 
 </div>
 
 <button type="submit"
-
 class="save-btn"
+name="save_book">
 
-name="<?php
-echo isset($_GET['edit'])
-? 'update_book'
-: 'save_book';
-?>">
-
-<?php
-echo isset($_GET['edit'])
-? 'Update Book'
-: 'Save Book';
-?>
+Save Book
 
 </button>
 

@@ -160,184 +160,184 @@ if(isset($_POST['save_article'])){
     exit();
 }
 
-// ===========================
-// DELETE ARTICLE
-// ===========================
+// // ===========================
+// // DELETE ARTICLE
+// // ===========================
 
-if(isset($_GET['delete'])){
+// if(isset($_GET['delete'])){
 
-    $id = $_GET['delete'];
+//     $id = $_GET['delete'];
 
-    $pdf = $conn->query("
-    SELECT PDF_File
-    FROM articles
-    WHERE ID='$id'
-    ");
+//     $pdf = $conn->query("
+//     SELECT PDF_File
+//     FROM articles
+//     WHERE ID='$id'
+//     ");
 
-    if($pdf->num_rows > 0){
+//     if($pdf->num_rows > 0){
 
-        $p = $pdf->fetch_assoc();
+//         $p = $pdf->fetch_assoc();
 
-        if(
-            $p['PDF_File'] != ""
-            &&
-            file_exists("../PDF_File/".$p['PDF_File'])
-        ){
+//         if(
+//             $p['PDF_File'] != ""
+//             &&
+//             file_exists("../PDF_File/".$p['PDF_File'])
+//         ){
 
-            unlink("../PDF_File/".$p['PDF_File']);
-        }
-    }
+//             unlink("../PDF_File/".$p['PDF_File']);
+//         }
+//     }
 
-    $conn->query("
-    DELETE FROM articles
-    WHERE ID='$id'
-    ");
+//     $conn->query("
+//     DELETE FROM articles
+//     WHERE ID='$id'
+//     ");
 
-    header("Location: articles.php");
-    exit();
-}
+//     header("Location: articles.php");
+//     exit();
+// }
 
-// ===========================
-// EDIT ARTICLE
-// ===========================
+// // ===========================
+// // EDIT ARTICLE
+// // ===========================
 
-$edit_id          = "";
-$edit_title       = "";
-$edit_description = "";
-$edit_category    = "";
-$edit_teacher     = "";
-$edit_student     = "";
-$edit_department  = "";
-$edit_date        = "";
+// $edit_id          = "";
+// $edit_title       = "";
+// $edit_description = "";
+// $edit_category    = "";
+// $edit_teacher     = "";
+// $edit_student     = "";
+// $edit_department  = "";
+// $edit_date        = "";
 
-if(isset($_GET['edit'])){
+// if(isset($_GET['edit'])){
 
-    $id = $_GET['edit'];
+//     $id = $_GET['edit'];
 
-    $res = $conn->query("
-    SELECT *
-    FROM articles
-    WHERE ID='$id'
-    ");
+//     $res = $conn->query("
+//     SELECT *
+//     FROM articles
+//     WHERE ID='$id'
+//     ");
 
-    if($res->num_rows > 0){
+//     if($res->num_rows > 0){
 
-        $row = $res->fetch_assoc();
+//         $row = $res->fetch_assoc();
 
-        $edit_id          = $row['ID'];
-        $edit_title       = $row['Title'];
-        $edit_description = $row['Description'];
-        $edit_category    = $row['Category'];
-        $edit_teacher     = $row['Teacher_ID'];
-        $edit_student     = $row['Student_ID'];
-        $edit_department  = $row['Department'];
-        $edit_date        = $row['Date'];
-    }
-}
+//         $edit_id          = $row['ID'];
+//         $edit_title       = $row['Title'];
+//         $edit_description = $row['Description'];
+//         $edit_category    = $row['Category'];
+//         $edit_teacher     = $row['Teacher_ID'];
+//         $edit_student     = $row['Student_ID'];
+//         $edit_department  = $row['Department'];
+//         $edit_date        = $row['Date'];
+//     }
+// }
 
-// ===========================
-// UPDATE ARTICLE
-// ===========================
+// // ===========================
+// // UPDATE ARTICLE
+// // ===========================
 
-if(isset($_POST['update_article'])){
+// if(isset($_POST['update_article'])){
 
-    $id          = mysqli_real_escape_string($conn,$_POST['id']);
-    $title       = mysqli_real_escape_string($conn,$_POST['title']);
-    $description = mysqli_real_escape_string($conn,$_POST['description']);
-    $category    = mysqli_real_escape_string($conn,$_POST['category']);
-    $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
-    $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
-    $department  = mysqli_real_escape_string($conn,$_POST['department']);
-    $date        = mysqli_real_escape_string($conn,$_POST['date']);
+//     $id          = mysqli_real_escape_string($conn,$_POST['id']);
+//     $title       = mysqli_real_escape_string($conn,$_POST['title']);
+//     $description = mysqli_real_escape_string($conn,$_POST['description']);
+//     $category    = mysqli_real_escape_string($conn,$_POST['category']);
+//     $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
+//     $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
+//     $department  = mysqli_real_escape_string($conn,$_POST['department']);
+//     $date        = mysqli_real_escape_string($conn,$_POST['date']);
 
-    if(empty($teacher_id) && empty($student_id)){
+//     if(empty($teacher_id) && empty($student_id)){
 
-        die("Please select Teacher or Student.");
-    }
+//         die("Please select Teacher or Student.");
+//     }
 
-    $teacher_value = !empty($teacher_id)
-    ? "'$teacher_id'"
-    : "NULL";
+//     $teacher_value = !empty($teacher_id)
+//     ? "'$teacher_id'"
+//     : "NULL";
 
-    $student_value = !empty($student_id)
-    ? "'$student_id'"
-    : "NULL";
+//     $student_value = !empty($student_id)
+//     ? "'$student_id'"
+//     : "NULL";
 
-    $query = "
-    UPDATE articles SET
+//     $query = "
+//     UPDATE articles SET
 
-    Title='$title',
-    Description='$description',
-    Category='$category',
-    Teacher_ID=$teacher_value,
-    Student_ID=$student_value,
-    Department='$department',
-    Date='$date'
-    ";
+//     Title='$title',
+//     Description='$description',
+//     Category='$category',
+//     Teacher_ID=$teacher_value,
+//     Student_ID=$student_value,
+//     Department='$department',
+//     Date='$date'
+//     ";
 
-    // ===========================
-    // UPDATE PDF
-    // ===========================
+//     // ===========================
+//     // UPDATE PDF
+//     // ===========================
 
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
+//     if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
 
-        $file_name = $_FILES['pdf_file']['name'];
-        $file_tmp  = $_FILES['pdf_file']['tmp_name'];
-        $file_size = $_FILES['pdf_file']['size'];
+//         $file_name = $_FILES['pdf_file']['name'];
+//         $file_tmp  = $_FILES['pdf_file']['tmp_name'];
+//         $file_size = $_FILES['pdf_file']['size'];
 
-        $extension = strtolower(
-            pathinfo($file_name, PATHINFO_EXTENSION)
-        );
+//         $extension = strtolower(
+//             pathinfo($file_name, PATHINFO_EXTENSION)
+//         );
 
-        if($extension != "pdf"){
+//         if($extension != "pdf"){
 
-            die("Only PDF files are allowed.");
-        }
+//             die("Only PDF files are allowed.");
+//         }
 
-        if($file_size > 209715200){
+//         if($file_size > 209715200){
 
-            die("File size must be less than 200MB.");
-        }
+//             die("File size must be less than 200MB.");
+//         }
 
-        // DELETE OLD PDF
+//         // DELETE OLD PDF
 
-        $old = $conn->query("
-        SELECT PDF_File
-        FROM articles
-        WHERE ID='$id'
-        ");
+//         $old = $conn->query("
+//         SELECT PDF_File
+//         FROM articles
+//         WHERE ID='$id'
+//         ");
 
-        if($old->num_rows > 0){
+//         if($old->num_rows > 0){
 
-            $o = $old->fetch_assoc();
+//             $o = $old->fetch_assoc();
 
-            if(
-                $o['PDF_File'] != ""
-                &&
-                file_exists("../PDF_File/".$o['PDF_File'])
-            ){
+//             if(
+//                 $o['PDF_File'] != ""
+//                 &&
+//                 file_exists("../PDF_File/".$o['PDF_File'])
+//             ){
 
-                unlink("../PDF_File/".$o['PDF_File']);
-            }
-        }
+//                 unlink("../PDF_File/".$o['PDF_File']);
+//             }
+//         }
 
-        $pdf_file = time() . "_" . $file_name;
+//         $pdf_file = time() . "_" . $file_name;
 
-        move_uploaded_file(
-            $file_tmp,
-            "../PDF_File/" . $pdf_file
-        );
+//         move_uploaded_file(
+//             $file_tmp,
+//             "../PDF_File/" . $pdf_file
+//         );
 
-        $query .= ", PDF_File='$pdf_file'";
-    }
+//         $query .= ", PDF_File='$pdf_file'";
+//     }
 
-    $query .= " WHERE ID='$id'";
+//     $query .= " WHERE ID='$id'";
 
-    $conn->query($query);
+//     $conn->query($query);
 
-    header("Location: articles.php");
-    exit();
-}
+//     header("Location: articles.php");
+//     exit();
+// }
 
 // ===========================
 // SEARCH ARTICLES
@@ -481,7 +481,7 @@ Search
 <th>Department</th>
 <th>Date</th>
 <th>PDF File</th>
-<th width="160">Action</th>
+
 
 </tr>
 
@@ -528,29 +528,7 @@ No File
 
 </td>
 
-<td>
 
-<div class="action-icons">
-
-<a href="articles.php?edit=<?php echo $row['ID']; ?>"
-class="edit-btn">
-
-Edit
-
-</a>
-
-<a href="articles.php?delete=<?php echo $row['ID']; ?>"
-class="delete-btn"
-
-onclick="return confirm('Delete this article?')">
-
-Delete
-
-</a>
-
-</div>
-
-</td>
 
 </tr>
 
@@ -563,7 +541,6 @@ Delete
 </div>
 
 </div>
-
 <!-- FORM -->
 
 <div class="form-section">
@@ -571,13 +548,7 @@ Delete
 <div class="form-card">
 
 <div class="form-title">
-
-<?php
-echo isset($_GET['edit'])
-? "Edit Article"
-: "Add Article";
-?>
-
+Add Article
 </div>
 
 <form method="POST"
@@ -588,14 +559,9 @@ enctype="multipart/form-data">
 <label class="form-label">ID</label>
 
 <input type="text"
-
 name="id"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_id; ?>">
+required>
 
 </div>
 
@@ -604,14 +570,9 @@ value="<?php echo $edit_id; ?>">
 <label class="form-label">Title</label>
 
 <input type="text"
-
 name="title"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_title; ?>">
+required>
 
 </div>
 
@@ -620,10 +581,8 @@ value="<?php echo $edit_title; ?>">
 <label class="form-label">Description</label>
 
 <textarea name="description"
-
 class="form-control"
-
-required><?php echo $edit_description; ?></textarea>
+required></textarea>
 
 </div>
 
@@ -632,14 +591,9 @@ required><?php echo $edit_description; ?></textarea>
 <label class="form-label">Category</label>
 
 <input type="text"
-
 name="category"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_category; ?>">
+required>
 
 </div>
 
@@ -649,8 +603,9 @@ value="<?php echo $edit_category; ?>">
 
 <select name="teacher_id"
 class="custom-select">
+
 <option value="">
-    
+Select Teacher
 </option>
 
 <?php
@@ -661,12 +616,7 @@ while($t = $teacher->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $t['ID']; ?>"
-
-<?php
-if($edit_teacher == $t['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $t['ID']; ?>">
 
 <?php echo $t['Name']; ?>
 
@@ -684,8 +634,9 @@ echo "selected";
 
 <select name="student_id"
 class="custom-select">
-<option value="">
 
+<option value="">
+Select Student
 </option>
 
 <?php
@@ -696,12 +647,7 @@ while($s = $student->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $s['ID']; ?>"
-
-<?php
-if($edit_student == $s['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $s['ID']; ?>">
 
 <?php echo $s['Name']; ?>
 
@@ -718,7 +664,11 @@ echo "selected";
 <label class="form-label">Department</label>
 
 <select name="department"
-class="custom-select">
+class="custom-select" required>
+
+<option value="">
+Select Department
+</option>
 
 <?php
 
@@ -727,16 +677,8 @@ $dep = $conn->query("SELECT * FROM department");
 while($d = $dep->fetch_assoc()){
 
 ?>
-<option value="">
-    Select Department
-</option>
 
-<option value="<?php echo $d['ID']; ?>"
-
-<?php
-if($edit_department == $d['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $d['ID']; ?>">
 
 <?php echo $d['Name']; ?>
 
@@ -753,9 +695,7 @@ echo "selected";
 <label class="form-label">PDF File</label>
 
 <input type="file"
-
 name="pdf_file"
-
 class="form-control">
 
 </div>
@@ -765,32 +705,17 @@ class="form-control">
 <label class="form-label">Date</label>
 
 <input type="date"
-
 name="date"
-
 class="form-control"
-
-required
-
-value="<?php echo $edit_date; ?>">
+required>
 
 </div>
 
 <button type="submit"
-
 class="save-btn"
+name="save_article">
 
-name="<?php
-echo isset($_GET['edit'])
-? 'update_article'
-: 'save_article';
-?>">
-
-<?php
-echo isset($_GET['edit'])
-? 'Update Article'
-: 'Save Article';
-?>
+Save Article
 
 </button>
 

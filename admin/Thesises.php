@@ -1,6 +1,6 @@
 <?php
-
 include('../auth.php');
+
 
 
 include('../db_connection.php');
@@ -15,38 +15,47 @@ if(!file_exists("../PDF_File")){
 }
 
 // ===========================
-// INSERT BOOK
+// INSERT THESIS
 // ===========================
 
-if(isset($_POST['save_book'])){
+if(isset($_POST['save_thesis'])){
 
     $id            = mysqli_real_escape_string($conn,$_POST['id']);
     $title         = mysqli_real_escape_string($conn,$_POST['title']);
     $description   = mysqli_real_escape_string($conn,$_POST['description']);
     $category      = mysqli_real_escape_string($conn,$_POST['category']);
-    $author        = mysqli_real_escape_string($conn,$_POST['author']);
-    $department_id = mysqli_real_escape_string($conn,$_POST['department']);
-    $pages = isset($_POST['pages']) ? (int)$_POST['pages'] : 0;
+    $student_id    = mysqli_real_escape_string($conn,$_POST['student_id']);
+    $instructor    = mysqli_real_escape_string($conn,$_POST['instructor']);
+    $department    = mysqli_real_escape_string($conn,$_POST['department']);
     $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
 
-    // ===========================
-    // CHECK AUTHOR
-    // ===========================
+    // CHECK STUDENT
+
+    $check_student = $conn->query("
+    SELECT ID
+    FROM students
+    WHERE ID='$student_id'
+    ");
+
+    if($check_student->num_rows == 0){
+
+        die("Selected Student does not exist.");
+    }
+
+    // CHECK INSTRUCTOR
 
     $check_teacher = $conn->query("
     SELECT ID
     FROM teacher
-    WHERE ID='$author'
+    WHERE ID='$instructor'
     ");
 
     if($check_teacher->num_rows == 0){
 
-        die("Selected Author does not exist.");
+        die("Selected Instructor does not exist.");
     }
 
-    // ===========================
     // PDF FILE
-    // ===========================
 
     $pdf_file = "";
 
@@ -78,20 +87,18 @@ if(isset($_POST['save_book'])){
         );
     }
 
-    // ===========================
     // INSERT
-    // ===========================
 
     $conn->query("
-    INSERT INTO books
+    INSERT INTO thesis
     (
         ID,
-        title,
+        Title,
         Description,
         Category,
-        Author,
+        Student_ID,
+        Instructor,
         Department,
-        pages,
         PDF_File,
         Publish_Date
     )
@@ -102,20 +109,20 @@ if(isset($_POST['save_book'])){
         '$title',
         '$description',
         '$category',
-        '$author',
-        '$department_id',
-        '$pages',
+        '$student_id',
+        '$instructor',
+        '$department',
         '$pdf_file',
         '$publish_date'
     )
     ");
 
-    header("Location: books.php");
+    header("Location: thesis.php");
     exit();
 }
 
 // ===========================
-// DELETE BOOK
+// DELETE THESIS
 // ===========================
 
 if(isset($_GET['delete'])){
@@ -124,7 +131,7 @@ if(isset($_GET['delete'])){
 
     $pdf = $conn->query("
     SELECT PDF_File
-    FROM books
+    FROM thesis
     WHERE ID='$id'
     ");
 
@@ -143,26 +150,26 @@ if(isset($_GET['delete'])){
     }
 
     $conn->query("
-    DELETE FROM books
+    DELETE FROM thesis
     WHERE ID='$id'
     ");
 
-    header("Location: books.php");
+    header("Location: thesis.php");
     exit();
 }
 
 // ===========================
-// EDIT BOOK
+// EDIT THESIS
 // ===========================
 
-$edit_id            = "";
-$edit_title         = "";
-$edit_description   = "";
-$edit_category      = "";
-$edit_author        = "";
-$edit_department_id = "";
-$edit_pages         = "";
-$edit_publish_date  = "";
+$edit_id           = "";
+$edit_title        = "";
+$edit_description  = "";
+$edit_category     = "";
+$edit_student      = "";
+$edit_instructor   = "";
+$edit_department   = "";
+$edit_publish_date = "";
 
 if(isset($_GET['edit'])){
 
@@ -170,7 +177,7 @@ if(isset($_GET['edit'])){
 
     $res = $conn->query("
     SELECT *
-    FROM books
+    FROM thesis
     WHERE ID='$id'
     ");
 
@@ -178,47 +185,45 @@ if(isset($_GET['edit'])){
 
         $row = $res->fetch_assoc();
 
-        $edit_id            = $row['ID'];
-        $edit_title         = $row['title'];
-        $edit_description   = $row['Description'];
-        $edit_category      = $row['Category'];
-        $edit_author        = $row['Author'];
-        $edit_department_id = $row['Department'];
-        $edit_pages         = $row['Pages'];
-        $edit_publish_date  = $row['Publish_Date'];
+        $edit_id           = $row['ID'];
+        $edit_title        = $row['Title'];
+        $edit_description  = $row['Description'];
+        $edit_category     = $row['Category'];
+        $edit_student      = $row['Student_ID'];
+        $edit_instructor   = $row['Instructor'];
+        $edit_department   = $row['Department'];
+        $edit_publish_date = $row['Publish_Date'];
     }
 }
 
 // ===========================
-// UPDATE BOOK
+// UPDATE THESIS
 // ===========================
 
-if(isset($_POST['update_book'])){
+if(isset($_POST['update_thesis'])){
 
     $id            = mysqli_real_escape_string($conn,$_POST['id']);
     $title         = mysqli_real_escape_string($conn,$_POST['title']);
     $description   = mysqli_real_escape_string($conn,$_POST['description']);
     $category      = mysqli_real_escape_string($conn,$_POST['category']);
-    $author        = mysqli_real_escape_string($conn,$_POST['author']);
-    $department_id = mysqli_real_escape_string($conn,$_POST['department']);
-    $pages = isset($_POST['pages']) ? (int)$_POST['pages'] : 0;
+    $student_id    = mysqli_real_escape_string($conn,$_POST['student_id']);
+    $instructor    = mysqli_real_escape_string($conn,$_POST['instructor']);
+    $department    = mysqli_real_escape_string($conn,$_POST['department']);
     $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
 
     $query = "
-    UPDATE books SET
+    UPDATE thesis SET
 
-    title='$title',
+    Title='$title',
     Description='$description',
     Category='$category',
-    Author='$author',
-    department='$department_id',
-    pages='$pages',
+    Student_ID='$student_id',
+    Instructor='$instructor',
+    Department='$department',
     Publish_Date='$publish_date'
     ";
 
-    // ===========================
     // UPDATE PDF
-    // ===========================
 
     if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
 
@@ -240,11 +245,11 @@ if(isset($_POST['update_book'])){
             die("File size must be less than 200MB.");
         }
 
-        // DELETE OLD FILE
+        // DELETE OLD PDF
 
         $old = $conn->query("
         SELECT PDF_File
-        FROM books
+        FROM thesis
         WHERE ID='$id'
         ");
 
@@ -276,12 +281,12 @@ if(isset($_POST['update_book'])){
 
     $conn->query($query);
 
-    header("Location: books.php");
+    header("Location: thesis.php");
     exit();
 }
 
 // ===========================
-// SEARCH BOOKS
+// SEARCH
 // ===========================
 
 $search = "";
@@ -293,48 +298,58 @@ if(isset($_GET['search'])){
         $_GET['search']
     );
 
-    $book_result = $conn->query("
+    $thesis_result = $conn->query("
 
-    SELECT books.*,
-    teacher.Name AS author_name,
+    SELECT thesis.*,
+    students.Name AS student_name,
+    teacher.Name AS instructor_name,
     department.Name AS department_name
 
-    FROM books
+    FROM thesis
+
+    LEFT JOIN students
+    ON thesis.Student_ID = students.ID
 
     LEFT JOIN teacher
-    ON books.Author = teacher.ID
+    ON thesis.Instructor = teacher.ID
 
     LEFT JOIN department
-    ON books.Department = department.ID
+    ON thesis.Department = department.ID
 
     WHERE
 
-    books.ID LIKE '%$search%'
-    OR books.Title LIKE '%$search%'
-    OR books.Category LIKE '%$search%'
+    thesis.ID LIKE '%$search%'
+    OR thesis.Title LIKE '%$search%'
+    OR thesis.Description LIKE '%$search%'
+    OR thesis.Category LIKE '%$search%'
+    OR students.Name LIKE '%$search%'
     OR teacher.Name LIKE '%$search%'
     OR department.Name LIKE '%$search%'
 
-    ORDER BY books.ID DESC
+    ORDER BY thesis.ID DESC
     ");
 
 }else{
 
-    $book_result = $conn->query("
+    $thesis_result = $conn->query("
 
-    SELECT books.*,
-    teacher.Name AS author_name,
+    SELECT thesis.*,
+    students.Name AS student_name,
+    teacher.Name AS instructor_name,
     department.Name AS department_name
 
-    FROM books
+    FROM thesis
+
+    LEFT JOIN students
+    ON thesis.Student_ID = students.ID
 
     LEFT JOIN teacher
-    ON books.Author = teacher.ID
+    ON thesis.Instructor = teacher.ID
 
     LEFT JOIN department
-    ON books.Department = department.ID
+    ON thesis.Department = department.ID
 
-    ORDER BY books.ID DESC
+    ORDER BY thesis.ID DESC
     ");
 }
 ?>
@@ -349,13 +364,14 @@ if(isset($_GET['search'])){
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Books</title>
+<title>Thesis</title>
 <link rel="stylesheet" href="style.css">
 
 <link rel="stylesheet"
 href="../css/bootstrap.min.css">
 
 <script src="../js/bootstrap.bundle.min.js"></script>
+
 
 
 </head>
@@ -373,13 +389,9 @@ href="../css/bootstrap.min.css">
 class="search-form">
 
 <input type="text"
-
 name="search"
-
 class="search-input"
-
-placeholder="Search books..."
-
+placeholder="Search thesis..."
 value="<?php echo $search; ?>">
 
 <button type="submit"
@@ -405,12 +417,12 @@ Search
 <th>Title</th>
 <th>Description</th>
 <th>Category</th>
-<th>Author</th>
+<th>Student</th>
+<th>Instructor</th>
 <th>Department</th>
-<th>Pages</th>
 <th>Publish Date</th>
-<th>PDF File</th>
-<th width="160">Action</th>
+<th>PDF</th>
+<th>Action</th>
 
 </tr>
 
@@ -418,22 +430,23 @@ Search
 
 <tbody>
 
-<?php while($row = $book_result->fetch_assoc()){ ?>
+<?php while($row = $thesis_result->fetch_assoc()){ ?>
 
 <tr>
 
 <td><?php echo $row['ID']; ?></td>
 
 <td><?php echo $row['Title']; ?></td>
+
 <td><?php echo $row['Description']; ?></td>
 
 <td><?php echo $row['Category']; ?></td>
 
-<td><?php echo $row['author_name']; ?></td>
+<td><?php echo $row['student_name']; ?></td>
+
+<td><?php echo $row['instructor_name']; ?></td>
 
 <td><?php echo $row['department_name']; ?></td>
-
-<td><?php echo $row['Pages']; ?></td>
 
 <td><?php echo $row['Publish_Date']; ?></td>
 
@@ -445,7 +458,7 @@ Search
 target="_blank"
 class="pdf-btn">
 
-View PDF
+PDF
 
 </a>
 
@@ -461,17 +474,16 @@ No File
 
 <div class="action-icons">
 
-<a href="books.php?edit=<?php echo $row['ID']; ?>"
+<a href="thesis.php?edit=<?php echo $row['ID']; ?>"
 class="edit-btn">
 
 Edit
 
 </a>
 
-<a href="books.php?delete=<?php echo $row['ID']; ?>"
+<a href="thesis.php?delete=<?php echo $row['ID']; ?>"
 class="delete-btn"
-
-onclick="return confirm('Delete this book?')">
+onclick="return confirm('Delete this thesis?')">
 
 Delete
 
@@ -501,8 +513,8 @@ Delete
 
 <?php
 echo isset($_GET['edit'])
-? "Edit Book"
-: "Add Book";
+? "Edit Thesis"
+: "Add Thesis";
 ?>
 
 </div>
@@ -515,13 +527,9 @@ enctype="multipart/form-data">
 <label class="form-label">ID</label>
 
 <input type="text"
-
 name="id"
-
 class="form-control"
-
 required
-
 value="<?php echo $edit_id; ?>">
 
 </div>
@@ -531,13 +539,9 @@ value="<?php echo $edit_id; ?>">
 <label class="form-label">Title</label>
 
 <input type="text"
-
 name="title"
-
 class="form-control"
-
 required
-
 value="<?php echo $edit_title; ?>">
 
 </div>
@@ -557,26 +561,57 @@ required><?php echo $edit_description; ?></textarea>
 <label class="form-label">Category</label>
 
 <input type="text"
-
 name="category"
-
 class="form-control"
-
 required
-
 value="<?php echo $edit_category; ?>">
 
 </div>
 
 <div class="mb-2">
 
-<label class="form-label">Author</label>
+<label class="form-label">Student</label>
 
-<select name="author"
+<select name="student_id"
 class="custom-select"
 required>
 
-<option value="">Select Author</option>
+<option value="">Select Student</option>
+
+<?php
+
+$student = $conn->query("SELECT * FROM students");
+
+while($s = $student->fetch_assoc()){
+
+?>
+
+<option value="<?php echo $s['ID']; ?>"
+
+<?php
+if($edit_student == $s['ID'])
+echo "selected";
+?>>
+
+<?php echo $s['Name']; ?>
+
+</option>
+
+<?php } ?>
+
+</select>
+
+</div>
+
+<div class="mb-2">
+
+<label class="form-label">Instructor</label>
+
+<select name="instructor"
+class="custom-select"
+required>
+
+<option value="">Select Instructor</option>
 
 <?php
 
@@ -589,7 +624,7 @@ while($t = $teacher->fetch_assoc()){
 <option value="<?php echo $t['ID']; ?>"
 
 <?php
-if($edit_author == $t['ID'])
+if($edit_instructor == $t['ID'])
 echo "selected";
 ?>>
 
@@ -611,6 +646,8 @@ echo "selected";
 class="custom-select"
 required>
 
+<option value="">Select Department</option>
+
 <?php
 
 $dep = $conn->query("SELECT * FROM department");
@@ -618,14 +655,11 @@ $dep = $conn->query("SELECT * FROM department");
 while($d = $dep->fetch_assoc()){
 
 ?>
-<option value="">
-    Select Department
-</option>
 
 <option value="<?php echo $d['ID']; ?>"
 
 <?php
-if($edit_department_id == $d['ID'])
+if($edit_department == $d['ID'])
 echo "selected";
 ?>>
 
@@ -641,28 +675,10 @@ echo "selected";
 
 <div class="mb-2">
 
-<label class="form-label">Pages</label>
-
-<input type="number"
-
-name="pages"
-
-class="form-control"
-
-required
-
-value="<?php echo $edit_pages; ?>">
-
-</div>
-
-<div class="mb-2">
-
 <label class="form-label">PDF File</label>
 
 <input type="file"
-
 name="pdf_file"
-
 class="form-control">
 
 </div>
@@ -672,31 +688,26 @@ class="form-control">
 <label class="form-label">Publish Date</label>
 
 <input type="date"
-
 name="publish_date"
-
 class="form-control"
-
 required
-
 value="<?php echo $edit_publish_date; ?>">
 
 </div>
 
 <button type="submit"
-
 class="save-btn"
 
 name="<?php
 echo isset($_GET['edit'])
-? 'update_book'
-: 'save_book';
+? 'update_thesis'
+: 'save_thesis';
 ?>">
 
 <?php
 echo isset($_GET['edit'])
-? 'Update Book'
-: 'Save Book';
+? 'Update Thesis'
+: 'Save Thesis';
 ?>
 
 </button>
