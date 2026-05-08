@@ -159,12 +159,6 @@ while($row = $thesis_result->fetch_assoc()){
                 </a>
             </li>
 
-            <li>
-                <a href="users.php">
-                    <i class="bi bi-people-fill"></i>
-                    Users
-                </a>
-            </li>
 
             <li>
                 <a href="departments.php">

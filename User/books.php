@@ -327,7 +327,8 @@ enctype="multipart/form-data">
 <input type="text"
 name="id"
 class="form-control"
-required>
+required
+placeholder="Enter Book ID">
 
 </div>
 
@@ -338,7 +339,8 @@ required>
 <input type="text"
 name="title"
 class="form-control"
-required>
+required
+placeholder="Enter Book Title">
 
 </div>
 
@@ -348,7 +350,8 @@ required>
 
 <textarea name="description"
 class="form-control"
-required></textarea>
+required
+placeholder="Enter Description"></textarea>
 
 </div>
 
@@ -359,7 +362,8 @@ required></textarea>
 <input type="text"
 name="category"
 class="form-control"
-required>
+required
+placeholder="Enter Category">
 
 </div>
 

@@ -29,83 +29,6 @@ if(isset($_POST['save_student'])){
     exit();
 }
 
-// ===========================
-// Delete Student
-// ===========================
-
-if(isset($_GET['delete'])){
-
-    $delete_id = $_GET['delete'];
-
-    $delete_query = "DELETE FROM students
-    WHERE ID='$delete_id'";
-
-    $conn->query($delete_query);
-
-    header("Location: students.php");
-    exit();
-}
-
-// ===========================
-// Edit Student
-// ===========================
-
-$edit_id         = "";
-$edit_name       = "";
-$edit_lastname   = "";
-$edit_email      = "";
-$edit_contact    = "";
-$edit_department = "";
-
-if(isset($_GET['edit'])){
-
-    $edit_id = $_GET['edit'];
-
-    $edit_query = "SELECT * FROM students
-    WHERE ID='$edit_id'";
-
-    $edit_result = $conn->query($edit_query);
-
-    if($edit_result->num_rows > 0){
-
-        $edit_row = $edit_result->fetch_assoc();
-
-        $edit_name       = $edit_row['Name'];
-        $edit_lastname   = $edit_row['Last_Name'];
-        $edit_email      = $edit_row['Email'];
-        $edit_contact    = $edit_row['Contact'];
-        $edit_department = $edit_row['Department'];
-    }
-}
-
-// ===========================
-// Update Student
-// ===========================
-
-if(isset($_POST['update_student'])){
-
-    $id          = $_POST['id'];
-    $name        = $_POST['name'];
-    $lastname    = $_POST['lastname'];
-    $email       = $_POST['email'];
-    $contact     = $_POST['contact'];
-    $department  = $_POST['department'];
-
-    $update_query = "UPDATE students SET
-
-    Name='$name',
-    Last_Name='$lastname',
-    Email='$email',
-    Contact='$contact',
-    Department='$department'
-
-    WHERE ID='$id'";
-
-    $conn->query($update_query);
-
-    header("Location: students.php");
-    exit();
-}
 
 // ===========================
 // Search
@@ -225,7 +148,7 @@ href="../css/bootstrap.min.css">
 
                         <th>Department</th>
 
-                        <th width="160">Action</th>
+                      
 
                     </tr>
 
@@ -248,33 +171,6 @@ href="../css/bootstrap.min.css">
                     <td><?php echo $row['Contact']; ?></td>
 
                     <td><?php echo $row['department_name']; ?></td>
-
-                    <td>
-
-                        <div class="action-icons">
-
-                            <a href="students.php?edit=<?php echo $row['ID']; ?>"
-                            class="edit-btn">
-
-                                Edit
-
-                            </a>
-
-                            <button type="button"
-
-                            class="delete-btn"
-
-                            data-bs-toggle="modal"
-
-                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
-
-                                Delete
-
-                            </button>
-
-                        </div>
-
-                    </td>
 
                 </tr>
 
@@ -352,191 +248,158 @@ href="../css/bootstrap.min.css">
         </div>
 
     </div>
+<!-- FORM SECTION -->
 
-    <!-- FORM SECTION -->
+<div class="form-section">
 
-    <div class="form-section">
+    <div class="form-card">
 
-        <div class="form-card">
+        <div class="form-title">
 
-            <div class="form-title">
-
-                <?php
-                echo isset($_GET['edit'])
-                ? "Edit Student"
-                : "Add Student";
-                ?>
-
-            </div>
-
-            <form method="POST">
-
-                <input type="hidden"
-
-                name="id"
-
-                value="<?php echo $edit_id; ?>">
-
-                <!-- Name -->
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Name
-
-                    </label>
-
-                    <input type="text"
-
-                    name="name"
-
-                    class="form-control"
-
-                    placeholder="Enter student name"
-
-                    value="<?php echo $edit_name; ?>"
-
-                    required>
-
-                </div>
-
-                <!-- Last Name -->
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Last Name
-
-                    </label>
-
-                    <input type="text"
-
-                    name="lastname"
-
-                    class="form-control"
-
-                    placeholder="Enter last name"
-
-                    value="<?php echo $edit_lastname; ?>"
-
-                    required>
-
-                </div>
-
-                <!-- Email -->
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Email
-
-                    </label>
-
-                    <input type="email"
-
-                    name="email"
-
-                    class="form-control"
-
-                    placeholder="Enter email"
-
-                    value="<?php echo $edit_email; ?>"
-
-                    required>
-
-                </div>
-
-                <!-- Contact -->
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Contact
-
-                    </label>
-
-                    <input type="text"
-
-                    name="contact"
-
-                    class="form-control"
-
-                    placeholder="Enter contact"
-
-                    value="<?php echo $edit_contact; ?>"
-
-                    required>
-
-                </div>
-
-                <!-- Department -->
-
-                <div class="mb-4">
-
-                    <label class="form-label">
-
-                        Department
-
-                    </label>
-
-                    <select name="department"
-                    class="custom-select">
-
-                        <?php
-
-                        $department_query = "SELECT * FROM department";
-
-                        $department_result = $conn->query($department_query);
-
-                        while($department = $department_result->fetch_assoc()){
-
-                        ?>
-
-                        <option value="<?php echo $department['ID']; ?>"
-
-                        <?php
-                        if($edit_department == $department['ID']){
-                            echo "selected";
-                        }
-                        ?>>
-
-                            <?php echo $department['Name']; ?>
-
-                        </option>
-
-                        <?php } ?>
-
-                    </select>
-
-                </div>
-
-                <!-- BUTTON -->
-
-                <button class="save-btn"
-
-                name="<?php
-                echo isset($_GET['edit'])
-                ? 'update_student'
-                : 'save_student';
-                ?>">
-
-                    <?php
-                    echo isset($_GET['edit'])
-                    ? 'Update Student'
-                    : 'Save Student';
-                    ?>
-
-                </button>
-
-            </form>
+            Add Student
 
         </div>
 
+        <form method="POST">
+
+            <!-- Name -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Name
+
+                </label>
+
+                <input type="text"
+
+                name="name"
+
+                class="form-control"
+
+                placeholder="Enter student name"
+
+                required>
+
+            </div>
+
+            <!-- Last Name -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Last Name
+
+                </label>
+
+                <input type="text"
+
+                name="lastname"
+
+                class="form-control"
+
+                placeholder="Enter last name"
+
+                required>
+
+            </div>
+
+            <!-- Email -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Email
+
+                </label>
+
+                <input type="email"
+
+                name="email"
+
+                class="form-control"
+
+                placeholder="Enter email"
+
+                required>
+
+            </div>
+
+            <!-- Contact -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Contact
+
+                </label>
+
+                <input type="text"
+
+                name="contact"
+
+                class="form-control"
+
+                placeholder="Enter contact"
+
+                required>
+
+            </div>
+
+            <!-- Department -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    Department
+
+                </label>
+
+                <select name="department"
+                class="custom-select">
+
+                    <?php
+
+                    $department_query = "SELECT * FROM department";
+
+                    $department_result = $conn->query($department_query);
+
+                    while($department = $department_result->fetch_assoc()){
+
+                    ?>
+
+                    <option value="<?php echo $department['ID']; ?>">
+
+                        <?php echo $department['Name']; ?>
+
+                    </option>
+
+                    <?php } ?>
+
+                </select>
+
+            </div>
+
+            <!-- BUTTON -->
+
+            <button class="save-btn"
+
+            name="save_student">
+
+                Save Student
+
+            </button>
+
+        </form>
+
     </div>
+
+</div>
 
 </div>
 

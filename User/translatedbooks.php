@@ -1,8 +1,6 @@
 <?php
 include('../auth.php');
 
-
-
 include('../db_connection.php');
 
 // ===========================
@@ -112,174 +110,6 @@ if(isset($_POST['save_book'])){
 }
 
 // ===========================
-// DELETE BOOK
-// ===========================
-
-if(isset($_GET['delete'])){
-
-    $id = $_GET['delete'];
-
-    $pdf = $conn->query("
-    SELECT PDF_File
-    FROM translated_books
-    WHERE ID='$id'
-    ");
-
-    if($pdf->num_rows > 0){
-
-        $p = $pdf->fetch_assoc();
-
-        if(
-            $p['PDF_File'] != ""
-            &&
-            file_exists("../PDF_File/".$p['PDF_File'])
-        ){
-
-            unlink("../PDF_File/".$p['PDF_File']);
-        }
-    }
-
-    $conn->query("
-    DELETE FROM translated_books
-    WHERE ID='$id'
-    ");
-
-    header("Location: translatedbooks.php");
-    exit();
-}
-
-// ===========================
-// EDIT BOOK
-// ===========================
-
-$edit_id            = "";
-$edit_title         = "";
-$edit_description   = "";
-$edit_author        = "";
-$edit_translated_by = "";
-$edit_category      = "";
-$edit_department    = "";
-$edit_pages         = "";
-$edit_publish_date  = "";
-
-if(isset($_GET['edit'])){
-
-    $id = $_GET['edit'];
-
-    $res = $conn->query("
-    SELECT *
-    FROM translated_books
-    WHERE ID='$id'
-    ");
-
-    if($res->num_rows > 0){
-
-        $row = $res->fetch_assoc();
-
-        $edit_id            = $row['ID'];
-        $edit_title         = $row['Title'];
-        $edit_description   = $row['Description'];
-        $edit_author        = $row['Author'];
-        $edit_translated_by = $row['Translated_by'];
-        $edit_category      = $row['Category'];
-        $edit_department    = $row['Department'];
-        $edit_pages         = $row['Pages'];
-        $edit_publish_date  = $row['Publish_Date'];
-    }
-}
-
-// ===========================
-// UPDATE BOOK
-// ===========================
-
-if(isset($_POST['update_book'])){
-
-    $id             = mysqli_real_escape_string($conn,$_POST['id']);
-    $title          = mysqli_real_escape_string($conn,$_POST['title']);
-    $description    = mysqli_real_escape_string($conn,$_POST['description']);
-    $author         = mysqli_real_escape_string($conn,$_POST['author']);
-    $translated_by  = mysqli_real_escape_string($conn,$_POST['translated_by']);
-    $category       = mysqli_real_escape_string($conn,$_POST['category']);
-    $department     = mysqli_real_escape_string($conn,$_POST['department']);
-    $pages          = (int)$_POST['pages'];
-    $publish_date   = mysqli_real_escape_string($conn,$_POST['publish_date']);
-
-    $query = "
-    UPDATE translated_books SET
-
-    Title='$title',
-    Description='$description',
-    Author='$author',
-    translated_by='$translated_by',
-    Category='$category',
-    Department='$department',
-    Pages='$pages',
-    Publish_Date='$publish_date'
-    ";
-
-    // UPDATE PDF
-
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
-
-        $file_name = $_FILES['pdf_file']['name'];
-        $file_tmp  = $_FILES['pdf_file']['tmp_name'];
-        $file_size = $_FILES['pdf_file']['size'];
-
-        $extension = strtolower(
-            pathinfo($file_name, PATHINFO_EXTENSION)
-        );
-
-        if($extension != "pdf"){
-
-            die("Only PDF files are allowed.");
-        }
-
-        if($file_size > 209715200){
-
-            die("File size must be less than 200MB.");
-        }
-
-        // DELETE OLD PDF
-
-        $old = $conn->query("
-        SELECT PDF_File
-        FROM translated_books
-        WHERE ID='$id'
-        ");
-
-        if($old->num_rows > 0){
-
-            $o = $old->fetch_assoc();
-
-            if(
-                $o['PDF_File'] != ""
-                &&
-                file_exists("../PDF_File/".$o['PDF_File'])
-            ){
-
-                unlink("../PDF_File/".$o['PDF_File']);
-            }
-        }
-
-        $pdf_file = time() . "_" . $file_name;
-
-        move_uploaded_file(
-            $file_tmp,
-            "../PDF_File/" . $pdf_file
-        );
-
-        $query .= ", PDF_File='$pdf_file'";
-    }
-
-    $query .= " WHERE ID='$id'";
-
-    $conn->query($query);
-
-    header("Location: translatedbooks.php");
-    exit();
-}
-
-// ===========================
 // SEARCH
 // ===========================
 
@@ -350,16 +180,18 @@ if(isset($_GET['search'])){
 content="width=device-width, initial-scale=1.0">
 
 <title>Translated Books</title>
+
 <link rel="stylesheet" href="style.css">
+
 <link rel="stylesheet"
 href="../css/bootstrap.min.css">
 
 <script src="../js/bootstrap.bundle.min.js"></script>
 
-
 </head>
 
 <body>
+
 <?php include('header.php'); ?>
 
 <div class="main-wrapper">
@@ -406,7 +238,6 @@ Search
 <th>Pages</th>
 <th>Publish Date</th>
 <th>PDF</th>
-<th>Action</th>
 
 </tr>
 
@@ -448,29 +279,6 @@ No File
 
 </td>
 
-<td>
-
-<div class="action-icons">
-
-<a href="translatedbooks.php?edit=<?php echo $row['ID']; ?>"
-class="edit-btn">
-
-Edit
-
-</a>
-
-<a href="translatedbooks.php?delete=<?php echo $row['ID']; ?>"
-class="delete-btn"
-onclick="return confirm('Delete this book?')">
-
-Delete
-
-</a>
-
-</div>
-
-</td>
-
 </tr>
 
 <?php } ?>
@@ -489,11 +297,7 @@ Delete
 
 <div class="form-title">
 
-<?php
-echo isset($_GET['edit'])
-? "Edit Translated Book"
-: "Add Translated Book";
-?>
+Add Translated Book
 
 </div>
 
@@ -508,7 +312,7 @@ enctype="multipart/form-data">
 name="id"
 class="form-control"
 required
-value="<?php echo $edit_id; ?>">
+placeholder="Enter Book ID">
 
 </div>
 
@@ -520,7 +324,7 @@ value="<?php echo $edit_id; ?>">
 name="title"
 class="form-control"
 required
-value="<?php echo $edit_title; ?>">
+placeholder="Enter Title">
 
 </div>
 
@@ -530,7 +334,8 @@ value="<?php echo $edit_title; ?>">
 
 <textarea name="description"
 class="form-control"
-required><?php echo $edit_description; ?></textarea>
+required
+placeholder="Enter Description"></textarea>
 
 </div>
 
@@ -541,8 +346,7 @@ required><?php echo $edit_description; ?></textarea>
 <input type="text"
 name="author"
 class="form-control"
-required
-value="<?php echo $edit_author; ?>">
+required>
 
 </div>
 
@@ -564,12 +368,7 @@ while($t = $teacher->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $t['ID']; ?>"
-
-<?php
-if($edit_translated_by == $t['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $t['ID']; ?>">
 
 <?php echo $t['Name']; ?>
 
@@ -589,7 +388,7 @@ echo "selected";
 name="category"
 class="form-control"
 required
-value="<?php echo $edit_category; ?>">
+placeholder="Enter Category">
 
 </div>
 
@@ -611,12 +410,7 @@ while($d = $dep->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $d['ID']; ?>"
-
-<?php
-if($edit_department == $d['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $d['ID']; ?>">
 
 <?php echo $d['Name']; ?>
 
@@ -635,8 +429,7 @@ echo "selected";
 <input type="number"
 name="pages"
 class="form-control"
-required
-value="<?php echo $edit_pages; ?>">
+required>
 
 </div>
 
@@ -657,25 +450,15 @@ class="form-control">
 <input type="date"
 name="publish_date"
 class="form-control"
-required
-value="<?php echo $edit_publish_date; ?>">
+required>
 
 </div>
 
 <button type="submit"
 class="save-btn"
+name="save_book">
 
-name="<?php
-echo isset($_GET['edit'])
-? 'update_book'
-: 'save_book';
-?>">
-
-<?php
-echo isset($_GET['edit'])
-? 'Update Book'
-: 'Save Book';
-?>
+Save Book
 
 </button>
 

@@ -122,170 +122,6 @@ if(isset($_POST['save_thesis'])){
 }
 
 // ===========================
-// DELETE THESIS
-// ===========================
-
-if(isset($_GET['delete'])){
-
-    $id = $_GET['delete'];
-
-    $pdf = $conn->query("
-    SELECT PDF_File
-    FROM thesis
-    WHERE ID='$id'
-    ");
-
-    if($pdf->num_rows > 0){
-
-        $p = $pdf->fetch_assoc();
-
-        if(
-            $p['PDF_File'] != ""
-            &&
-            file_exists("../PDF_File/".$p['PDF_File'])
-        ){
-
-            unlink("../PDF_File/".$p['PDF_File']);
-        }
-    }
-
-    $conn->query("
-    DELETE FROM thesis
-    WHERE ID='$id'
-    ");
-
-    header("Location: thesis.php");
-    exit();
-}
-
-// ===========================
-// EDIT THESIS
-// ===========================
-
-$edit_id           = "";
-$edit_title        = "";
-$edit_description  = "";
-$edit_category     = "";
-$edit_student      = "";
-$edit_instructor   = "";
-$edit_department   = "";
-$edit_publish_date = "";
-
-if(isset($_GET['edit'])){
-
-    $id = $_GET['edit'];
-
-    $res = $conn->query("
-    SELECT *
-    FROM thesis
-    WHERE ID='$id'
-    ");
-
-    if($res->num_rows > 0){
-
-        $row = $res->fetch_assoc();
-
-        $edit_id           = $row['ID'];
-        $edit_title        = $row['Title'];
-        $edit_description  = $row['Description'];
-        $edit_category     = $row['Category'];
-        $edit_student      = $row['Student_ID'];
-        $edit_instructor   = $row['Instructor'];
-        $edit_department   = $row['Department'];
-        $edit_publish_date = $row['Publish_Date'];
-    }
-}
-
-// ===========================
-// UPDATE THESIS
-// ===========================
-
-if(isset($_POST['update_thesis'])){
-
-    $id            = mysqli_real_escape_string($conn,$_POST['id']);
-    $title         = mysqli_real_escape_string($conn,$_POST['title']);
-    $description   = mysqli_real_escape_string($conn,$_POST['description']);
-    $category      = mysqli_real_escape_string($conn,$_POST['category']);
-    $student_id    = mysqli_real_escape_string($conn,$_POST['student_id']);
-    $instructor    = mysqli_real_escape_string($conn,$_POST['instructor']);
-    $department    = mysqli_real_escape_string($conn,$_POST['department']);
-    $publish_date  = mysqli_real_escape_string($conn,$_POST['publish_date']);
-
-    $query = "
-    UPDATE thesis SET
-
-    Title='$title',
-    Description='$description',
-    Category='$category',
-    Student_ID='$student_id',
-    Instructor='$instructor',
-    Department='$department',
-    Publish_Date='$publish_date'
-    ";
-
-    // UPDATE PDF
-
-    if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
-
-        $file_name = $_FILES['pdf_file']['name'];
-        $file_tmp  = $_FILES['pdf_file']['tmp_name'];
-        $file_size = $_FILES['pdf_file']['size'];
-
-        $extension = strtolower(
-            pathinfo($file_name, PATHINFO_EXTENSION)
-        );
-
-        if($extension != "pdf"){
-
-            die("Only PDF files are allowed.");
-        }
-
-        if($file_size > 209715200){
-
-            die("File size must be less than 200MB.");
-        }
-
-        // DELETE OLD PDF
-
-        $old = $conn->query("
-        SELECT PDF_File
-        FROM thesis
-        WHERE ID='$id'
-        ");
-
-        if($old->num_rows > 0){
-
-            $o = $old->fetch_assoc();
-
-            if(
-                $o['PDF_File'] != ""
-                &&
-                file_exists("../PDF_File/".$o['PDF_File'])
-            ){
-
-                unlink("../PDF_File/".$o['PDF_File']);
-            }
-        }
-
-        $pdf_file = time() . "_" . $file_name;
-
-        move_uploaded_file(
-            $file_tmp,
-            "../PDF_File/" . $pdf_file
-        );
-
-        $query .= ", PDF_File='$pdf_file'";
-    }
-
-    $query .= " WHERE ID='$id'";
-
-    $conn->query($query);
-
-    header("Location: thesis.php");
-    exit();
-}
-
-// ===========================
 // SEARCH
 // ===========================
 
@@ -422,7 +258,7 @@ Search
 <th>Department</th>
 <th>Publish Date</th>
 <th>PDF</th>
-<th>Action</th>
+
 
 </tr>
 
@@ -470,29 +306,6 @@ No File
 
 </td>
 
-<td>
-
-<div class="action-icons">
-
-<a href="thesis.php?edit=<?php echo $row['ID']; ?>"
-class="edit-btn">
-
-Edit
-
-</a>
-
-<a href="thesis.php?delete=<?php echo $row['ID']; ?>"
-class="delete-btn"
-onclick="return confirm('Delete this thesis?')">
-
-Delete
-
-</a>
-
-</div>
-
-</td>
-
 </tr>
 
 <?php } ?>
@@ -518,7 +331,6 @@ echo isset($_GET['edit'])
 ?>
 
 </div>
-
 <form method="POST"
 enctype="multipart/form-data">
 
@@ -530,7 +342,7 @@ enctype="multipart/form-data">
 name="id"
 class="form-control"
 required
-value="<?php echo $edit_id; ?>">
+placeholder="Enter Thesis ID">
 
 </div>
 
@@ -542,7 +354,7 @@ value="<?php echo $edit_id; ?>">
 name="title"
 class="form-control"
 required
-value="<?php echo $edit_title; ?>">
+placeholder="Enter Thesis Title">
 
 </div>
 
@@ -552,7 +364,8 @@ value="<?php echo $edit_title; ?>">
 
 <textarea name="description"
 class="form-control"
-required><?php echo $edit_description; ?></textarea>
+required
+placeholder="Enter Description"></textarea>
 
 </div>
 
@@ -564,7 +377,7 @@ required><?php echo $edit_description; ?></textarea>
 name="category"
 class="form-control"
 required
-value="<?php echo $edit_category; ?>">
+placeholder="Enter Category">
 
 </div>
 
@@ -586,12 +399,7 @@ while($s = $student->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $s['ID']; ?>"
-
-<?php
-if($edit_student == $s['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $s['ID']; ?>">
 
 <?php echo $s['Name']; ?>
 
@@ -621,12 +429,7 @@ while($t = $teacher->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $t['ID']; ?>"
-
-<?php
-if($edit_instructor == $t['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $t['ID']; ?>">
 
 <?php echo $t['Name']; ?>
 
@@ -656,12 +459,7 @@ while($d = $dep->fetch_assoc()){
 
 ?>
 
-<option value="<?php echo $d['ID']; ?>"
-
-<?php
-if($edit_department == $d['ID'])
-echo "selected";
-?>>
+<option value="<?php echo $d['ID']; ?>">
 
 <?php echo $d['Name']; ?>
 
@@ -690,25 +488,15 @@ class="form-control">
 <input type="date"
 name="publish_date"
 class="form-control"
-required
-value="<?php echo $edit_publish_date; ?>">
+required>
 
 </div>
 
 <button type="submit"
 class="save-btn"
+name="save_thesis">
 
-name="<?php
-echo isset($_GET['edit'])
-? 'update_thesis'
-: 'save_thesis';
-?>">
-
-<?php
-echo isset($_GET['edit'])
-? 'Update Thesis'
-: 'Save Thesis';
-?>
+Save Thesis
 
 </button>
 

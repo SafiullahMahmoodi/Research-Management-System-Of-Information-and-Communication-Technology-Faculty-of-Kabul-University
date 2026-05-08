@@ -307,7 +307,7 @@ body{
 }
 
 .form-title{
-    font-size:18px;
+    font-size:13px;
     font-weight:700;
     color:#0f172a;
     margin-bottom:15px;
@@ -331,7 +331,7 @@ body{
     height:40px;
     border-radius:8px;
     border:1px solid #d1d5db;
-    font-size:12px;
+    font-size:10px;
     background:white;
     padding:0 10px;
     transition:0.3s;

@@ -131,12 +131,7 @@ body{
 
 <div class="header-menu">
 
-<a href="users.php"
-class="<?php echo basename($_SERVER['PHP_SELF']) == 'users.php' ? 'active' : ''; ?>">
 
-Users
-
-</a>
 
 <a href="departments.php"
 class="<?php echo basename($_SERVER['PHP_SELF']) == 'departments.php' ? 'active' : ''; ?>">
