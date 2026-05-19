@@ -37,15 +37,25 @@ if (isset($_GET['delete'])) {
 
     $delete_id = $_GET['delete'];
 
-    $delete_query = "DELETE FROM students
-    WHERE ID='$delete_id'";
+    // Delete related thesis
 
-    $conn->query($delete_query);
+    $conn->query("DELETE FROM thesis
+    WHERE Student_ID='$delete_id'");
+
+    // Delete related articles
+
+    $conn->query("DELETE FROM articles
+    WHERE Student_ID='$delete_id'");
+
+
+    // Delete student
+
+    $conn->query("DELETE FROM students
+    WHERE ID='$delete_id'");
 
     header("Location: students.php");
     exit();
 }
-
 // ===========================
 // Edit Student
 // ===========================
@@ -259,17 +269,15 @@ $student_result = $conn->query($student_query);
 
                                         </a>
 
-                                        <button type="button"
+                                        <a href="students.php?delete=<?php echo $row['ID']; ?>"
 
                                             class="delete-btn"
 
-                                            data-bs-toggle="modal"
-
-                                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
+                                            onclick="return confirm('Are you sure you want to delete this Student? It will delete all data that related to this students in other tables.')">
 
                                             Delete
 
-                                        </button>
+                                        </a>
 
                                     </div>
 
@@ -277,70 +285,6 @@ $student_result = $conn->query($student_query);
 
                             </tr>
 
-                            <!-- DELETE MODAL -->
-
-                            <div class="modal fade"
-
-                                id="deleteModal<?php echo $row['ID']; ?>">
-
-                                <div class="modal-dialog modal-dialog-centered">
-
-                                    <div class="modal-content"
-                                        style="border-radius:16px;">
-
-                                        <div class="modal-header bg-danger text-white">
-
-                                            <h5 class="modal-title">
-
-                                                Delete Student
-
-                                            </h5>
-
-                                            <button class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal">
-
-                                            </button>
-
-                                        </div>
-
-                                        <div class="modal-body text-center">
-
-                                            Delete
-
-                                            <strong>
-
-                                                <?php echo $row['Name']; ?>
-
-                                            </strong>
-
-                                            ?
-
-                                        </div>
-
-                                        <div class="modal-footer">
-
-                                            <button class="btn btn-secondary"
-                                                data-bs-dismiss="modal">
-
-                                                Cancel
-
-                                            </button>
-
-                                            <a href="students.php?delete=<?php echo $row['ID']; ?>"
-
-                                                class="btn btn-danger">
-
-                                                Delete
-
-                                            </a>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
 
                         <?php } ?>
 

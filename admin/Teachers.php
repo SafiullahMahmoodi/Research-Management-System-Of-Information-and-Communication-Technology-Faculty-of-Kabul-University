@@ -1,13 +1,18 @@
 <?php
 include('../auth.php');
-
-
-
 include('../db_connection.php');
+
+// ===========================
+// Message
+// ===========================
+
+$message = "";
+$message_type = "";
 
 // ===========================
 // Insert Teacher
 // ===========================
+
 if (isset($_POST['save_teacher'])) {
 
     $name        = $_POST['name'];
@@ -31,9 +36,32 @@ if (isset($_POST['save_teacher'])) {
 // ===========================
 // Delete
 // ===========================
+
 if (isset($_GET['delete'])) {
 
     $id = $_GET['delete'];
+
+    // Delete related articles
+
+    $conn->query("DELETE FROM articles
+    WHERE Teacher_ID='$id'");
+
+    // Delete related books
+
+    $conn->query("DELETE FROM books
+    WHERE Author='$id'");
+
+    // Delete related translated books
+
+    $conn->query("DELETE FROM translated_books
+    WHERE translated_by='$id'");
+
+    // Delete related thesis
+
+    $conn->query("DELETE FROM thesis
+    WHERE Instructor='$id'");
+
+    // Then delete teacher
 
     $conn->query("DELETE FROM teacher
     WHERE ID='$id'");
@@ -41,10 +69,10 @@ if (isset($_GET['delete'])) {
     header("Location: teachers.php");
     exit();
 }
-
 // ===========================
 // Edit
 // ===========================
+
 $edit_id = "";
 $edit_name = "";
 $edit_lastname = "";
@@ -77,6 +105,7 @@ if (isset($_GET['edit'])) {
 // ===========================
 // Update
 // ===========================
+
 if (isset($_POST['update_teacher'])) {
 
     $id = $_POST['id'];
@@ -105,6 +134,7 @@ if (isset($_POST['update_teacher'])) {
 // ===========================
 // Search
 // ===========================
+
 $search = "";
 
 if (isset($_GET['search'])) {
@@ -153,365 +183,13 @@ if (isset($_GET['search'])) {
         content="width=device-width, initial-scale=1.0">
 
     <title>Teachers</title>
+
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <!-- 
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    background:#eef2f7;
-    font-family:Segoe UI;
-    overflow:hidden;
-}
-                
-/* =========================
-   Main Layout
-========================= */
-
-.main-wrapper{
-
-    display:flex;
-
-    gap:18px;
-
-    padding:18px;
-
-    height:calc(100vh - 65px);
-}
-
-/* =========================
-   Table Section
-========================= */
-
-.table-section{
-
-    width:78%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    overflow:hidden;
-}
-
-/* =========================
-   Search
-========================= */
-
-.search-wrapper{
-
-    display:flex;
-
-    justify-content:center;
-
-    margin-bottom:15px;
-}
-
-.search-form{
-
-    display:flex;
-
-    width:100%;
-
-    max-width:520px;
-}
-
-.search-input{
-
-    width:100%;
-
-    border:none;
-
-    outline:none;
-
-    padding:11px 14px;
-
-    border-radius:12px 0 0 12px;
-
-    border:1px solid #d1d5db;
-
-    background:white;
-
-    font-size:13px;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.search-btn{
-
-    border:none;
-
-    background:#0f9d58;
-
-    color:white;
-
-    padding:11px 20px;
-
-    border-radius:0 12px 12px 0;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    cursor:pointer;
-}
-
-.search-btn:hover{
-
-    background:#0c7c45;
-}
-
-/* =========================
-   Table Card
-========================= */
-
-.table-card{
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:15px;
-
-    overflow:auto;
-
-    box-shadow:0 5px 18px rgba(0,0,0,0.08);
-
-    flex:1;
-}
-
-.table{
-
-    border:1px solid #d1d5db;
-}
-
-.table thead{
-
-    background:#0f9d58;
-
-    color:white;
-}
-
-.table th,
-.table td{
-
-    border:1px solid #d1d5db !important;
-
-    vertical-align:middle;
-
-    font-size:12px;
-
-    padding:10px;
-}
-
-/* =========================
-   Buttons
-========================= */
-
-.action-icons{
-
-    display:flex;
-
-    gap:8px;
-}
-
-.edit-btn{
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:6px 12px;
-
-    border-radius:7px;
-
-    text-decoration:none;
-
-    font-size:11px;
-
-    font-weight:700;
-}
-
-.edit-btn:hover{
-
-    background:#1d4ed8;
-
-    color:white;
-}
-
-.delete-btn{
-
-    border:none;
-
-    background:#dc2626;
-
-    color:white;
-
-    padding:6px 12px;
-
-    border-radius:7px;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    cursor:pointer;
-}
-
-.delete-btn:hover{
-
-    background:#b91c1c;
-}
-
-/* =========================
-   Form Section
-========================= */
-
-.form-section{
-
-    width:22%;
-
-    min-width:260px;
-
-    height:100%;
-}
-
-/* =========================
-   Form Card
-========================= */
-
-.form-card{
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:16px;
-
-    box-shadow:0 5px 18px rgba(0,0,0,0.08);
-
-    height:100%;
-
-    overflow-y:auto;
-
-    display:flex;
-
-    flex-direction:column;
-}
-
-.form-title{
-
-    font-size:18px;
-
-    font-weight:700;
-
-    color:#0f172a;
-
-    margin-bottom:15px;
-
-    text-align:center;
-}
-
-/* =========================
-   Inputs
-========================= */
-
-.form-control,
-.custom-select{
-
-    height:38px;
-
-    border-radius:8px;
-
-    border:1px solid #d1d5db;
-
-    font-size:12px;
-
-    background:#ffffff;
-
-    padding:0 10px;
-
-    transition:0.3s;
-}
-
-.form-control:focus,
-.custom-select:focus{
-
-    border-color:#0f9d58;
-
-    box-shadow:0 0 0 0.15rem rgba(15,157,88,0.15);
-
-    outline:none;
-}
-
-/* =========================
-   Save Button
-========================= */
-
-.save-btn{
-
-    width:100%;
-
-    background:#0f9d58;
-
-    color:white;
-
-    border:none;
-
-    padding:10px;
-
-    border-radius:8px;
-
-    font-size:13px;
-
-    font-weight:700;
-}
-
-.save-btn:hover{
-
-    background:#0c7c45;
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media(max-width:992px){
-
-    body{
-        overflow:auto;
-    }
-
-    .main-wrapper{
-
-        flex-direction:column;
-
-        height:auto;
-    }
-
-    .table-section,
-    .form-section{
-
-        width:100%;
-    }
-
-    .form-card{
-
-        height:auto;
-    }
-}
-
-</style> -->
 
 </head>
 
@@ -524,6 +202,24 @@ body{
         <!-- TABLE -->
 
         <div class="table-section">
+
+            <!-- ALERT MESSAGE -->
+
+            <?php if ($message != "") { ?>
+
+                <div class="alert alert-<?php echo $message_type; ?> alert-dismissible fade show">
+
+                    <?php echo $message; ?>
+
+                    <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"></button>
+
+                </div>
+
+            <?php } ?>
+
+            <!-- SEARCH -->
 
             <div class="search-wrapper">
 
@@ -550,6 +246,8 @@ body{
                 </form>
 
             </div>
+
+            <!-- TABLE -->
 
             <div class="table-card">
 
@@ -610,15 +308,15 @@ body{
 
                                         </a>
 
-                                        <button class="delete-btn"
+                                        <a href="teachers.php?delete=<?php echo $row['ID']; ?>"
 
-                                            data-bs-toggle="modal"
+                                            class="delete-btn"
 
-                                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
+                                            onclick="return confirm('Are you sure you want to delete this teacher? It will delete all data that related to this teacher in other tables.')">
 
                                             Delete
 
-                                        </button>
+                                        </a>
 
                                     </div>
 
@@ -635,6 +333,7 @@ body{
             </div>
 
         </div>
+
         <!-- FORM -->
 
         <div class="form-section">

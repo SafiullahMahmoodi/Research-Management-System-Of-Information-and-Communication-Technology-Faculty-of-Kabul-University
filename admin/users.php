@@ -232,18 +232,15 @@ $user_result = $conn->query($user_query);
                                             Edit
 
                                         </a>
-
-                                        <button type="button"
+                                        <a href="users.php?delete=<?php echo $row['ID']; ?>"
 
                                             class="delete-btn"
 
-                                            data-bs-toggle="modal"
-
-                                            data-bs-target="#deleteModal<?php echo $row['ID']; ?>">
+                                            onclick="return confirm('Are you sure you want to delete this user?')">
 
                                             Delete
 
-                                        </button>
+                                        </a>
 
                                     </div>
 
@@ -251,70 +248,7 @@ $user_result = $conn->query($user_query);
 
                             </tr>
 
-                            <!-- DELETE MODAL -->
 
-                            <div class="modal fade"
-
-                                id="deleteModal<?php echo $row['ID']; ?>">
-
-                                <div class="modal-dialog modal-dialog-centered">
-
-                                    <div class="modal-content"
-                                        style="border-radius:16px;">
-
-                                        <div class="modal-header bg-danger text-white">
-
-                                            <h5 class="modal-title">
-
-                                                Delete User
-
-                                            </h5>
-
-                                            <button class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal">
-
-                                            </button>
-
-                                        </div>
-
-                                        <div class="modal-body text-center">
-
-                                            Delete
-
-                                            <strong>
-
-                                                <?php echo $row['Username']; ?>
-
-                                            </strong>
-
-                                            ?
-
-                                        </div>
-
-                                        <div class="modal-footer">
-
-                                            <button class="btn btn-secondary"
-                                                data-bs-dismiss="modal">
-
-                                                Cancel
-
-                                            </button>
-
-                                            <a href="users.php?delete=<?php echo $row['ID']; ?>"
-
-                                                class="btn btn-danger">
-
-                                                Delete
-
-                                            </a>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
 
                         <?php } ?>
 

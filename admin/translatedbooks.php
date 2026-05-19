@@ -506,6 +506,7 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="id"
                             class="form-control"
+                            placeholder="Enter ID"
                             required
                             value="<?php echo $edit_id; ?>">
 
@@ -518,6 +519,7 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="title"
                             class="form-control"
+                            placeholder="Enter Title"
                             required
                             value="<?php echo $edit_title; ?>">
 
@@ -540,6 +542,7 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="author"
                             class="form-control"
+                            placeholder="Enter Author Name"
                             required
                             value="<?php echo $edit_author; ?>">
 
@@ -587,6 +590,7 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="category"
                             class="form-control"
+                            placeholder="Enter Category"
                             required
                             value="<?php echo $edit_category; ?>">
 

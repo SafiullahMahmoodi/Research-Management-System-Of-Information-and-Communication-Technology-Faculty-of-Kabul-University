@@ -591,6 +591,7 @@ if (isset($_GET['search'])) {
                             name="id"
 
                             class="form-control"
+                            placeholder="Enter ID"
 
                             required
 
@@ -607,6 +608,7 @@ if (isset($_GET['search'])) {
                             name="title"
 
                             class="form-control"
+                            placeholder="Enter Title"
 
                             required
 
@@ -635,6 +637,7 @@ if (isset($_GET['search'])) {
                             name="category"
 
                             class="form-control"
+                            placeholder="Enter Category"
 
                             required
 
@@ -649,7 +652,7 @@ if (isset($_GET['search'])) {
                         <select name="teacher_id"
                             class="custom-select">
                             <option value="">
-
+                                select teacher
                             </option>
 
                             <?php

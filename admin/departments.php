@@ -38,15 +38,44 @@ if (isset($_GET['delete'])) {
 
     $delete_id = $_GET['delete'];
 
-    $delete_query = "DELETE FROM department
-    WHERE ID='$delete_id'";
+    // Delete articles
 
-    $conn->query($delete_query);
+    $conn->query("DELETE FROM articles
+    WHERE Department='$delete_id'");
+
+    // Delete books
+
+    $conn->query("DELETE FROM books
+    WHERE Department='$delete_id'");
+
+    // Delete translated books
+
+    $conn->query("DELETE FROM translated_books
+    WHERE Department='$delete_id'");
+
+    // Delete thesis
+
+    $conn->query("DELETE FROM thesis
+    WHERE Department='$delete_id'");
+
+    // Delete students
+
+    $conn->query("DELETE FROM students
+    WHERE Department='$delete_id'");
+
+    // Delete teachers
+
+    $conn->query("DELETE FROM teacher
+    WHERE Department='$delete_id'");
+
+    // Delete department
+
+    $conn->query("DELETE FROM department
+    WHERE ID='$delete_id'");
 
     header("Location: departments.php");
     exit();
 }
-
 // ===========================
 // Edit Department
 // ===========================
@@ -133,395 +162,7 @@ $department_result = $conn->query($department_query);
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <!-- 
-<style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    background:#eef2f7;
-    font-family:Segoe UI;
-    overflow:hidden;
-}
-
-
-/* =========================
-   Main Layout
-========================= */
-
-.main-wrapper{
-
-    display:flex;
-
-    gap:18px;
-
-    padding:18px;
-
-    height:calc(100vh - 65px);
-}
-
-/* =========================
-   Table Section
-========================= */
-
-.table-section{
-
-    width:75%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    overflow:hidden;
-}
-
-/* =========================
-   Search
-========================= */
-
-.search-wrapper{
-
-    display:flex;
-
-    justify-content:center;
-
-    margin-bottom:15px;
-}
-
-.search-form{
-
-    display:flex;
-
-    width:100%;
-
-    max-width:520px;
-}
-
-.search-input{
-
-    width:100%;
-
-    border:none;
-
-    outline:none;
-
-    padding:11px 14px;
-
-    border-radius:12px 0 0 12px;
-
-    border:1px solid #d1d5db;
-
-    background:white;
-
-    font-size:13px;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.search-btn{
-
-    border:none;
-
-    background:#0f9d58;
-
-    color:white;
-
-    padding:11px 20px;
-
-    border-radius:0 12px 12px 0;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:0.3s;
-}
-
-.search-btn:hover{
-
-    background:#0c7c45;
-}
-
-/* =========================
-   Table Card
-========================= */
-
-.table-card{
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:15px;
-
-    overflow:auto;
-
-    box-shadow:0 5px 18px rgba(0,0,0,0.08);
-
-    flex:1;
-}
-
-.table{
-
-    border:1px solid #d1d5db;
-}
-
-.table thead{
-
-    background:#0f9d58;
-
-    color:white;
-}
-
-.table th,
-.table td{
-
-    border:1px solid #d1d5db !important;
-
-    vertical-align:middle;
-
-    font-size:12px;
-
-    padding:10px;
-}
-
-/* =========================
-   Buttons
-========================= */
-
-.action-icons{
-
-    display:flex;
-
-    gap:8px;
-}
-
-.edit-btn{
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:6px 12px;
-
-    border-radius:7px;
-
-    text-decoration:none;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    transition:0.3s;
-}
-
-.edit-btn:hover{
-
-    background:#1d4ed8;
-
-    color:white;
-}
-
-.delete-btn{
-
-    border:none;
-
-    background:#dc2626;
-
-    color:white;
-
-    padding:6px 12px;
-
-    border-radius:7px;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:0.3s;
-}
-
-.delete-btn:hover{
-
-    background:#b91c1c;
-}
-
-/* =========================
-   Form Section
-========================= */
-
-.form-section{
-
-    width:25%;
-
-    min-width:260px;
-
-    height:100%;
-}
-
-/* =========================
-   Form Card
-========================= */
-
-.form-card{
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:16px;
-
-    box-shadow:0 5px 18px rgba(0,0,0,0.08);
-
-    height:100%;
-
-    overflow-y:auto;
-
-    display:flex;
-
-    flex-direction:column;
-}
-
-.form-title{
-
-    font-size:20px;
-
-    font-weight:700;
-
-    color:#0f172a;
-
-    margin-bottom:20px;
-
-    text-align:center;
-}
-
-.form-label{
-
-    font-size:13px;
-
-    font-weight:700;
-
-    margin-bottom:6px;
-
-    color:#374151;
-}
-
-/* =========================
-   Inputs
-========================= */
-
-.form-control{
-
-    height:40px;
-
-    border-radius:8px;
-
-    border:1px solid #d1d5db;
-
-    font-size:13px;
-
-    background:#ffffff;
-
-    padding:0 10px;
-
-    transition:0.3s;
-}
-
-.form-control:focus{
-
-    border-color:#0f9d58;
-
-    box-shadow:0 0 0 0.15rem rgba(15,157,88,0.15);
-
-    outline:none;
-}
-
-/* =========================
-   Save Button
-========================= */
-
-.save-btn{
-
-    width:100%;
-
-    background:#0f9d58;
-
-    color:white;
-
-    border:none;
-
-    padding:10px;
-
-    border-radius:8px;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    transition:0.3s;
-}
-
-.save-btn:hover{
-
-    background:#0c7c45;
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media(max-width:992px){
-
-    body{
-        overflow:auto;
-    }
-
-    .main-wrapper{
-
-        flex-direction:column;
-
-        height:auto;
-    }
-
-    .table-section,
-    .form-section{
-
-        width:100%;
-    }
-
-    .form-card{
-
-        height:auto;
-    }
-
-    .main-header{
-
-        flex-direction:column;
-
-        height:auto;
-
-        gap:10px;
-
-        padding:15px;
-    }
-
-    .header-menu{
-
-        flex-wrap:wrap;
-
-        justify-content:center;
-    }
-}
-
-</style> -->
 
 </head>
 
@@ -601,7 +242,7 @@ body{
                                         <a href="departments.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
 
-                                            onclick="return confirm('Are you sure to delete this department?')">
+                                            onclick="return confirm('Are you sure to delete this department? It will delete all data that related to this department in other tables.')">
 
                                             Delete
 
