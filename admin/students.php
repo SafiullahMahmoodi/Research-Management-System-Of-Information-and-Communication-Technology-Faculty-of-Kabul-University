@@ -10,6 +10,7 @@ include('../db_connection.php');
 
 if (isset($_POST['save_student'])) {
 
+    $id          = $_POST['id'];
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
     $email       = $_POST['email'];
@@ -17,11 +18,25 @@ if (isset($_POST['save_student'])) {
     $department  = $_POST['department'];
 
     $insert_query = "INSERT INTO students
-    (Name, Last_Name, Email, Contact, Department)
+(
+    ID,
+    Name,
+    Last_Name,
+    Email,
+    Contact,
+    Department
+)
 
-    VALUES
+VALUES
 
-    ('$name','$lastname','$email','$contact','$department')";
+(
+    '$id',
+    '$name',
+    '$lastname',
+    '$email',
+    '$contact',
+    '$department'
+)";
 
     $conn->query($insert_query);
 
@@ -319,6 +334,31 @@ $student_result = $conn->query($student_query);
                         name="id"
 
                         value="<?php echo $edit_id; ?>">
+                    <!-- ID -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            ID
+
+                        </label>
+
+                        <input type="text"
+
+                            name="id"
+
+                            class="form-control"
+
+                            placeholder="Enter Student ID"
+
+                            value="<?php echo $edit_id; ?>"
+
+                            <?php echo isset($_GET['edit']) ? 'readonly' : ''; ?>
+
+                            required>
+
+                    </div>
 
                     <!-- Name -->
 

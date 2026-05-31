@@ -12,9 +12,9 @@ $message_type = "";
 // ===========================
 // Insert Teacher
 // ===========================
-
 if (isset($_POST['save_teacher'])) {
 
+    $id          = $_POST['id'];
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
     $email       = $_POST['email'];
@@ -23,16 +23,31 @@ if (isset($_POST['save_teacher'])) {
     $department  = $_POST['department'];
 
     $conn->query("INSERT INTO teacher
-    (Name, Last_Name, Email, Contact, Education, Department)
+    (
+        ID,
+        Name,
+        Last_Name,
+        Email,
+        Contact,
+        Education,
+        Department
+    )
 
     VALUES
 
-    ('$name','$lastname','$email','$contact','$education','$department')");
+    (
+        '$id',
+        '$name',
+        '$lastname',
+        '$email',
+        '$contact',
+        '$education',
+        '$department'
+    )");
 
     header("Location: teachers.php");
     exit();
 }
-
 // ===========================
 // Delete
 // ===========================
@@ -357,6 +372,31 @@ if (isset($_GET['search'])) {
                         name="id"
 
                         value="<?php echo $edit_id; ?>">
+                    <!-- ID -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            ID
+
+                        </label>
+
+                        <input type="text"
+
+                            name="id"
+
+                            class="form-control"
+
+                            placeholder="Enter Teacher ID"
+
+                            value="<?php echo $edit_id; ?>"
+
+                            <?php echo isset($_GET['edit']) ? 'readonly' : ''; ?>
+
+                            required>
+
+                    </div>
 
                     <!-- Name -->
 

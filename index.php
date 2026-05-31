@@ -15,7 +15,11 @@
 
     <style>
         body {
-            background-image: url("");
+            background-image: url("img/ictimage.jpeg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
         .main-header {

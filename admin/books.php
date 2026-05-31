@@ -312,6 +312,7 @@ if (isset($_GET['search'])) {
     books.ID LIKE '%$search%'
     OR books.Title LIKE '%$search%'
     OR books.Category LIKE '%$search%'
+    OR books.Publish_Date LIKE '%$search%'
     OR teacher.Name LIKE '%$search%'
     OR department.Name LIKE '%$search%'
 
@@ -659,16 +660,9 @@ if (isset($_GET['search'])) {
 
                     </div>
 
-                    <div class="mb-2">
-
-                        <label class="form-label">PDF File</label>
-
-                        <input type="file"
-
-                            name="pdf_file"
-
-                            class="form-control">
-
+                    <div class="mb-3">
+                        <label for="formFileSm" class="form-label">Small file input example</label>
+                        <input class="form-control form-control-sm" id="formFileSm" type="file">
                     </div>
 
                     <div class="mb-3">

@@ -652,7 +652,7 @@ if (isset($_GET['search'])) {
                         <select name="teacher_id"
                             class="custom-select">
                             <option value="">
-                                select teacher
+
                             </option>
 
                             <?php
