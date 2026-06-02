@@ -5,29 +5,52 @@ include('../auth.php');
 
 
 include('../db_connection.php');
+$error = "";
 
 // ===========================
 // Insert User
 // ===========================
 
+$error = "";
+
 if (isset($_POST['save_user'])) {
 
-    $username  = $_POST['username'];
-    $email     = $_POST['email'];
-    $user_type = $_POST['user_type'];
-    $password  = md5($_POST['password']);
+    $username         = $_POST['username'];
+    $email            = $_POST['email'];
+    $user_type        = $_POST['user_type'];
+    $password         = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
-    $insert_query = "INSERT INTO users
-    (Username, Email, usertype, Password)
+    // Check Password Match
+    if ($password != $confirm_password) {
+
+        $error = "Password do not match!";
+    } else {
+
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $insert_query = "INSERT INTO users
+    (
+        Username,
+        Email,
+        usertype,
+        Password
+    )
 
     VALUES
 
-    ('$username','$email','$user_type','$password')";
+    (
+        '$username',
+        '$email',
+        '$user_type',
+        '$hashed_password'
+    )";
 
-    $conn->query($insert_query);
+        $conn->query($insert_query);
 
-    header("Location: users.php");
-    exit();
+        header("Location: users.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -114,7 +137,7 @@ if (isset($_GET['search'])) {
 
     WHERE
 
-    ID LIKE '%$search%'
+  
     OR Username LIKE '%$search%'
     OR Email LIKE '%$search%'
     OR usertype LIKE '%$search%'";
@@ -194,7 +217,7 @@ $user_result = $conn->query($user_query);
 
                         <tr>
 
-                            <th>ID</th>
+
 
                             <th>Username</th>
 
@@ -214,7 +237,7 @@ $user_result = $conn->query($user_query);
 
                             <tr>
 
-                                <td><?php echo $row['ID']; ?></td>
+
 
                                 <td><?php echo $row['Username']; ?></td>
 
@@ -365,30 +388,56 @@ $user_result = $conn->query($user_query);
 
                     <!-- Password -->
 
-                    <?php if (!isset($_GET['edit'])) { ?>
+                    <div class="mb-3">
 
-                        <div class="mb-4">
+                        <label class="form-label">
 
-                            <label class="form-label">
+                            Password
 
-                                Password
+                        </label>
 
-                            </label>
+                        <input type="password"
 
-                            <input type="password"
+                            name="password"
 
-                                name="password"
+                            class="form-control"
 
-                                class="form-control"
+                            placeholder="Enter password"
 
-                                placeholder="Enter password"
+                            required>
 
-                                required>
+                    </div>
 
-                        </div>
+                    <!-- Confirm Password -->
 
-                    <?php } ?>
+                    <div class="mb-4">
 
+                        <label class="form-label">
+
+                            Confirm Password
+
+                        </label>
+                        <?php if ($error != "") { ?>
+
+                            <div class="alert alert-danger">
+
+                                <?php echo $error; ?>
+
+                            </div>
+
+                        <?php } ?>
+
+                        <input type="password"
+
+                            name="confirm_password"
+
+                            class="form-control"
+
+                            placeholder="Confirm password"
+
+                            required>
+
+                    </div>
                     <!-- BUTTON -->
 
                     <button class="save-btn"

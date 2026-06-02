@@ -215,6 +215,12 @@ while ($row = $thesis_result->fetch_assoc()) {
                         Translated Books
                     </a>
                 </li>
+                <li>
+                    <a href="../Reports/systemreports.php">
+                        <i class="bi bi-translate"></i>
+                        Reports
+                    </a>
+                </li>
 
             </ul>
 

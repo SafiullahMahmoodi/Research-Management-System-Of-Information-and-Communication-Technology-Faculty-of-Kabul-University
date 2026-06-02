@@ -6,7 +6,7 @@ include('../auth.php');
 
 
 include('../db_connection.php');
-
+$error = "";
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -37,12 +37,8 @@ if (isset($_POST['save_article'])) {
 
     if (empty($teacher_id) && empty($student_id)) {
 
-        die("Please select Teacher or Student.");
+        $error = "Please select at least one Teacher or Student.";
     }
-
-    // ===========================
-    // CHECK TEACHER
-    // ===========================
 
     if (!empty($teacher_id)) {
 
@@ -252,8 +248,9 @@ if (isset($_POST['update_article'])) {
 
     if (empty($teacher_id) && empty($student_id)) {
 
-        die("Please select Teacher or Student.");
+        $error = "Please select at least one Teacher or Student.";
     }
+
 
     $teacher_value = !empty($teacher_id)
         ? "'$teacher_id'"
@@ -427,6 +424,25 @@ if (isset($_GET['search'])) {
 
 
 </head>
+<script>
+    function validateForm() {
+
+        let teacher =
+            document.querySelector('[name="teacher_id"]').value;
+
+        let student =
+            document.querySelector('[name="student_id"]').value;
+
+        if (teacher === "" && student === "") {
+
+            alert("Please select at least one Teacher or Student.");
+
+            return false;
+        }
+
+        return true;
+    }
+</script>
 
 <body>
     <?php include('header.php'); ?>
@@ -578,9 +594,19 @@ if (isset($_GET['search'])) {
                     ?>
 
                 </div>
+                <?php if (!empty($error)) { ?>
+
+                    <div class="alert alert-danger">
+
+                        <?php echo $error; ?>
+
+                    </div>
+
+                <?php } ?>
 
                 <form method="POST"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data"
+                    onsubmit="return validateForm()">
 
                     <div class="mb-2">
 
