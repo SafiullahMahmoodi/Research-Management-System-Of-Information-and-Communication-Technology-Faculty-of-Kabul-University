@@ -368,10 +368,15 @@ align-items-center">
 
                     <input
                         type="password"
+                        id="password"
                         name="password"
-                        class="form-control custom-input"
-                        placeholder="Enter password"
+                        class="form-control"
                         required>
+
+                    <input
+                        type="checkbox"
+                        onclick="password.type = this.checked ? 'text' : 'password'">
+                    Show Password
 
                 </div>
 

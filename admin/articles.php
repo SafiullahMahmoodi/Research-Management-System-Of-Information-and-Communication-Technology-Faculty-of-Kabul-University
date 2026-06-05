@@ -102,9 +102,12 @@ if (isset($_POST['save_article'])) {
 
         if ($extension != "pdf") {
 
-            die("Only PDF files are allowed.");
+            echo "<script>
+            alert('Only PDF files are allowed!');
+            window.history.back();
+          </script>";
+            exit();
         }
-
         // MAX 200MB
 
         if ($file_size > 209715200) {
@@ -367,16 +370,17 @@ if (isset($_GET['search'])) {
     LEFT JOIN department
     ON articles.Department = department.ID
 
-    WHERE
+WHERE
 
-    articles.ID LIKE '%$search%'
-    OR articles.Title LIKE '%$search%'
-    OR articles.Category LIKE '%$search%'
-    OR teacher.Name LIKE '%$search%'
-    OR students.Name LIKE '%$search%'
-    OR department.Name LIKE '%$search%'
+articles.ID LIKE '%$search%'
+OR articles.Title LIKE '%$search%'
+OR articles.Category LIKE '%$search%'
+OR teacher.Name LIKE '%$search%'
+OR students.Name LIKE '%$search%'
+OR department.Name LIKE '%$search%'
+OR articles.`Date` LIKE '%$search%'
 
-    ORDER BY articles.ID DESC
+ORDER BY articles.ID DESC
     ");
 } else {
 
@@ -441,6 +445,27 @@ if (isset($_GET['search'])) {
         }
 
         return true;
+    }
+</script>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension = file.name
+                .split('.')
+                .pop()
+                .toLowerCase();
+
+            if (extension !== "pdf") {
+
+                alert("Only PDF files are allowed!");
+
+                input.value = "";
+            }
+        }
     }
 </script>
 
@@ -776,18 +801,19 @@ if (isset($_GET['search'])) {
 
                     </div>
 
-                    <div class="mb-2">
+                    <div class="mb-3">
 
                         <label class="form-label">PDF File</label>
 
-                        <input type="file"
-
+                        <input
+                            type="file"
                             name="pdf_file"
-
-                            class="form-control">
+                            id="pdf_file"
+                            class="form-control form-control-sm"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
 
                     </div>
-
                     <div class="mb-3">
 
                         <label class="form-label">Date</label>

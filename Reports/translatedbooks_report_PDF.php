@@ -13,30 +13,12 @@ use Dompdf\Dompdf;
 
 $where = " WHERE 1=1 ";
 
-if (!empty($_GET['teacher'])) {
+if (!empty($_GET['translator'])) {
 
-    $teacher = mysqli_real_escape_string($conn, $_GET['teacher']);
-
-    $where .= "
-    AND articles.Teacher_ID='$teacher'
-    ";
-}
-
-if (!empty($_GET['student'])) {
-
-    $student = mysqli_real_escape_string($conn, $_GET['student']);
+    $translator = mysqli_real_escape_string($conn, $_GET['translator']);
 
     $where .= "
-    AND articles.Student_ID='$student'
-    ";
-}
-
-if (!empty($_GET['category'])) {
-
-    $category = mysqli_real_escape_string($conn, $_GET['category']);
-
-    $where .= "
-    AND articles.Category LIKE '%$category%'
+    AND translated_books.translated_by='$translator'
     ";
 }
 
@@ -45,7 +27,16 @@ if (!empty($_GET['department'])) {
     $department = mysqli_real_escape_string($conn, $_GET['department']);
 
     $where .= "
-    AND articles.Department='$department'
+    AND translated_books.Department='$department'
+    ";
+}
+
+if (!empty($_GET['category'])) {
+
+    $category = mysqli_real_escape_string($conn, $_GET['category']);
+
+    $where .= "
+    AND translated_books.Category LIKE '%$category%'
     ";
 }
 
@@ -54,7 +45,7 @@ if (!empty($_GET['date_from'])) {
     $date_from = mysqli_real_escape_string($conn, $_GET['date_from']);
 
     $where .= "
-    AND articles.Date >= '$date_from'
+    AND translated_books.Publish_Date >= '$date_from'
     ";
 }
 
@@ -63,7 +54,7 @@ if (!empty($_GET['date_to'])) {
     $date_to = mysqli_real_escape_string($conn, $_GET['date_to']);
 
     $where .= "
-    AND articles.Date <= '$date_to'
+    AND translated_books.Publish_Date <= '$date_to'
     ";
 }
 
@@ -71,57 +62,48 @@ if (!empty($_GET['date_to'])) {
 // QUERY
 // ======================
 
-$article_result = $conn->query("
+$book_result = $conn->query("
 
-SELECT articles.*,
-teacher.Name AS teacher_name,
-students.Name AS student_name,
+SELECT translated_books.*,
+teacher.Name AS translator_name,
 department.Name AS department_name
 
-FROM articles
+FROM translated_books
 
 LEFT JOIN teacher
-ON articles.Teacher_ID = teacher.ID
-
-LEFT JOIN students
-ON articles.Student_ID = students.ID
+ON translated_books.translated_by = teacher.ID
 
 LEFT JOIN department
-ON articles.Department = department.ID
+ON translated_books.Department = department.ID
 
 $where
 
-ORDER BY articles.ID DESC
+ORDER BY translated_books.ID DESC
 
 ");
 
 // ======================
-// TOTAL FILTERED RECORDS
+// TOTAL
 // ======================
 
-$total_query = $conn->query("
+$total = $conn->query("
 
 SELECT COUNT(*) AS total
 
-FROM articles
+FROM translated_books
 
 LEFT JOIN teacher
-ON articles.Teacher_ID = teacher.ID
-
-LEFT JOIN students
-ON articles.Student_ID = students.ID
+ON translated_books.translated_by = teacher.ID
 
 LEFT JOIN department
-ON articles.Department = department.ID
+ON translated_books.Department = department.ID
 
 $where
 
-");
-
-$total = $total_query->fetch_assoc()['total'];
+")->fetch_assoc()['total'];
 
 // ======================
-// HTML DESIGN
+// PDF DESIGN
 // ======================
 
 $html = '
@@ -170,11 +152,11 @@ td{
 </style>
 
 <div class="report-title">
-    Articles Report
+Translated Books Report
 </div>
 
 <div class="report-info">
-    Generated Date: ' . date("Y-m-d") . '
+Generated Date : ' . date("Y-m-d") . '
 </div>
 
 <table border="1">
@@ -183,17 +165,18 @@ td{
 
 <th>ID</th>
 <th>Title</th>
+<th>Author</th>
+<th>Translator</th>
 <th>Category</th>
-<th>Teacher</th>
-<th>Student</th>
 <th>Department</th>
-<th>Date</th>
+<th>Pages</th>
+<th>Publish Date</th>
 
 </tr>
 
 ';
 
-while ($row = $article_result->fetch_assoc()) {
+while ($row = $book_result->fetch_assoc()) {
 
     $html .= '
 
@@ -203,15 +186,17 @@ while ($row = $article_result->fetch_assoc()) {
 
         <td>' . $row['Title'] . '</td>
 
+        <td>' . $row['Author'] . '</td>
+
+        <td>' . $row['translator_name'] . '</td>
+
         <td>' . $row['Category'] . '</td>
-
-        <td>' . $row['teacher_name'] . '</td>
-
-        <td>' . $row['student_name'] . '</td>
 
         <td>' . $row['department_name'] . '</td>
 
-        <td>' . $row['Date'] . '</td>
+        <td>' . $row['Pages'] . '</td>
+
+        <td>' . $row['Publish_Date'] . '</td>
 
     </tr>
 
@@ -223,13 +208,15 @@ $html .= '
 </table>
 
 <div class="footer">
-    Total Filtered Articles : ' . $total . '
+
+Total Translated Books : ' . $total . '
+
 </div>
 
 ';
 
 // ======================
-// PDF
+// GENERATE PDF
 // ======================
 
 $dompdf = new Dompdf();
@@ -241,7 +228,7 @@ $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 
 $dompdf->stream(
-    "Articles_Report.pdf",
+    "Translated_Books_Report.pdf",
     array("Attachment" => true)
 );
 

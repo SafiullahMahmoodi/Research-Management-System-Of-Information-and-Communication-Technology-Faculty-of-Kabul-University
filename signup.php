@@ -218,8 +218,14 @@ if (isset($_POST['signup'])) {
                         class="form-control custom-input"
                         placeholder="Enter password"
                         required>
+                    <input
+                        type="checkbox"
+                        onclick="password.type = this.checked ? 'text' : 'password'">
+                    Show Password
+
 
                 </div>
+
 
                 <!-- Signup Button -->
 

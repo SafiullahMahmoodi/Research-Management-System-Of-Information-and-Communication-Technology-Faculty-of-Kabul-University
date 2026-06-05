@@ -130,27 +130,12 @@
     <div class="header-menu">
 
 
-        <a href="departments_report.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'departments_report.php' ? 'active' : ''; ?>">
+        <a href="systemreports.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'systemreports.php' ? 'active' : ''; ?>">
 
-            Departments
-
-        </a>
-
-        <a href="teachers_report.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'teachers_report.php' ? 'active' : ''; ?>">
-
-            Teachers
+            System Report
 
         </a>
-
-        <a href="students_report.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'students_report.php' ? 'active' : ''; ?>">
-
-            Students
-
-        </a>
-
         <a href="articles_report.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'articles_report.php' ? 'active' : ''; ?>">
 
@@ -172,8 +157,8 @@
 
         </a>
 
-        <a href="thesises_report.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesises_report.php' ? 'active' : ''; ?>">
+        <a href="thesis_report.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesis_report.php' ? 'active' : ''; ?>">
 
             Thesises
 
@@ -183,7 +168,7 @@
 
     <div class="header-buttons">
 
-        <a href="dashboard.php"
+        <a href="../admin/dashboard.php"
             class="header-btn">
 
             Dashboard

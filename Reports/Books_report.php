@@ -105,9 +105,40 @@ $where
         href="../css/bootstrap.min.css">
 
     <style>
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .form-control {
+            font-size: 13px;
+            height: 34px;
+            padding: 4px 8px;
+        }
+
+        .btn {
+            font-size: 13px;
+            padding: 5px 12px;
+        }
+
+        .table {
+            font-size: 13px;
+        }
+
+        .report-title {
+            font-size: 24px;
+        }
+
+        h5 {
+            font-size: 15px;
+        }
+
         body {
             background: #f4f6f9;
             font-family: Segoe UI;
+            overflow-y: auto !important;
+            height: auto !important;
         }
 
         .report-container {

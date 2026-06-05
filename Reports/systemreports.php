@@ -32,7 +32,11 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
         body {
             background: #f4f6f9;
             font-family: Segoe UI;
+
+            overflow-y: auto !important;
+            height: auto !important;
         }
+
 
         .report-container {
             width: 90%;

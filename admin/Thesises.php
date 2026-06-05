@@ -71,9 +71,12 @@ if (isset($_POST['save_thesis'])) {
 
         if ($extension != "pdf") {
 
-            die("Only PDF files are allowed.");
+            echo "<script>
+            alert('Only PDF files are allowed!');
+            window.history.back();
+          </script>";
+            exit();
         }
-
         if ($file_size > 209715200) {
 
             die("File size must be less than 200MB.");
@@ -316,15 +319,16 @@ if (isset($_GET['search'])) {
     LEFT JOIN department
     ON thesis.Department = department.ID
 
-    WHERE
+ WHERE
 
-    thesis.ID LIKE '%$search%'
-    OR thesis.Title LIKE '%$search%'
-    OR thesis.Description LIKE '%$search%'
-    OR thesis.Category LIKE '%$search%'
-    OR students.Name LIKE '%$search%'
-    OR teacher.Name LIKE '%$search%'
-    OR department.Name LIKE '%$search%'
+thesis.ID LIKE '%$search%'
+OR thesis.Title LIKE '%$search%'
+OR thesis.Description LIKE '%$search%'
+OR thesis.Category LIKE '%$search%'
+OR students.Name LIKE '%$search%'
+OR teacher.Name LIKE '%$search%'
+OR department.Name LIKE '%$search%'
+OR thesis.Publish_Date LIKE '%$search%'
 
     ORDER BY thesis.ID DESC
     ");
@@ -374,6 +378,24 @@ if (isset($_GET['search'])) {
 
 
 </head>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension = file.name.split('.').pop().toLowerCase();
+
+            if (extension !== "pdf") {
+
+                alert("Only PDF files are allowed!");
+
+                input.value = "";
+            }
+        }
+    }
+</script>
 
 <body>
     <?php include('header.php'); ?>
@@ -678,11 +700,11 @@ if (isset($_GET['search'])) {
                     <div class="mb-2">
 
                         <label class="form-label">PDF File</label>
-
                         <input type="file"
                             name="pdf_file"
-                            class="form-control">
-
+                            class="form-control"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
                     </div>
 
                     <div class="mb-3">

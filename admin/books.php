@@ -59,10 +59,13 @@ if (isset($_POST['save_book'])) {
         $extension = strtolower(
             pathinfo($file_name, PATHINFO_EXTENSION)
         );
-
         if ($extension != "pdf") {
 
-            die("Only PDF files are allowed.");
+            echo "<script>
+            alert('Only PDF files are allowed!');
+            window.history.back();
+          </script>";
+            exit();
         }
 
         if ($file_size > 209715200) {
@@ -359,6 +362,27 @@ if (isset($_GET['search'])) {
 
 
 </head>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension = file.name
+                .split('.')
+                .pop()
+                .toLowerCase();
+
+            if (extension !== "pdf") {
+
+                alert("Only PDF files are allowed!");
+
+                input.value = "";
+            }
+        }
+    }
+</script>
 
 <body>
     <?php include('header.php'); ?>
@@ -661,8 +685,17 @@ if (isset($_GET['search'])) {
                     </div>
 
                     <div class="mb-3">
-                        <label for="formFileSm" class="form-label">Small file input example</label>
-                        <input class="form-control form-control-sm" id="formFileSm" type="file">
+
+                        <label class="form-label">PDF File</label>
+
+                        <input
+                            type="file"
+                            name="pdf_file"
+                            id="pdf_file"
+                            class="form-control form-control-sm"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
+
                     </div>
 
                     <div class="mb-3">

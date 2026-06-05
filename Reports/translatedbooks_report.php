@@ -9,30 +9,12 @@ include('../db_connection.php');
 
 $where = " WHERE 1=1 ";
 
-if (!empty($_GET['teacher'])) {
+if (!empty($_GET['translator'])) {
 
-    $teacher = $_GET['teacher'];
-
-    $where .= "
-    AND articles.Teacher_ID='$teacher'
-    ";
-}
-
-if (!empty($_GET['student'])) {
-
-    $student = $_GET['student'];
+    $translator = $_GET['translator'];
 
     $where .= "
-    AND articles.Student_ID='$student'
-    ";
-}
-
-if (!empty($_GET['category'])) {
-
-    $category = $_GET['category'];
-
-    $where .= "
-    AND articles.Category LIKE '%$category%'
+    AND translated_books.translated_by='$translator'
     ";
 }
 
@@ -41,7 +23,16 @@ if (!empty($_GET['department'])) {
     $department = $_GET['department'];
 
     $where .= "
-    AND articles.Department='$department'
+    AND translated_books.Department='$department'
+    ";
+}
+
+if (!empty($_GET['category'])) {
+
+    $category = $_GET['category'];
+
+    $where .= "
+    AND translated_books.Category LIKE '%$category%'
     ";
 }
 
@@ -50,7 +41,7 @@ if (!empty($_GET['date_from'])) {
     $date_from = $_GET['date_from'];
 
     $where .= "
-    AND articles.Date >= '$date_from'
+    AND translated_books.Publish_Date >= '$date_from'
     ";
 }
 
@@ -59,52 +50,66 @@ if (!empty($_GET['date_to'])) {
     $date_to = $_GET['date_to'];
 
     $where .= "
-    AND articles.Date <= '$date_to'
+    AND translated_books.Publish_Date <= '$date_to'
     ";
 }
 
 // ======================
-// REPORT QUERY
+// QUERY
 // ======================
 
-$article_result = $conn->query("
+$book_result = $conn->query("
 
-SELECT articles.*,
-teacher.Name AS teacher_name,
-students.Name AS student_name,
+SELECT translated_books.*,
+teacher.Name AS translator_name,
 department.Name AS department_name
 
-FROM articles
+FROM translated_books
 
 LEFT JOIN teacher
-ON articles.Teacher_ID = teacher.ID
-
-LEFT JOIN students
-ON articles.Student_ID = students.ID
+ON translated_books.translated_by = teacher.ID
 
 LEFT JOIN department
-ON articles.Department = department.ID
+ON translated_books.Department = department.ID
 
 $where
 
-ORDER BY articles.ID DESC
+ORDER BY translated_books.ID DESC
 
 ");
+
+// ======================
+// TOTAL
+// ======================
+
+$total = $conn->query("
+
+SELECT COUNT(*) AS total
+
+FROM translated_books
+
+LEFT JOIN teacher
+ON translated_books.translated_by = teacher.ID
+
+LEFT JOIN department
+ON translated_books.Department = department.ID
+
+$where
+
+")->fetch_assoc()['total'];
 
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Articles Report</title>
+    <title>Translated Books Report</title>
 
-    <link rel="stylesheet"
-        href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <style>
         .form-label {
@@ -180,6 +185,7 @@ ORDER BY articles.ID DESC
 </head>
 
 <body>
+
     <?php include('header.php'); ?>
 
     <div class="report-container">
@@ -187,47 +193,41 @@ ORDER BY articles.ID DESC
         <div class="report-card">
 
             <h2 class="report-title">
-
-                Articles Report
-
+                Translated Books Report
             </h2>
 
-            <div class="col-md-12 mt-3">
+            <div class="mb-3 no-print">
 
-                <a href="articles.php"
-                    class="btn btn-secondary me-2">
-
+                <a href="systemreports.php"
+                    class="btn btn-secondary">
                     Back
-
                 </a>
 
                 <button
-                    class="btn btn-success me-2"
+                    class="btn btn-success"
                     onclick="window.print()">
-
                     Print Report
-
                 </button>
 
-                <a href="articles_report_pdf.php?<?php echo http_build_query($_GET); ?>"
+                <a href="translatedbooks_report_pdf.php?<?php echo http_build_query($_GET); ?>"
                     class="btn btn-danger">
-
                     Download PDF
-
                 </a>
-
             </div>
+
             <form method="GET" class="row mb-3">
 
-                <!-- Teacher -->
+                <div class="col-md-3">
 
-                <div class="col-md-2">
                     <label class="form-label">
-                        Teacher
+                        Translator
                     </label>
-                    <select name="teacher" class="form-control">
 
-                        <option value="">All Teachers</option>
+                    <select name="translator" class="form-control">
+
+                        <option value="">
+                            All Translators
+                        </option>
 
                         <?php
 
@@ -235,63 +235,44 @@ ORDER BY articles.ID DESC
 
                         while ($t = $teacher->fetch_assoc()) {
 
-                            echo "<option value='{$t['ID']}'>
-                        {$t['Name']}
-                      </option>";
-                        }
-
                         ?>
 
-                    </select>
-                </div>
+                            <option value="<?php echo $t['ID']; ?>">
 
-                <!-- Student -->
+                                <?php echo $t['Name']; ?>
 
-                <div class="col-md-2">
-                    <label class="form-label">
-                        Student
-                    </label>
-                    <select name="student" class="form-control">
+                            </option>
 
-                        <option value="">All Students</option>
-
-                        <?php
-
-                        $student = $conn->query("SELECT * FROM students");
-
-                        while ($s = $student->fetch_assoc()) {
-
-                            echo "<option value='{$s['ID']}'>
-                        {$s['Name']}
-                      </option>";
-                        }
-
-                        ?>
+                        <?php } ?>
 
                     </select>
+
                 </div>
 
-                <!-- Category -->
-
                 <div class="col-md-2">
+
                     <label class="form-label">
                         Category
                     </label>
+
                     <input type="text"
                         name="category"
-                        class="form-control"
-                        placeholder="Category">
+                        class="form-control">
+
                 </div>
 
-                <!-- Department -->
-
                 <div class="col-md-2">
+
                     <label class="form-label">
                         Department
                     </label>
-                    <select name="department" class="form-control">
 
-                        <option value="">All Departments</option>
+                    <select name="department"
+                        class="form-control">
+
+                        <option value="">
+                            All Departments
+                        </option>
 
                         <?php
 
@@ -299,17 +280,20 @@ ORDER BY articles.ID DESC
 
                         while ($d = $dep->fetch_assoc()) {
 
-                            echo "<option value='{$d['ID']}'>
-                        {$d['Name']}
-                      </option>";
-                        }
-
                         ?>
 
+                            <option value="<?php echo $d['ID']; ?>">
+                                <?php echo $d['Name']; ?>
+                            </option>
+
+                        <?php } ?>
+
                     </select>
+
                 </div>
 
                 <div class="col-md-2">
+
                     <label class="form-label">
                         Date From
                     </label>
@@ -317,9 +301,11 @@ ORDER BY articles.ID DESC
                     <input type="date"
                         name="date_from"
                         class="form-control">
+
                 </div>
 
                 <div class="col-md-2">
+
                     <label class="form-label">
                         Date To
                     </label>
@@ -327,22 +313,23 @@ ORDER BY articles.ID DESC
                     <input type="date"
                         name="date_to"
                         class="form-control">
+
                 </div>
 
-
-
-
-
                 <div class="col-md-12 mt-2">
-                    <button type="submit"
+
+                    <button
+                        type="submit"
                         class="btn btn-primary">
 
                         Filter Report
 
                     </button>
+
                 </div>
 
             </form>
+
             <table class="table table-bordered table-striped">
 
                 <thead>
@@ -351,11 +338,12 @@ ORDER BY articles.ID DESC
 
                         <th>ID</th>
                         <th>Title</th>
+                        <th>Author</th>
+                        <th>Translator</th>
                         <th>Category</th>
-                        <th>Teacher</th>
-                        <th>Student</th>
                         <th>Department</th>
-                        <th>Date</th>
+                        <th>Pages</th>
+                        <th>Publish Date</th>
 
                     </tr>
 
@@ -363,7 +351,7 @@ ORDER BY articles.ID DESC
 
                 <tbody>
 
-                    <?php while ($row = $article_result->fetch_assoc()) { ?>
+                    <?php while ($row = $book_result->fetch_assoc()) { ?>
 
                         <tr>
 
@@ -371,15 +359,17 @@ ORDER BY articles.ID DESC
 
                             <td><?php echo $row['Title']; ?></td>
 
+                            <td><?php echo $row['Author']; ?></td>
+
+                            <td><?php echo $row['translator_name']; ?></td>
+
                             <td><?php echo $row['Category']; ?></td>
-
-                            <td><?php echo $row['teacher_name']; ?></td>
-
-                            <td><?php echo $row['student_name']; ?></td>
 
                             <td><?php echo $row['department_name']; ?></td>
 
-                            <td><?php echo $row['Date']; ?></td>
+                            <td><?php echo $row['Pages']; ?></td>
+
+                            <td><?php echo $row['Publish_Date']; ?></td>
 
                         </tr>
 
@@ -389,22 +379,10 @@ ORDER BY articles.ID DESC
 
             </table>
 
-            <br>
-
             <h5>
 
-                Total Articles :
-
-                <?php
-
-                $total = $conn->query("
-SELECT COUNT(*) AS total
-FROM articles
-")->fetch_assoc();
-
-                echo $total['total'];
-
-                ?>
+                Total Translated Books :
+                <?php echo $total; ?>
 
             </h5>
 

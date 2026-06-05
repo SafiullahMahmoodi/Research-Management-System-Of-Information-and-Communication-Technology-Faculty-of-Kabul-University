@@ -59,7 +59,11 @@ if (isset($_POST['save_book'])) {
 
         if ($extension != "pdf") {
 
-            die("Only PDF files are allowed.");
+            echo "<script>
+            alert('Only PDF files are allowed!');
+            window.history.back();
+          </script>";
+            exit();
         }
 
         if ($file_size > 209715200) {
@@ -231,7 +235,11 @@ if (isset($_POST['update_book'])) {
 
         if ($extension != "pdf") {
 
-            die("Only PDF files are allowed.");
+            echo "<script>
+            alert('Only PDF files are allowed!');
+            window.history.back();
+          </script>";
+            exit();
         }
 
         if ($file_size > 209715200) {
@@ -291,32 +299,32 @@ if (isset($_GET['search'])) {
         $conn,
         $_GET['search']
     );
-
     $book_result = $conn->query("
 
-    SELECT translated_books.*,
-    teacher.Name AS translator_name,
-    department.Name AS department_name
+SELECT translated_books.*,
+teacher.Name AS translator_name,
+department.Name AS department_name
 
-    FROM translated_books
+FROM translated_books
 
-    LEFT JOIN teacher
-    ON translated_books.translated_by = teacher.ID
+LEFT JOIN teacher
+ON translated_books.translated_by = teacher.ID
 
-    LEFT JOIN department
-    ON translated_books.Department = department.ID
+LEFT JOIN department
+ON translated_books.Department = department.ID
 
-    WHERE
+WHERE
 
-    translated_books.ID LIKE '%$search%'
-    OR translated_books.Title LIKE '%$search%'
-    OR translated_books.Author LIKE '%$search%'
-    OR translated_books.Category LIKE '%$search%'
-    OR teacher.Name LIKE '%$search%'
-    OR department.Name LIKE '%$search%'
+translated_books.ID LIKE '%$search%'
+OR translated_books.Title LIKE '%$search%'
+OR translated_books.Author LIKE '%$search%'
+OR translated_books.Category LIKE '%$search%'
+OR teacher.Name LIKE '%$search%'
+OR department.Name LIKE '%$search%'
+OR translated_books.Publish_Date LIKE '%$search%'
 
-    ORDER BY translated_books.ID DESC
-    ");
+ORDER BY translated_books.ID DESC
+");
 } else {
 
     $book_result = $conn->query("
@@ -357,6 +365,25 @@ if (isset($_GET['search'])) {
 
 
 </head>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension =
+                file.name.split('.').pop().toLowerCase();
+
+            if (extension !== "pdf") {
+
+                alert("Only PDF files are allowed!");
+
+                input.value = "";
+            }
+        }
+    }
+</script>
 
 <body>
     <?php include('header.php'); ?>
@@ -649,8 +676,9 @@ if (isset($_GET['search'])) {
 
                         <input type="file"
                             name="pdf_file"
-                            class="form-control">
-
+                            class="form-control"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
                     </div>
 
                     <div class="mb-3">
