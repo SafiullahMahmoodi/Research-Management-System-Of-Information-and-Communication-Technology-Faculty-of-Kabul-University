@@ -184,6 +184,12 @@
             Thesises
 
         </a>
+        <a href="../reports/systemreports.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == '../reports/systemreports.php' ? 'active' : ''; ?>">
+
+            Reports
+
+        </a>
 
     </div>
 

@@ -75,8 +75,28 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
         }
 
         @media print {
-            .print-btn {
-                display: none;
+
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .report-card {
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            .report-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .report-title {
+                text-align: center;
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -85,7 +105,10 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
 </head>
 
 <body>
-    <?php include('header.php'); ?>
+    <div class="no-print">
+        <?php include('header.php'); ?>
+    </div>
+
 
     <div class="report-container">
 

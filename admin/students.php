@@ -350,8 +350,6 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter Student ID"
-
                             value="<?php echo $edit_id; ?>"
 
                             <?php echo isset($_GET['edit']) ? 'readonly' : ''; ?>
@@ -376,7 +374,6 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter student name"
 
                             value="<?php echo $edit_name; ?>"
 
@@ -400,7 +397,6 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter last name"
 
                             value="<?php echo $edit_lastname; ?>"
 
@@ -424,7 +420,7 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter email"
+
 
                             value="<?php echo $edit_email; ?>"
 
@@ -448,7 +444,6 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter contact"
 
                             value="<?php echo $edit_contact; ?>"
 

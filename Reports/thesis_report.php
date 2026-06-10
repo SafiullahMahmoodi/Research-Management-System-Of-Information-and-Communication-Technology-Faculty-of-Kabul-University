@@ -177,15 +177,26 @@ $where
         @media print {
 
             .no-print {
-                display: none;
+                display: none !important;
             }
 
             body {
-                background: white;
+                background: white !important;
             }
 
             .report-card {
-                box-shadow: none;
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            .report-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .report-title {
+                text-align: center;
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -194,7 +205,10 @@ $where
 
 <body>
 
-    <?php include('header.php'); ?>
+    <div class="no-print">
+        <?php include('header.php'); ?>
+    </div>
+
 
     <div class="report-container">
 
@@ -206,12 +220,6 @@ $where
 
             <div class="mb-3 no-print">
 
-                <a href="systemreports.php"
-                    class="btn btn-secondary">
-
-                    Back
-
-                </a>
 
                 <button
                     class="btn btn-success"
@@ -232,7 +240,7 @@ $where
 
             <!-- FILTER FORM -->
 
-            <form method="GET" class="row mb-3">
+            <form method="GET" class="row mb-3 no-print">
 
                 <div class="col-md-2">
 

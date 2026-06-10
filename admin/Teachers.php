@@ -282,7 +282,7 @@ if (isset($_GET['search'])) {
 
                             <th>Contact</th>
 
-                            <th>Education</th>
+                            <th>Degree</th>
 
                             <th>Department</th>
 
@@ -388,7 +388,6 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter Teacher ID"
 
                             value="<?php echo $edit_id; ?>"
 
@@ -414,8 +413,6 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter teacher name"
-
                             value="<?php echo $edit_name; ?>"
 
                             required>
@@ -437,8 +434,6 @@ if (isset($_GET['search'])) {
                             name="lastname"
 
                             class="form-control"
-
-                            placeholder="Enter last name"
 
                             value="<?php echo $edit_lastname; ?>"
 
@@ -462,7 +457,7 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter email"
+
 
                             value="<?php echo $edit_email; ?>"
 
@@ -486,7 +481,7 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter contact"
+
 
                             value="<?php echo $edit_contact; ?>"
 
@@ -500,7 +495,7 @@ if (isset($_GET['search'])) {
 
                         <label class="form-label">
 
-                            Education
+                            Degree
 
                         </label>
 
@@ -510,7 +505,6 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter education"
 
                             value="<?php echo $edit_education; ?>"
 

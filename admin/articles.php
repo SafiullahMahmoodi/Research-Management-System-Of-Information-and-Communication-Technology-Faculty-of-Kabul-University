@@ -642,7 +642,6 @@ ORDER BY articles.ID DESC
                             name="id"
 
                             class="form-control"
-                            placeholder="Enter ID"
 
                             required
 
@@ -659,7 +658,7 @@ ORDER BY articles.ID DESC
                             name="title"
 
                             class="form-control"
-                            placeholder="Enter Title"
+
 
                             required
 
@@ -688,7 +687,7 @@ ORDER BY articles.ID DESC
                             name="category"
 
                             class="form-control"
-                            placeholder="Enter Category"
+
 
                             required
 

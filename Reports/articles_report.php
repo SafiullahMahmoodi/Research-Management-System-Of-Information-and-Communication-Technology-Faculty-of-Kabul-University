@@ -107,6 +107,32 @@ ORDER BY articles.ID DESC
         href="../css/bootstrap.min.css">
 
     <style>
+        @media print {
+
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .report-card {
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            .report-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .report-title {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+
         .form-label {
             font-size: 13px;
             font-weight: 600;
@@ -180,7 +206,9 @@ ORDER BY articles.ID DESC
 </head>
 
 <body>
-    <?php include('header.php'); ?>
+    <div class="no-print">
+        <?php include('header.php'); ?>
+    </div>
 
     <div class="report-container">
 
@@ -192,14 +220,7 @@ ORDER BY articles.ID DESC
 
             </h2>
 
-            <div class="col-md-12 mt-3">
-
-                <a href="articles.php"
-                    class="btn btn-secondary me-2">
-
-                    Back
-
-                </a>
+            <div class="col-md-12 mt-3 no-print">
 
                 <button
                     class="btn btn-success me-2"
@@ -217,7 +238,7 @@ ORDER BY articles.ID DESC
                 </a>
 
             </div>
-            <form method="GET" class="row mb-3">
+            <form method="GET" class="row mb-3 no-print">
 
                 <!-- Teacher -->
 

@@ -550,7 +550,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                         <input type="text"
                             name="id"
                             class="form-control"
-                            placeholder="Enter ID"
+
                             required
                             value="<?php echo $edit_id; ?>">
 
@@ -563,7 +563,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                         <input type="text"
                             name="title"
                             class="form-control"
-                            placeholder="Enter Title"
+
                             required
                             value="<?php echo $edit_title; ?>">
 
@@ -586,7 +586,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                         <input type="text"
                             name="category"
                             class="form-control"
-                            placeholder="Enter Category"
+
                             required
                             value="<?php echo $edit_category; ?>">
 

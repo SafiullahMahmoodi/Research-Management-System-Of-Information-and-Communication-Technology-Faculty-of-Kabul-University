@@ -139,28 +139,28 @@
         <a href="articles_report.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'articles_report.php' ? 'active' : ''; ?>">
 
-            Articles
+            Articles Report
 
         </a>
 
         <a href="books_report.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'books_report.php' ? 'active' : ''; ?>">
 
-            Books
+            Books Report
 
         </a>
 
         <a href="translatedbooks_report.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'translatedbooks_report.php' ? 'active' : ''; ?>">
 
-            Translated Books
+            Translated Books Report
 
         </a>
 
         <a href="thesis_report.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesis_report.php' ? 'active' : ''; ?>">
 
-            Thesises
+            Thesises Report
 
         </a>
 

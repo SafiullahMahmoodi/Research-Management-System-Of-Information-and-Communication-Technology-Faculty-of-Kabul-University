@@ -298,7 +298,7 @@ $department_result = $conn->query($department_query);
 
                             class="form-control"
 
-                            placeholder="Enter department ID"
+
 
                             required
 
@@ -324,7 +324,6 @@ $department_result = $conn->query($department_query);
 
                             class="form-control"
 
-                            placeholder="Enter department name"
 
                             required
 
