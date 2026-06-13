@@ -1,7 +1,7 @@
 <?php
 include('../auth.php');
 include('../db_connection.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 // ===========================
 // Message
 // ===========================
@@ -188,7 +188,8 @@ if (isset($_GET['search'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -197,7 +198,7 @@ if (isset($_GET['search'])) {
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Teachers</title>
+    <title><?= ($lang == 'fa') ? 'استادان' : 'Teachers'; ?></title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -205,7 +206,36 @@ if (isset($_GET['search'])) {
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+        html[dir="rtl"] .main-wrapper,
+        html[dir="rtl"] .table-section,
+        html[dir="rtl"] .form-section,
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card {
+            direction: rtl;
+            text-align: right;
+        }
 
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label {
+            text-align: right;
+            display: block;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+    </style>
 </head>
 
 <body>
@@ -235,27 +265,19 @@ if (isset($_GET['search'])) {
             <?php } ?>
 
             <!-- SEARCH -->
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-            <div class="search-wrapper">
-
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
-
-                        placeholder="Search teachers..."
-
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی استادان...' : 'Search teachers...'; ?>"
                         value="<?php echo $search; ?>">
 
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -272,21 +294,14 @@ if (isset($_GET['search'])) {
 
                         <tr>
 
-                            <th>ID</th>
-
-                            <th>Name</th>
-
-                            <th>Last Name</th>
-
-                            <th>Email</th>
-
-                            <th>Contact</th>
-
-                            <th>Degree</th>
-
-                            <th>Department</th>
-
-                            <th width="160">Action</th>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تماس' : 'Contact'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'مدرک تحصیلی' : 'Degree'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+                            <th width="160"><?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?></th>
 
                         </tr>
 
@@ -319,20 +334,20 @@ if (isset($_GET['search'])) {
                                         <a href="teachers.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
 
                                         <a href="teachers.php?delete=<?php echo $row['ID']; ?>"
-
                                             class="delete-btn"
 
-                                            onclick="return confirm('Are you sure you want to delete this teacher? It will delete all data that related to this teacher in other tables.')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا مطمئن هستید؟ با حذف این استاد تمام اطلاعات مرتبط نیز حذف خواهد شد.'
+                                                                            : 'Are you sure you want to delete this teacher? It will delete all related data.'; ?>')">
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
                                         </a>
-
                                     </div>
 
                                 </td>
@@ -354,13 +369,12 @@ if (isset($_GET['search'])) {
         <div class="form-section">
 
             <div class="form-card">
-
                 <div class="form-title">
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit Teacher"
-                        : "Add Teacher";
+                        ? (($lang == 'fa') ? 'ویرایش استاد' : 'Edit Teacher')
+                        : (($lang == 'fa') ? 'افزودن استاد' : 'Add Teacher');
                     ?>
 
                 </div>
@@ -377,9 +391,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            ID
-
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -402,10 +414,9 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Name
-
+                            <?= ($lang == 'fa') ? 'نام' : 'Name'; ?>
                         </label>
+
 
                         <input type="text"
 
@@ -424,9 +435,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Last Name
-
+                            <?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?>
                         </label>
 
                         <input type="text"
@@ -446,9 +455,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Email
-
+                            <?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?>
                         </label>
 
                         <input type="email"
@@ -470,9 +477,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Contact
-
+                            <?= ($lang == 'fa') ? 'شماره تماس' : 'Contact'; ?>
                         </label>
 
                         <input type="text"
@@ -494,9 +499,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Degree
-
+                            <?= ($lang == 'fa') ? 'مدرک تحصیلی' : 'Degree'; ?>
                         </label>
 
                         <input type="text"
@@ -517,9 +520,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-4">
 
                         <label class="form-label">
-
-                            Department
-
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
                         </label>
 
                         <select name="department"
@@ -553,7 +554,6 @@ if (isset($_GET['search'])) {
                     <!-- Button -->
 
                     <button class="save-btn"
-
                         name="<?php
                                 echo isset($_GET['edit'])
                                     ? 'update_teacher'
@@ -562,8 +562,8 @@ if (isset($_GET['search'])) {
 
                         <?php
                         echo isset($_GET['edit'])
-                            ? 'Update Teacher'
-                            : 'Save Teacher';
+                            ? (($lang == 'fa') ? 'بروزرسانی استاد' : 'Update Teacher')
+                            : (($lang == 'fa') ? 'ذخیره استاد' : 'Save Teacher');
                         ?>
 
                     </button>

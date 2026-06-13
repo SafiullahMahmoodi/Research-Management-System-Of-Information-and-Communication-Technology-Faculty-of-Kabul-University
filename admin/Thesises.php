@@ -4,7 +4,7 @@ include('../auth.php');
 
 
 include('../db_connection.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -358,7 +358,8 @@ OR thesis.Publish_Date LIKE '%$search%'
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -366,8 +367,11 @@ OR thesis.Publish_Date LIKE '%$search%'
 
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
-
-    <title>Thesis</title>
+    <title>
+        <?= ($lang == 'fa')
+            ? 'پایان‌نامه‌ها'
+            : 'Thesis'; ?>
+    </title>
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
@@ -375,7 +379,35 @@ OR thesis.Publish_Date LIKE '%$search%'
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
+    <Style>
+        html[dir="rtl"] {
+            direction: rtl;
+        }
 
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card,
+        html[dir="rtl"] .search-form,
+        html[dir="rtl"] .table,
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .action-icons {
+            justify-content: flex-start;
+        }
+
+        html[dir="rtl"] .search-wrapper {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+    </Style>
 
 </head>
 <script>
@@ -389,7 +421,9 @@ OR thesis.Publish_Date LIKE '%$search%'
 
             if (extension !== "pdf") {
 
-                alert("Only PDF files are allowed!");
+                alert("<?= ($lang == 'fa')
+                            ? 'فقط فایل PDF مجاز است!'
+                            : 'Only PDF files are allowed!'; ?>");
 
                 input.value = "";
             }
@@ -412,14 +446,12 @@ OR thesis.Publish_Date LIKE '%$search%'
                     <input type="text"
                         name="search"
                         class="search-input"
-                        placeholder="Search thesis..."
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی پایان‌نامه‌ها...'
+                                            : 'Search thesis...'; ?>"
                         value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -434,16 +466,16 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                         <tr>
 
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Student</th>
-                            <th>Instructor</th>
-                            <th>Department</th>
-                            <th>Publish Date</th>
-                            <th>PDF</th>
-                            <th>Action</th>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'محصل' : 'Student'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'استاد راهنما' : 'Instructor'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?></th>
 
                         </tr>
 
@@ -478,14 +510,15 @@ OR thesis.Publish_Date LIKE '%$search%'
                                         <a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
                                             target="_blank"
                                             class="pdf-btn">
-
-                                            PDF
+                                            <?= ($lang == 'fa') ? 'PDF' : 'PDF'; ?>
 
                                         </a>
 
                                     <?php } else { ?>
 
-                                        No File
+                                        <?= ($lang == 'fa')
+                                            ? 'بدون فایل'
+                                            : 'No File'; ?>
 
                                     <?php } ?>
 
@@ -497,16 +530,19 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                                         <a href="thesis.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
-
-                                            Edit
-
+                                            <?= ($lang == 'fa')
+                                                ? 'ویرایش'
+                                                : 'Edit'; ?>
                                         </a>
 
                                         <a href="thesis.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
-                                            onclick="return confirm('Delete this thesis?')">
-
-                                            Delete
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا از حذف این پایان‌نامه مطمئن هستید؟'
+                                                                            : 'Delete this thesis?'; ?>')">
+                                            <?= ($lang == 'fa')
+                                                ? 'حذف'
+                                                : 'Delete'; ?>
 
                                         </a>
 
@@ -534,8 +570,12 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit Thesis"
-                        : "Add Thesis";
+                        ? (($lang == 'fa')
+                            ? 'ویرایش پایان‌نامه'
+                            : 'Edit Thesis')
+                        : (($lang == 'fa')
+                            ? 'افزودن پایان‌نامه'
+                            : 'Add Thesis');
                     ?>
 
                 </div>
@@ -545,7 +585,9 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">ID</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                        </label>
 
                         <input type="text"
                             name="id"
@@ -558,7 +600,9 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">Title</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?>
+                        </label>
 
                         <input type="text"
                             name="title"
@@ -571,7 +615,9 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">Description</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?>
+                        </label>
 
                         <textarea name="description"
                             class="form-control"
@@ -581,7 +627,9 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">Category</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                        </label>
 
                         <input type="text"
                             name="category"
@@ -594,14 +642,19 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">Student</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'محصل' : 'Student'; ?>
+                        </label>
 
                         <select name="student_id"
                             class="custom-select"
                             required>
 
-                            <option value="">Select Student</option>
-
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب محصل'
+                                    : 'Select Student'; ?>
+                            </option>
                             <?php
 
                             $student = $conn->query("SELECT * FROM students");
@@ -629,13 +682,21 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">Instructor</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa')
+                                ? 'استاد راهنما'
+                                : 'Instructor'; ?>
+                        </label>
 
                         <select name="instructor"
                             class="custom-select"
                             required>
 
-                            <option value="">Select Instructor</option>
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب استاد راهنما'
+                                    : 'Select Instructor'; ?>
+                            </option>
 
                             <?php
 
@@ -664,13 +725,21 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-2">
 
-                        <label class="form-label">Department</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa')
+                                ? 'دیپارتمنت'
+                                : 'Department'; ?>
+                        </label>
 
                         <select name="department"
                             class="custom-select"
                             required>
 
-                            <option value="">Select Department</option>
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب دیپارتمنت'
+                                    : 'Select Department'; ?>
+                            </option>
 
                             <?php
 
@@ -698,8 +767,11 @@ OR thesis.Publish_Date LIKE '%$search%'
                     </div>
 
                     <div class="mb-2">
-
-                        <label class="form-label">PDF File</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa')
+                                ? 'فایل PDF'
+                                : 'PDF File'; ?>
+                        </label>
                         <input type="file"
                             name="pdf_file"
                             class="form-control"
@@ -709,7 +781,11 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <div class="mb-3">
 
-                        <label class="form-label">Publish Date</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa')
+                                ? 'تاریخ نشر'
+                                : 'Publish Date'; ?>
+                        </label>
 
                         <input type="date"
                             name="publish_date"
@@ -730,8 +806,12 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                         <?php
                         echo isset($_GET['edit'])
-                            ? 'Update Thesis'
-                            : 'Save Thesis';
+                            ? (($lang == 'fa')
+                                ? 'بروزرسانی پایان‌نامه'
+                                : 'Update Thesis')
+                            : (($lang == 'fa')
+                                ? 'ذخیره پایان‌نامه'
+                                : 'Save Thesis');
                         ?>
 
                     </button>

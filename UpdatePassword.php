@@ -2,6 +2,7 @@
 // updatepassword.php
 
 session_start();
+$lang = $_SESSION['lang'] ?? 'en';
 
 // Include Database Connection
 include('db_connection.php');
@@ -19,7 +20,9 @@ if (isset($_POST['update_password'])) {
 
     if ($new_password != $confirm_password) {
 
-        $error = "Passwords do not match!";
+        $error = ($lang == 'fa')
+            ? "رمزهای عبور با هم مطابقت ندارند!"
+            : "Passwords do not match!";
     } else {
 
         // Check Email Exists
@@ -41,14 +44,20 @@ if (isset($_POST['update_password'])) {
 
             if ($conn->query($sql) === TRUE) {
 
-                $message = "Password Updated Successfully!";
+                $message = ($lang == 'fa')
+                    ? "رمز عبور با موفقیت به‌روزرسانی شد!"
+                    : "Password Updated Successfully!";
             } else {
 
-                $error = "Something went wrong!";
+                $error = ($lang == 'fa')
+                    ? "خطایی رخ داده است!"
+                    : "Something went wrong!";
             }
         } else {
 
-            $error = "Email not found!";
+            $error = ($lang == 'fa')
+                ? "ایمیل یافت نشد!"
+                : "Email not found!";
         }
     }
 }
@@ -87,7 +96,11 @@ if (isset($_POST['update_password'])) {
 
                 <div class="header-title">
 
-                    Research Management of Information and Communication Technology Faculty
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابرات'
+                        : 'Research Management of Information and Communication Technology Faculty';
+                    ?>
 
                 </div>
 
@@ -95,7 +108,11 @@ if (isset($_POST['update_password'])) {
 
                 <a href="index.php" class="btn home-btn">
 
-                    Home Page
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'صفحه اصلی'
+                        : 'Home Page';
+                    ?>
 
                 </a>
 
@@ -114,10 +131,13 @@ if (isset($_POST['update_password'])) {
         <div class="update-card">
 
             <!-- Title -->
-
             <h2 class="update-title">
 
-                Update Password
+                <?php
+                echo ($lang == 'fa')
+                    ? 'تغییر رمز عبور'
+                    : 'Update Password';
+                ?>
 
             </h2>
 
@@ -143,7 +163,11 @@ if (isset($_POST['update_password'])) {
 
                     <label class="form-label">
 
-                        Email Address
+                        <?php
+                        echo ($lang == 'fa')
+                            ? ' ایمیل آدرس'
+                            : 'Email Address';
+                        ?>
 
                     </label>
 
@@ -151,7 +175,7 @@ if (isset($_POST['update_password'])) {
                         type="email"
                         name="email"
                         class="form-control custom-input"
-                        placeholder="Enter your email"
+                        placeholder="<?php echo ($lang == 'fa') ? 'ایمیل خود را وارد کنید' : 'Enter your email'; ?>"
                         required>
 
                 </div>
@@ -162,7 +186,11 @@ if (isset($_POST['update_password'])) {
 
                     <label class="form-label">
 
-                        New Password
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'رمز عبور جدید'
+                            : 'New Password';
+                        ?>
 
                     </label>
 
@@ -170,7 +198,7 @@ if (isset($_POST['update_password'])) {
                         type="password"
                         name="new_password"
                         class="form-control custom-input"
-                        placeholder="Enter new password"
+                        placeholder="<?php echo ($lang == 'fa') ? 'رمز عبور جدید را وارد کنید' : 'Enter new password'; ?>"
                         required>
 
                 </div>
@@ -181,7 +209,11 @@ if (isset($_POST['update_password'])) {
 
                     <label class="form-label">
 
-                        Confirm Password
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'تأیید رمز عبور'
+                            : 'Confirm Password';
+                        ?>
 
                     </label>
 
@@ -189,7 +221,7 @@ if (isset($_POST['update_password'])) {
                         type="password"
                         name="confirm_password"
                         class="form-control custom-input"
-                        placeholder="Confirm password"
+                        placeholder="<?php echo ($lang == 'fa') ? 'رمز عبور را دوباره وارد کنید' : 'Confirm password'; ?>"
                         required>
 
                 </div>
@@ -201,7 +233,11 @@ if (isset($_POST['update_password'])) {
                     name="update_password"
                     class="btn btn-success w-100 update-btn">
 
-                    Update Password
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'به‌روزرسانی رمز عبور'
+                        : 'Update Password';
+                    ?>
 
                 </button>
 
@@ -211,11 +247,19 @@ if (isset($_POST['update_password'])) {
 
             <div class="links">
 
-                <a href="login.php">
+                <div class="links">
 
-                    Back to Login
+                    <a href="login.php">
 
-                </a>
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'بازگشت به صفحه ورود'
+                            : 'Back to Login';
+                        ?>
+
+                    </a>
+
+                </div>
 
             </div>
 

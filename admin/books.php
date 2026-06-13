@@ -4,7 +4,7 @@ include('../auth.php');
 
 
 include('../db_connection.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -182,7 +182,7 @@ if (isset($_GET['edit'])) {
         $row = $res->fetch_assoc();
 
         $edit_id            = $row['ID'];
-        $edit_title         = $row['title'];
+        $edit_title         = $row['Title'];
         $edit_description   = $row['Description'];
         $edit_category      = $row['Category'];
         $edit_author        = $row['Author'];
@@ -343,7 +343,8 @@ if (isset($_GET['search'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -351,8 +352,7 @@ if (isset($_GET['search'])) {
 
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
-
-    <title>Books</title>
+    <title><?= ($lang == 'fa') ? 'کتاب‌ها' : 'Books'; ?></title>
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
@@ -360,7 +360,33 @@ if (isset($_GET['search'])) {
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
+    <Style>
+        html[dir="rtl"] .main-wrapper,
+        html[dir="rtl"] .table-section,
+        html[dir="rtl"] .form-section,
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card {
+            direction: rtl;
+            text-align: right;
+        }
 
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] textarea,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+    </Style>
 </head>
 <script>
     function checkPDF(input) {
@@ -376,7 +402,7 @@ if (isset($_GET['search'])) {
 
             if (extension !== "pdf") {
 
-                alert("Only PDF files are allowed!");
+                alert("<?= ($lang == 'fa') ? 'فقط فایل PDF مجاز است.' : 'Only PDF files are allowed!'; ?>");
 
                 input.value = "";
             }
@@ -391,26 +417,21 @@ if (isset($_GET['search'])) {
 
         <div class="table-section">
 
-            <div class="search-wrapper">
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی کتاب‌ها...'
+                                            : 'Search books...'; ?>"
+                        value="<?= $search; ?>">
 
-                        placeholder="Search books..."
-
-                        value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -425,16 +446,25 @@ if (isset($_GET['search'])) {
 
                         <tr>
 
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Department</th>
-                            <th>Pages</th>
-                            <th>Publish Date</th>
-                            <th>PDF File</th>
-                            <th width="160">Action</th>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'تعداد صفحات' : 'Pages'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?></th>
 
                         </tr>
 
@@ -469,13 +499,13 @@ if (isset($_GET['search'])) {
                                             target="_blank"
                                             class="pdf-btn">
 
-                                            View PDF
+                                            <?= ($lang == 'fa') ? 'مشاهده PDF' : 'View PDF'; ?>
 
                                         </a>
 
                                     <?php } else { ?>
 
-                                        No File
+                                        <?= ($lang == 'fa') ? 'بدون فایل' : 'No File'; ?>
 
                                     <?php } ?>
 
@@ -484,20 +514,21 @@ if (isset($_GET['search'])) {
                                 <td>
 
                                     <div class="action-icons">
-
                                         <a href="books.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
 
                                         <a href="books.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
 
-                                            onclick="return confirm('Delete this book?')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا از حذف این کتاب مطمئن هستید؟'
+                                                                            : 'Delete this book?'; ?>')">
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
                                         </a>
 
@@ -527,8 +558,12 @@ if (isset($_GET['search'])) {
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit Book"
-                        : "Add Book";
+                        ? (($lang == 'fa')
+                            ? 'ویرایش کتاب'
+                            : 'Edit Book')
+                        : (($lang == 'fa')
+                            ? 'افزودن کتاب'
+                            : 'Add Book');
                     ?>
 
                 </div>
@@ -538,7 +573,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">ID</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                        </label>
 
                         <input type="text"
 
@@ -554,7 +591,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Title</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?>
+                        </label>
 
                         <input type="text"
 
@@ -569,7 +608,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Description</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?>
+                        </label>
 
                         <textarea name="description"
                             class="form-control"
@@ -579,7 +620,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Category</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                        </label>
 
                         <input type="text"
 
@@ -595,13 +638,19 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Author</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?>
+                        </label>
 
                         <select name="author"
                             class="custom-select"
                             required>
 
-                            <option value="">Select Author</option>
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب نویسنده'
+                                    : 'Select Author'; ?>
+                            </option>
 
                             <?php
 
@@ -630,29 +679,27 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Department</label>
-
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
+                        </label>
                         <select name="department"
                             class="custom-select"
                             required>
 
-                            <?php
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب دیپارتمنت'
+                                    : 'Select Department'; ?>
+                            </option>
 
+                            <?php
                             $dep = $conn->query("SELECT * FROM department");
 
                             while ($d = $dep->fetch_assoc()) {
-
                             ?>
-                                <option value="">
-                                    Select Department
-                                </option>
 
                                 <option value="<?php echo $d['ID']; ?>"
-
-                                    <?php
-                                    if ($edit_department_id == $d['ID'])
-                                        echo "selected";
-                                    ?>>
+                                    <?php if ($edit_department_id == $d['ID']) echo "selected"; ?>>
 
                                     <?php echo $d['Name']; ?>
 
@@ -666,7 +713,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Pages</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'صفحات' : 'Pages'; ?>
+                        </label>
 
                         <input type="number"
 
@@ -682,7 +731,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-3">
 
-                        <label class="form-label">PDF File</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
+                        </label>
 
                         <input
                             type="file"
@@ -696,7 +747,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-3">
 
-                        <label class="form-label">Publish Date</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تاریخ انتشار' : 'Publish Date'; ?>
+                        </label>
 
                         <input type="date"
 
@@ -711,20 +764,18 @@ if (isset($_GET['search'])) {
                     </div>
 
                     <button type="submit"
-
                         class="save-btn"
-
-                        name="<?php
-                                echo isset($_GET['edit'])
+                        name="<?= isset($_GET['edit'])
                                     ? 'update_book'
-                                    : 'save_book';
-                                ?>">
+                                    : 'save_book'; ?>">
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? 'Update Book'
-                            : 'Save Book';
-                        ?>
+                        <?= isset($_GET['edit'])
+                            ? (($lang == 'fa')
+                                ? 'بروزرسانی کتاب'
+                                : 'Update Book')
+                            : (($lang == 'fa')
+                                ? 'ذخیره کتاب'
+                                : 'Save Book'); ?>
 
                     </button>
 

@@ -2,6 +2,7 @@
 // signup.php
 
 session_start();
+$lang = $_SESSION['lang'] ?? 'en';
 
 // Include Database Connection
 include('db_connection.php');
@@ -25,30 +26,34 @@ if (isset($_POST['signup'])) {
               OR email='$email'";
 
     $result = $conn->query($check);
-
     if ($result->num_rows > 0) {
 
-        $error = "Username or Email already exists!";
+        $error = ($lang == 'fa')
+            ? "نام کاربری یا ایمیل قبلاً ثبت شده است!"
+            : "Username or Email already exists!";
     } else {
 
-        // Insert User
-
         $sql = "INSERT INTO users(username, email, usertype, password)
-                VALUES('$username', '$email', '$user_type', '$password')";
+            VALUES('$username', '$email', '$user_type', '$password')";
 
         if ($conn->query($sql) === TRUE) {
 
-            $message = "Registration Successfully Completed!";
+            $message = ($lang == 'fa')
+                ? "ثبت نام با موفقیت انجام شد!"
+                : "Registration Successfully Completed!";
         } else {
 
-            $error = "Something went wrong!";
+            $error = ($lang == 'fa')
+                ? "خطایی رخ داده است!"
+                : "Something went wrong!";
         }
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?php echo ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -60,7 +65,74 @@ if (isset($_POST['signup'])) {
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <title>Sign Up</title>
+    <title>
+        <?php
+        echo ($lang == 'fa')
+            ? 'ایجاد حساب کاربری'
+            : 'Create Account';
+        ?>
+    </title>
+    <style>
+        html[dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="ltr"] {
+            direction: ltr;
+            text-align: left;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .form-select {
+            text-align: right;
+        }
+
+        html[dir="ltr"] .form-control,
+        html[dir="ltr"] .form-select {
+            text-align: left;
+        }
+
+        /* Persian (RTL) */
+        html[dir="rtl"] .form-label {
+            display: block;
+            text-align: right;
+            width: 100%;
+        }
+
+        /* English (LTR) */
+        html[dir="ltr"] .form-label {
+            display: block;
+            text-align: left;
+            width: 100%;
+        }
+
+        .show-password-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .show-password-container input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .show-password-container label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        html[dir="rtl"] .show-password {
+            justify-content: flex-start;
+        }
+    </style>
 </head>
 
 <body>
@@ -77,7 +149,11 @@ if (isset($_POST['signup'])) {
 
                 <div class="header-title">
 
-                    Research Management of Information and Communication Technology Faculty
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابراتی'
+                        : 'Research Management of Information and Communication Technology Faculty';
+                    ?>
 
                 </div>
 
@@ -85,7 +161,11 @@ if (isset($_POST['signup'])) {
 
                 <a href="index.php" class="btn home-btn">
 
-                    Home Page
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'صفحه اصلی'
+                        : 'Home Page';
+                    ?>
 
                 </a>
 
@@ -107,7 +187,11 @@ if (isset($_POST['signup'])) {
 
             <h2 class="signup-title">
 
-                Create Account
+                <?php
+                echo ($lang == 'fa')
+                    ? 'ایجاد حساب کاربری'
+                    : 'Create Account';
+                ?>
 
             </h2>
 
@@ -130,10 +214,13 @@ if (isset($_POST['signup'])) {
                 <!-- Username -->
 
                 <div class="mb-3">
-
                     <label class="form-label">
 
-                        Username
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'نام کاربری'
+                            : 'Username';
+                        ?>
 
                     </label>
 
@@ -141,7 +228,7 @@ if (isset($_POST['signup'])) {
                         type="text"
                         name="username"
                         class="form-control custom-input"
-                        placeholder="Enter username"
+                        placeholder="<?php echo ($lang == 'fa') ? 'نام کاربری را وارد کنید' : 'Enter username'; ?>"
                         required>
 
                 </div>
@@ -152,7 +239,11 @@ if (isset($_POST['signup'])) {
 
                     <label class="form-label">
 
-                        Email
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'ایمیل'
+                            : 'Email';
+                        ?>
 
                     </label>
 
@@ -160,7 +251,7 @@ if (isset($_POST['signup'])) {
                         type="email"
                         name="email"
                         class="form-control custom-input"
-                        placeholder="Enter email"
+                        placeholder="<?php echo ($lang == 'fa') ? 'ایمیل را وارد کنید' : 'Enter email'; ?>"
                         required>
 
                 </div>
@@ -168,10 +259,13 @@ if (isset($_POST['signup'])) {
                 <!-- User Type -->
 
                 <div class="mb-3">
-
                     <label class="form-label">
 
-                        User Type
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'نوع کاربر'
+                            : 'User Type';
+                        ?>
 
                     </label>
 
@@ -182,19 +276,31 @@ if (isset($_POST['signup'])) {
 
                         <option value="">
 
-                            Select User Type
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'نوع کاربر را انتخاب کنید'
+                                : 'Select User Type';
+                            ?>
 
                         </option>
 
                         <option value="admin">
 
-                            Admin
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'مدیر'
+                                : 'Admin';
+                            ?>
 
                         </option>
 
                         <option value="user">
 
-                            User
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'کاربر'
+                                : 'User';
+                            ?>
 
                         </option>
 
@@ -205,25 +311,42 @@ if (isset($_POST['signup'])) {
                 <!-- Password -->
 
                 <div class="mb-3">
-
                     <label class="form-label">
 
-                        Password
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'رمز عبور'
+                            : 'Password';
+                        ?>
 
                     </label>
 
                     <input
                         type="password"
+                        id="password"
                         name="password"
                         class="form-control custom-input"
-                        placeholder="Enter password"
+                        placeholder="<?php echo ($lang == 'fa') ? 'رمز عبور را وارد کنید' : 'Enter password'; ?>"
                         required>
-                    <input
-                        type="checkbox"
-                        onclick="password.type = this.checked ? 'text' : 'password'">
-                    Show Password
+                    <div style="display:flex; align-items:center; gap:8px;
+     flex-direction:<?= ($lang == 'fa') ? 'row' : 'row'; ?>;">
 
+                        <input
+                            type="checkbox"
+                            id="showPassword"
+                            onclick="document.getElementById('password').type = this.checked ? 'text' : 'password';">
 
+                        <label for="showPassword" style="margin:0;">
+
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'نمایش رمز عبور'
+                                : 'Show Password';
+                            ?>
+
+                        </label>
+
+                    </div>
                 </div>
 
 
@@ -234,7 +357,11 @@ if (isset($_POST['signup'])) {
                     name="signup"
                     class="btn btn-success w-100 signup-btn">
 
-                    Sign Up
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'ثبت نام'
+                        : 'Sign Up';
+                    ?>
 
                 </button>
 
@@ -244,11 +371,19 @@ if (isset($_POST['signup'])) {
 
             <div class="links">
 
-                <a href="login.php">
+                <div class="links">
 
-                    Already have an account? Login
+                    <a href="login.php">
 
-                </a>
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'قبلاً حساب دارید؟ وارد شوید'
+                            : 'Already have an account? Login';
+                        ?>
+
+                    </a>
+
+                </div>
 
             </div>
 

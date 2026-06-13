@@ -3,7 +3,7 @@
 
 include('../auth.php');
 
-
+$lang = $_SESSION['lang'] ?? 'en';
 
 
 include('../db_connection.php');
@@ -147,7 +147,8 @@ $department_result = $conn->query($department_query);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -156,14 +157,56 @@ $department_result = $conn->query($department_query);
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Departments</title>
+    <title><?= ($lang == 'fa') ? 'دیپارتمنت‌ها' : 'Departments'; ?></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
+    <style>
+        /* Persian Language */
 
+        html[dir="rtl"] .table,
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label {
+            display: block;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-form {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .form-card {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .action-icons {
+            justify-content: flex-start;
+        }
+
+        /* English Language */
+
+        html[dir="ltr"] .table,
+        html[dir="ltr"] .table th,
+        html[dir="ltr"] .table td {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .form-card {
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body>
@@ -174,26 +217,19 @@ $department_result = $conn->query($department_query);
 
         <div class="table-section">
 
-            <div class="search-wrapper">
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
                 <form method="GET"
                     class="search-form">
-
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
-
-                        placeholder="Search departments..."
-
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی دیپارتمنت‌ها...' : 'Search departments...'; ?>"
                         value="<?php echo $search; ?>">
 
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -208,11 +244,17 @@ $department_result = $conn->query($department_query);
 
                         <tr>
 
-                            <th width="100">ID</th>
+                            <th width="100">
+                                <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            </th>
 
-                            <th>Department Name</th>
+                            <th>
+                                <?= ($lang == 'fa') ? 'نام دیپارتمنت' : 'Department Name'; ?>
+                            </th>
 
-                            <th width="180">Action</th>
+                            <th width="180">
+                                <?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?>
+                            </th>
 
                         </tr>
 
@@ -235,16 +277,18 @@ $department_result = $conn->query($department_query);
                                         <a href="departments.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
 
                                         <a href="departments.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
 
-                                            onclick="return confirm('Are you sure to delete this department? It will delete all data that related to this department in other tables.')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا مطمئن هستید؟ با حذف این دیپارتمنت تمام اطلاعات مرتبط نیز حذف خواهد شد.'
+                                                                            : 'Are you sure to delete this department? It will delete all related data.'; ?>')">
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
                                         </a>
 
@@ -269,13 +313,12 @@ $department_result = $conn->query($department_query);
         <div class="form-section">
 
             <div class="form-card">
-
                 <div class="form-title">
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit Department"
-                        : "Add Department";
+                        ? (($lang == 'fa') ? 'ویرایش دیپارتمنت' : 'Edit Department')
+                        : (($lang == 'fa') ? 'افزودن دیپارتمنت' : 'Add Department');
                     ?>
 
                 </div>
@@ -287,9 +330,7 @@ $department_result = $conn->query($department_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            ID
-
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -311,11 +352,8 @@ $department_result = $conn->query($department_query);
                     <!-- Department Name -->
 
                     <div class="mb-4">
-
                         <label class="form-label">
-
-                            Department Name
-
+                            <?= ($lang == 'fa') ? 'نام دیپارتمنت' : 'Department Name'; ?>
                         </label>
 
                         <input type="text"
@@ -334,9 +372,7 @@ $department_result = $conn->query($department_query);
                     <!-- Save Button -->
 
                     <button type="submit"
-
                         class="save-btn"
-
                         name="<?php
                                 echo isset($_GET['edit'])
                                     ? 'update_department'
@@ -345,8 +381,8 @@ $department_result = $conn->query($department_query);
 
                         <?php
                         echo isset($_GET['edit'])
-                            ? 'Update Department'
-                            : 'Save Department';
+                            ? (($lang == 'fa') ? 'بروزرسانی دیپارتمنت' : 'Update Department')
+                            : (($lang == 'fa') ? 'ذخیره دیپارتمنت' : 'Save Department');
                         ?>
 
                     </button>

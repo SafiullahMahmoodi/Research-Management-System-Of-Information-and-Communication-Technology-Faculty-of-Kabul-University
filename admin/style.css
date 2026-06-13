@@ -7,6 +7,47 @@
   padding: 0;
   box-sizing: border-box;
 }
+/* Persian Language */
+
+html[dir="rtl"] .table,
+html[dir="rtl"] .table th,
+html[dir="rtl"] .table td {
+    text-align: right;
+}
+
+html[dir="rtl"] .form-label {
+    display: block;
+    text-align: right;
+}
+
+html[dir="rtl"] .form-control,
+html[dir="rtl"] .search-input {
+    text-align: right;
+}
+
+html[dir="rtl"] .search-form {
+    direction: rtl;
+}
+
+html[dir="rtl"] .form-card {
+    text-align: right;
+}
+
+html[dir="rtl"] .action-icons {
+    justify-content: flex-start;
+}
+
+/* English Language */
+
+html[dir="ltr"] .table,
+html[dir="ltr"] .table th,
+html[dir="ltr"] .table td {
+    text-align: left;
+}
+
+html[dir="ltr"] .form-card {
+    text-align: left;
+}
 
 /* =========================
    BODY
@@ -242,6 +283,13 @@ body {
 .search-btn:hover {
   background: #0c7c45;
 }
+.search-wrapper[dir="rtl"] .search-input {
+    text-align: right;
+}
+
+.search-wrapper[dir="ltr"] .search-input {
+    text-align: left;
+}
 
 /* =========================
    BUTTONS
@@ -354,23 +402,44 @@ textarea {
 
 /* =========================
    SAVE BUTTON
-========================= */
+========================= */.form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
 
+.save-btn,
+.cancel-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Save Button */
 .save-btn {
-  width: 100%;
-  background: #0f9d58;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 10px;
-  transition: 0.3s;
+    background: #0f9d58;
+    color: white;
 }
 
 .save-btn:hover {
-  background: #0c7c45;
+    background: #0c7c45;
+    transform: translateY(-2px);
+}
+
+/* Cancel Button */
+.cancel-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: #bb2d3b;
+    transform: translateY(-2px);
 }
 
 /* =========================
@@ -463,4 +532,55 @@ textarea {
     gap: 10px;
     padding: 15px;
   }
+  html[dir="rtl"] {
+    direction: rtl;
+}
+
+html[dir="rtl"] .form-label,
+html[dir="rtl"] .form-control,
+html[dir="rtl"] .custom-select,
+html[dir="rtl"] .search-input {
+    text-align: right;
+}
+
+html[dir="rtl"] table {
+    text-align: right;
+}
+.search-wrapper[dir="rtl"] {
+    text-align: right;
+}
+
+.search-wrapper[dir="rtl"] .search-form {
+    flex-direction: row-reverse;
+}
+.search-wrapper[dir="rtl"] input {
+    text-align: right;
+}
+.search-btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.search-wrapper[dir="rtl"] .search-form {
+    flex-direction: row-reverse;
+}
+/* LTR حالت عادی */
+.search-input {
+    border-radius: 0 8px 8px 0;
+}
+
+.search-btn {
+    border-radius: 8px 0 0 8px;
+}
+
+/* RTL فارسی */
+.search-wrapper[dir="rtl"] .search-input {
+    border-radius: 8px 0 0 8px;
+}
+
+.search-wrapper[dir="rtl"] .search-btn {
+    border-radius: 0 8px 8px 0;
+}
 }

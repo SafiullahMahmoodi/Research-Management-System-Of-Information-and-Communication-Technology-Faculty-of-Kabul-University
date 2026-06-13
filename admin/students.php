@@ -3,7 +3,7 @@ include('../auth.php');
 
 
 include('../db_connection.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 // ===========================
 // Insert Student
 // ===========================
@@ -172,7 +172,8 @@ $student_result = $conn->query($student_query);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -181,12 +182,48 @@ $student_result = $conn->query($student_query);
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Students</title>
+    <title><?= ($lang == 'fa') ? 'محصلان' : 'Students'; ?></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+        html[dir="rtl"] .main-wrapper,
+        html[dir="rtl"] .table-section,
+        html[dir="rtl"] .form-section,
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label {
+            display: block;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+
+        html[dir="ltr"] .table th,
+        html[dir="ltr"] .table td {
+            text-align: left;
+        }
+    </style>
+
 
 </head>
 
@@ -200,27 +237,19 @@ $student_result = $conn->query($student_query);
         <div class="table-section">
 
             <!-- SEARCH -->
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-            <div class="search-wrapper">
-
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
-
-                        placeholder="Search students..."
-
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی محصلان...' : 'Search students...'; ?>"
                         value="<?php echo $search; ?>">
 
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -237,19 +266,21 @@ $student_result = $conn->query($student_query);
 
                         <tr>
 
-                            <th>ID</th>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
 
-                            <th>Name</th>
+                            <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
 
-                            <th>Last Name</th>
+                            <th><?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?></th>
 
-                            <th>Email</th>
+                            <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
 
-                            <th>Contact</th>
+                            <th><?= ($lang == 'fa') ? 'شماره تماس' : 'Contact'; ?></th>
 
-                            <th>Department</th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
 
-                            <th width="160">Action</th>
+                            <th width="160">
+                                <?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?>
+                            </th>
 
                         </tr>
 
@@ -280,17 +311,18 @@ $student_result = $conn->query($student_query);
                                         <a href="students.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
 
                                         <a href="students.php?delete=<?php echo $row['ID']; ?>"
-
                                             class="delete-btn"
 
-                                            onclick="return confirm('Are you sure you want to delete this Student? It will delete all data that related to this students in other tables.')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا مطمئن هستید؟ با حذف این محصل تمام اطلاعات مرتبط نیز حذف خواهد شد.'
+                                                                            : 'Are you sure you want to delete this student? It will delete all related data.'; ?>')">
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
                                         </a>
 
@@ -321,8 +353,8 @@ $student_result = $conn->query($student_query);
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit Student"
-                        : "Add Student";
+                        ? (($lang == 'fa') ? 'ویرایش محصل' : 'Edit Student')
+                        : (($lang == 'fa') ? 'افزودن محصل' : 'Add Student');
                     ?>
 
                 </div>
@@ -337,11 +369,8 @@ $student_result = $conn->query($student_query);
                     <!-- ID -->
 
                     <div class="mb-3">
-
                         <label class="form-label">
-
-                            ID
-
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -363,9 +392,7 @@ $student_result = $conn->query($student_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Name
-
+                            <?= ($lang == 'fa') ? 'نام' : 'Name'; ?>
                         </label>
 
                         <input type="text"
@@ -386,9 +413,7 @@ $student_result = $conn->query($student_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Last Name
-
+                            <?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?>
                         </label>
 
                         <input type="text"
@@ -407,12 +432,10 @@ $student_result = $conn->query($student_query);
                     <!-- Email -->
 
                     <div class="mb-3">
-
                         <label class="form-label">
-
-                            Email
-
+                            <?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?>
                         </label>
+
 
                         <input type="email"
 
@@ -433,10 +456,9 @@ $student_result = $conn->query($student_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Contact
-
+                            <?= ($lang == 'fa') ? 'شماره تماس' : 'Contact'; ?>
                         </label>
+
 
                         <input type="text"
 
@@ -455,10 +477,9 @@ $student_result = $conn->query($student_query);
 
                     <div class="mb-4">
 
+
                         <label class="form-label">
-
-                            Department
-
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
                         </label>
 
                         <select name="department"
@@ -495,7 +516,6 @@ $student_result = $conn->query($student_query);
                     <!-- BUTTON -->
 
                     <button class="save-btn"
-
                         name="<?php
                                 echo isset($_GET['edit'])
                                     ? 'update_student'
@@ -504,8 +524,8 @@ $student_result = $conn->query($student_query);
 
                         <?php
                         echo isset($_GET['edit'])
-                            ? 'Update Student'
-                            : 'Save Student';
+                            ? (($lang == 'fa') ? 'بروزرسانی محصل' : 'Update Student')
+                            : (($lang == 'fa') ? 'ذخیره محصل' : 'Save Student');
                         ?>
 
                     </button>

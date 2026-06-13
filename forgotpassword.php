@@ -2,6 +2,7 @@
 // forgotpassword.php
 
 session_start();
+$lang = $_SESSION['lang'] ?? 'en';
 
 // Include Database Connection
 include('db_connection.php');
@@ -30,7 +31,9 @@ if (isset($_POST['check_email'])) {
         exit();
     } else {
 
-        $error = "Email not found!";
+        $error = ($lang == 'fa')
+            ? "ایمیل یافت نشد!"
+            : "Email not found!";
     }
 }
 ?>
@@ -62,11 +65,13 @@ if (isset($_POST['check_email'])) {
 
             <div class="d-flex justify-content-between align-items-center">
 
-                <!-- Left Text -->
-
                 <div class="header-title">
 
-                    Research Management of Information and Communication Technology Faculty
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابرات'
+                        : 'Research Management of Information and Communication Technology Faculty';
+                    ?>
 
                 </div>
 
@@ -74,7 +79,11 @@ if (isset($_POST['check_email'])) {
 
                 <a href="index.php" class="btn home-btn">
 
-                    Home Page
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'صفحه اصلی'
+                        : 'Home Page';
+                    ?>
 
                 </a>
 
@@ -96,7 +105,11 @@ if (isset($_POST['check_email'])) {
 
             <h2 class="forgot-title">
 
-                Forgot Password
+                <?php
+                echo ($lang == 'fa')
+                    ? 'بازیابی رمز عبور'
+                    : 'Forgot Password';
+                ?>
 
             </h2>
 
@@ -118,7 +131,11 @@ if (isset($_POST['check_email'])) {
 
                     <label class="form-label">
 
-                        Email Address
+                        <?php
+                        echo ($lang == 'fa')
+                            ? ' ایمیل آدرس'
+                            : 'Email Address';
+                        ?>
 
                     </label>
 
@@ -126,7 +143,7 @@ if (isset($_POST['check_email'])) {
                         type="email"
                         name="email"
                         class="form-control custom-input"
-                        placeholder="Enter your email"
+                        placeholder="<?php echo ($lang == 'fa') ? 'ایمیل خود را وارد کنید' : 'Enter your email'; ?>"
                         required>
 
                 </div>
@@ -138,7 +155,11 @@ if (isset($_POST['check_email'])) {
                     name="check_email"
                     class="btn btn-success w-100 continue-btn">
 
-                    Continue
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'ادامه'
+                        : 'Continue';
+                    ?>
 
                 </button>
 

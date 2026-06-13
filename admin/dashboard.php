@@ -3,6 +3,7 @@
 
 include('../auth.php');
 
+$lang = $_SESSION['lang'] ?? 'en';
 
 
 include('../db_connection.php');
@@ -98,7 +99,8 @@ while ($row = $thesis_result->fetch_assoc()) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -107,7 +109,9 @@ while ($row = $thesis_result->fetch_assoc()) {
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard</title>
+    <title>
+        <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
+    </title>
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap -->
 
@@ -131,13 +135,15 @@ while ($row = $thesis_result->fetch_assoc()) {
 
         <div class="header-title">
 
-            Research Management System of Information and Communication Technology Faculty
+            <?= ($lang == 'fa')
+                ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابراتی'
+                : 'Research Management System of Information and Communication Technology Faculty'; ?>
 
         </div>
 
         <a href="../logout.php" class="logout-btn">
 
-            Logout
+            <?= ($lang == 'fa') ? 'خروج' : 'Logout'; ?>
 
         </a>
 
@@ -156,69 +162,70 @@ while ($row = $thesis_result->fetch_assoc()) {
                 <li>
                     <a href="dashboard.php" class="active">
                         <i class="bi bi-speedometer2"></i>
-                        Dashboard
+                        <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="users.php">
                         <i class="bi bi-people-fill"></i>
-                        Users
+                        <?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="departments.php">
                         <i class="bi bi-building"></i>
-                        Departments
+                        <?= ($lang == 'fa') ? 'دیپارتمنت‌ها' : 'Departments'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="teachers.php">
                         <i class="bi bi-person-workspace"></i>
-                        Teachers
+                        <?= ($lang == 'fa') ? 'استادان' : 'Teachers'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="students.php">
                         <i class="bi bi-mortarboard-fill"></i>
-                        Students
+                        <?= ($lang == 'fa') ? 'محصلان' : 'Students'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="articles.php">
                         <i class="bi bi-file-earmark-text-fill"></i>
-                        Articles
+                        <?= ($lang == 'fa') ? 'مقالات' : 'Articles'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="thesises.php">
                         <i class="bi bi-journal-richtext"></i>
-                        Thesises
+                        <?= ($lang == 'fa') ? 'مونوگراف‌ها' : 'Thesises'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="books.php">
                         <i class="bi bi-book-fill"></i>
-                        Books
+                        <?= ($lang == 'fa') ? 'کتاب‌ها' : 'Books'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="translatedbooks.php">
                         <i class="bi bi-translate"></i>
-                        Translated Books
+                        <?= ($lang == 'fa') ? 'کتاب‌های ترجمه‌شده' : 'Translated Books'; ?>
                     </a>
                 </li>
+
                 <li>
                     <a href="../Reports/systemreports.php">
-                        <i class="bi bi-translate"></i>
-                        Reports
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        <?= ($lang == 'fa') ? 'گزارش‌ها' : 'Reports'; ?>
                     </a>
                 </li>
 
@@ -232,10 +239,9 @@ while ($row = $thesis_result->fetch_assoc()) {
 
             <h2 class="page-title">
 
-                Dashboard
+                <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
 
             </h2>
-
             <div class="graph-grid">
 
                 <!-- Articles -->
@@ -345,7 +351,6 @@ while ($row = $thesis_result->fetch_assoc()) {
         // Articles Chart
         // Line Chart
         // ==========================
-
         new Chart(document.getElementById('articlesChart'), {
 
             type: 'line',
@@ -356,7 +361,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                 datasets: [{
 
-                    label: 'Articles',
+                    label: '<?= ($lang == "fa") ? "مقالات" : "Articles"; ?>',
 
                     data: <?php echo json_encode($article_data); ?>,
 
@@ -377,8 +382,22 @@ while ($row = $thesis_result->fetch_assoc()) {
             },
 
             options: {
+
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    title: {
+
+                        display: true,
+
+                        text: '<?= ($lang == "fa") ? "مقالات براساس کتگوری" : "Articles By Category"; ?>'
+
+                    }
+
+                }
+
             }
         });
 
@@ -386,7 +405,6 @@ while ($row = $thesis_result->fetch_assoc()) {
         // Books Chart
         // Doughnut Chart
         // ==========================
-
         new Chart(document.getElementById('booksChart'), {
 
             type: 'doughnut',
@@ -396,6 +414,8 @@ while ($row = $thesis_result->fetch_assoc()) {
                 labels: <?php echo json_encode($book_labels); ?>,
 
                 datasets: [{
+
+                    label: '<?= ($lang == "fa") ? "کتاب‌ها" : "Books"; ?>',
 
                     data: <?php echo json_encode($book_data); ?>,
 
@@ -410,8 +430,22 @@ while ($row = $thesis_result->fetch_assoc()) {
             },
 
             options: {
+
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    title: {
+
+                        display: true,
+
+                        text: '<?= ($lang == "fa") ? "کتاب‌ها براساس کتگوری" : "Books By Category"; ?>'
+
+                    }
+
+                }
+
             }
         });
 
@@ -419,7 +453,6 @@ while ($row = $thesis_result->fetch_assoc()) {
         // Translate Books Chart
         // Pie Chart
         // ==========================
-
         new Chart(document.getElementById('translateChart'), {
 
             type: 'pie',
@@ -429,6 +462,8 @@ while ($row = $thesis_result->fetch_assoc()) {
                 labels: <?php echo json_encode($translate_labels); ?>,
 
                 datasets: [{
+
+                    label: '<?= ($lang == "fa") ? "کتاب‌های ترجمه‌شده" : "Translated Books"; ?>',
 
                     data: <?php echo json_encode($translate_data); ?>,
 
@@ -443,16 +478,28 @@ while ($row = $thesis_result->fetch_assoc()) {
             },
 
             options: {
+
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    title: {
+
+                        display: true,
+
+                        text: '<?= ($lang == "fa") ? "کتاب‌های ترجمه‌شده براساس کتگوری" : "Translated Books By Category"; ?>'
+
+                    }
+
+                }
+
             }
         });
-
         // ==========================
         // Thesis Chart
         // Bar Chart
         // ==========================
-
         new Chart(document.getElementById('thesisChart'), {
 
             type: 'bar',
@@ -463,7 +510,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                 datasets: [{
 
-                    label: 'Thesis',
+                    label: '<?= ($lang == "fa") ? "مونوگراف‌ها" : "Thesis"; ?>',
 
                     data: <?php echo json_encode($thesis_data); ?>,
 
@@ -480,8 +527,22 @@ while ($row = $thesis_result->fetch_assoc()) {
             },
 
             options: {
+
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    title: {
+
+                        display: true,
+
+                        text: '<?= ($lang == "fa") ? "مونوگراف‌ها براساس کتگوری" : "Thesis By Category"; ?>'
+
+                    }
+
+                }
+
             }
         });
     </script>

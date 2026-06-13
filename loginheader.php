@@ -1,4 +1,4 @@
-<!-- header.php -->
+<!-- header.php
 
 <style>
     .header {
@@ -48,4 +48,4 @@
         Home Page
     </a>
 
-</div>
+</div> -->

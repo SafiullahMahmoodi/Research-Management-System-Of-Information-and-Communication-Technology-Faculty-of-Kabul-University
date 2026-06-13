@@ -3,6 +3,7 @@ include('../auth.php');
 
 
 
+$lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
 $error = "";
@@ -23,8 +24,9 @@ if (isset($_POST['save_user'])) {
 
     // Check Password Match
     if ($password != $confirm_password) {
-
-        $error = "Password do not match!";
+        $error = ($lang == 'fa')
+            ? "رمزهای عبور مطابقت ندارند!"
+            : "Passwords do not match!";
     } else {
 
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -151,7 +153,8 @@ $user_result = $conn->query($user_query);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -160,13 +163,101 @@ $user_result = $conn->query($user_query);
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Users</title>
+    <title><?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+        .search-input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            outline: none;
+            width: 250px;
+        }
 
+        .search-wrapper[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .form-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background: #5a6268;
+        }
+
+
+        /* Persian Language */
+
+        html[dir="rtl"] .table,
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label {
+            display: block;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-form {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .form-card {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .action-icons {
+            justify-content: flex-start;
+        }
+
+        /* English Language */
+
+        html[dir="ltr"] .table,
+        html[dir="ltr"] .table th,
+        html[dir="ltr"] .table td {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .form-card {
+            text-align: left;
+        }
+    </style>
 
 </head>
 
@@ -181,26 +272,19 @@ $user_result = $conn->query($user_query);
 
             <!-- SEARCH -->
 
-            <div class="search-wrapper">
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی کاربران...' : 'Search users...'; ?>"
+                        value="<?= htmlspecialchars($search ?? '') ?>">
 
-                        placeholder="Search users..."
-
-                        value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -219,13 +303,15 @@ $user_result = $conn->query($user_query);
 
 
 
-                            <th>Username</th>
+                            <th><?= ($lang == 'fa') ? 'نام کاربری' : 'Username'; ?></th>
 
-                            <th>Email</th>
+                            <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
 
-                            <th>User Type</th>
+                            <th><?= ($lang == 'fa') ? 'نوع کاربر' : 'User Type'; ?></th>
 
-                            <th width="160">Action</th>
+                            <th width="160">
+                                <?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?>
+                            </th>
 
                         </tr>
 
@@ -252,16 +338,17 @@ $user_result = $conn->query($user_query);
                                         <a href="users.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
                                         <a href="users.php?delete=<?php echo $row['ID']; ?>"
-
                                             class="delete-btn"
 
-                                            onclick="return confirm('Are you sure you want to delete this user?')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا مطمئن هستید که می‌خواهید این کاربر را حذف کنید؟'
+                                                                            : 'Are you sure you want to delete this user?'; ?>')">
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
                                         </a>
 
@@ -293,8 +380,8 @@ $user_result = $conn->query($user_query);
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit User"
-                        : "Add User";
+                        ? (($lang == 'fa') ? 'ویرایش کاربر' : 'Edit User')
+                        : (($lang == 'fa') ? 'افزودن کاربر' : 'Add User');
                     ?>
 
                 </div>
@@ -312,9 +399,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Username
-
+                            <?= ($lang == 'fa') ? 'نام کاربری' : 'Username'; ?>
                         </label>
 
                         <input type="text"
@@ -323,7 +408,9 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="Enter username"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'نام کاربری را وارد کنید'
+                                                : 'Enter username'; ?>"
 
                             value="<?php echo $edit_username; ?>"
 
@@ -336,9 +423,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Email
-
+                            <?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?>
                         </label>
 
                         <input type="email"
@@ -347,7 +432,9 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="Enter email"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'ایمیل را وارد کنید'
+                                                : 'Enter email'; ?>"
 
                             value="<?php echo $edit_email; ?>"
 
@@ -360,9 +447,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            User Type
-
+                            <?= ($lang == 'fa') ? 'نوع کاربر' : 'User Type'; ?>
                         </label>
 
                         <select name="user_type"
@@ -371,14 +456,14 @@ $user_result = $conn->query($user_query);
                             <option value="Admin"
                                 <?php if ($edit_type == "Admin") echo "selected"; ?>>
 
-                                Admin
+                                <?= ($lang == 'fa') ? 'مدیر' : 'Admin'; ?>
 
                             </option>
 
                             <option value="User"
                                 <?php if ($edit_type == "User") echo "selected"; ?>>
 
-                                User
+                                <?= ($lang == 'fa') ? 'کاربر' : 'User'; ?>
 
                             </option>
 
@@ -391,9 +476,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-
-                            Password
-
+                            <?= ($lang == 'fa') ? 'رمز عبور' : 'Password'; ?>
                         </label>
 
                         <input type="password"
@@ -402,7 +485,9 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="Enter password"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'رمز عبور را وارد کنید'
+                                                : 'Enter password'; ?>"
 
                             required>
 
@@ -413,9 +498,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-4">
 
                         <label class="form-label">
-
-                            Confirm Password
-
+                            <?= ($lang == 'fa') ? 'تأیید رمز عبور' : 'Confirm Password'; ?>
                         </label>
                         <?php if ($error != "") { ?>
 
@@ -433,28 +516,49 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="Confirm password"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'تأیید رمز عبور'
+                                                : 'Confirm password'; ?>"
 
                             required>
 
                     </div>
                     <!-- BUTTON -->
 
-                    <button class="save-btn"
 
-                        name="<?php
-                                echo isset($_GET['edit'])
-                                    ? 'update_user'
-                                    : 'save_user';
-                                ?>">
+                    <?php
+                    $isEdit = isset($_GET['edit']);
+                    ?>
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? 'Update User'
-                            : 'Save User';
-                        ?>
 
-                    </button>
+
+                    <div class="form-buttons">
+
+                        <button
+                            type="submit"
+                            class="save-btn"
+                            name="<?php echo $isEdit ? 'update_user' : 'save_user'; ?>">
+
+                            <?php
+                            echo $isEdit
+                                ? ($lang == 'fa' ? 'بروزرسانی کاربر' : 'Update User')
+                                : ($lang == 'fa' ? 'ذخیره کاربر' : 'Save User');
+                            ?>
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='users.php'">
+
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+
+                    </div>
+
+
 
                 </form>
 

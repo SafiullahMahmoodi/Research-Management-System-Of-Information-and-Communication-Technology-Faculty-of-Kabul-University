@@ -4,7 +4,7 @@ include('../auth.php');
 
 
 include('../db_connection.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -236,7 +236,9 @@ if (isset($_POST['update_book'])) {
         if ($extension != "pdf") {
 
             echo "<script>
-            alert('Only PDF files are allowed!');
+            alert('<?= ($lang == 'fa')
+                        ? 'فقط فایل PDF مجاز است!'
+                        : 'Only PDF files are allowed!'; ?>');
             window.history.back();
           </script>";
             exit();
@@ -347,7 +349,8 @@ ORDER BY translated_books.ID DESC
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -356,14 +359,44 @@ ORDER BY translated_books.ID DESC
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Translated Books</title>
+    <title>
+        <?= ($lang == 'fa')
+            ? 'کتاب‌های ترجمه‌شده'
+            : 'Translated Books'; ?>
+    </title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
+    <style>
+        html[dir="rtl"] .main-wrapper,
+        html[dir="rtl"] .table-section,
+        html[dir="rtl"] .form-section,
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card {
+            direction: rtl;
+            text-align: right;
+        }
 
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] textarea,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+    </style>
 </head>
 <script>
     function checkPDF(input) {
@@ -376,8 +409,9 @@ ORDER BY translated_books.ID DESC
                 file.name.split('.').pop().toLowerCase();
 
             if (extension !== "pdf") {
-
-                alert("Only PDF files are allowed!");
+                alert("<?= ($lang == 'fa')
+                            ? 'فقط فایل PDF مجاز است!'
+                            : 'Only PDF files are allowed!'; ?>");
 
                 input.value = "";
             }
@@ -400,13 +434,15 @@ ORDER BY translated_books.ID DESC
                     <input type="text"
                         name="search"
                         class="search-input"
-                        placeholder="Search translated books..."
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی کتاب‌های ترجمه‌شده...'
+                                            : 'Search translated books...'; ?>"
                         value="<?php echo $search; ?>">
 
                     <button type="submit"
                         class="search-btn">
 
-                        Search
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
 
                     </button>
 
@@ -421,19 +457,17 @@ ORDER BY translated_books.ID DESC
                     <thead>
 
                         <tr>
-
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Author</th>
-                            <th>Translator</th>
-                            <th>Category</th>
-                            <th>Department</th>
-                            <th>Pages</th>
-                            <th>Publish Date</th>
-                            <th>PDF</th>
-                            <th>Action</th>
-
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'مترجم' : 'Translator'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تعداد صفحات' : 'Pages'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?></th>
                         </tr>
 
                     </thead>
@@ -461,14 +495,13 @@ ORDER BY translated_books.ID DESC
                                         <a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
                                             target="_blank"
                                             class="pdf-btn">
-
-                                            PDF
+                                            <?= ($lang == 'fa') ? 'PDF' : 'PDF'; ?>
 
                                         </a>
 
                                     <?php } else { ?>
 
-                                        No File
+                                        <?= ($lang == 'fa') ? 'بدون فایل' : 'No File'; ?>
 
                                     <?php } ?>
 
@@ -481,17 +514,19 @@ ORDER BY translated_books.ID DESC
                                         <a href="translatedbooks.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
 
                                         <a href="translatedbooks.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
-                                            onclick="return confirm('Delete this book?')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا از حذف این کتاب مطمئن هستید؟'
+                                                                            : 'Delete this book?'; ?>')"
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
-                                        </a>
+                                            </a>
 
                                     </div>
 
@@ -513,22 +548,24 @@ ORDER BY translated_books.ID DESC
 
             <div class="form-card">
 
-                <div class="form-title">
-
-                    <?php
-                    echo isset($_GET['edit'])
-                        ? "Edit Translated Book"
-                        : "Add Translated Book";
-                    ?>
-
-                </div>
+                <?php
+                echo isset($_GET['edit'])
+                    ? (($lang == 'fa')
+                        ? 'ویرایش کتاب ترجمه‌شده'
+                        : 'Edit Translated Book')
+                    : (($lang == 'fa')
+                        ? 'افزودن کتاب ترجمه‌شده'
+                        : 'Add Translated Book');
+                ?>
 
                 <form method="POST"
                     enctype="multipart/form-data">
 
                     <div class="mb-2">
 
-                        <label class="form-label">ID</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                        </label>
 
                         <input type="text"
                             name="id"
@@ -541,7 +578,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Title</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?>
+                        </label>
 
                         <input type="text"
                             name="title"
@@ -554,7 +593,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Description</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?>
+                        </label>
 
                         <textarea name="description"
                             class="form-control"
@@ -564,7 +605,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Author</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?>
+                        </label>
 
                         <input type="text"
                             name="author"
@@ -577,13 +620,19 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Translated By</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'ترجمه شده توسط' : 'Translated By'; ?>
+                        </label>
 
                         <select name="translated_by"
                             class="custom-select"
                             required>
 
-                            <option value="">Select Translator</option>
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب مترجم'
+                                    : 'Select Translator'; ?>
+                            </option>
 
                             <?php
 
@@ -612,7 +661,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Category</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                        </label>
 
                         <input type="text"
                             name="category"
@@ -625,13 +676,18 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Department</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'بخش' : 'Department'; ?>
+                        </label>
 
                         <select name="department"
                             class="custom-select"
                             required>
-
-                            <option value="">Select Department</option>
+                            <option value="">
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب دیپارتمنت'
+                                    : 'Select Department'; ?>
+                            </option>
 
                             <?php
 
@@ -660,7 +716,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Pages</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تعداد صفحات' : 'Pages'; ?>
+                        </label>
 
                         <input type="number"
                             name="pages"
@@ -672,7 +730,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">PDF File</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
+                        </label>
 
                         <input type="file"
                             name="pdf_file"
@@ -683,7 +743,9 @@ ORDER BY translated_books.ID DESC
 
                     <div class="mb-3">
 
-                        <label class="form-label">Publish Date</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تاریخ انتشار' : 'Publish Date'; ?>
+                        </label>
 
                         <input type="date"
                             name="publish_date"
@@ -695,18 +757,17 @@ ORDER BY translated_books.ID DESC
 
                     <button type="submit"
                         class="save-btn"
-
-                        name="<?php
-                                echo isset($_GET['edit'])
+                        name="<?= isset($_GET['edit'])
                                     ? 'update_book'
-                                    : 'save_book';
-                                ?>">
+                                    : 'save_book'; ?>">
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? 'Update Book'
-                            : 'Save Book';
-                        ?>
+                        <?= isset($_GET['edit'])
+                            ? (($lang == 'fa')
+                                ? 'بروزرسانی کتاب'
+                                : 'Update Book')
+                            : (($lang == 'fa')
+                                ? 'ذخیره کتاب'
+                                : 'Save Book'); ?>
 
                     </button>
 

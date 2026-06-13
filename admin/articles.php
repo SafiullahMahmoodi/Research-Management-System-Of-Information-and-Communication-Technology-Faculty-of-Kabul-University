@@ -2,7 +2,7 @@
 
 include('../auth.php');
 
-
+$lang = $_SESSION['lang'] ?? 'en';
 
 
 include('../db_connection.php');
@@ -250,8 +250,9 @@ if (isset($_POST['update_article'])) {
     $date        = mysqli_real_escape_string($conn, $_POST['date']);
 
     if (empty($teacher_id) && empty($student_id)) {
-
-        $error = "Please select at least one Teacher or Student.";
+        $error = ($lang == 'fa')
+            ? 'حداقل  استاد یا محصل را انتخاب کنید.'
+            : 'Please select at least one Teacher or Student.';
     }
 
 
@@ -410,7 +411,8 @@ ORDER BY articles.ID DESC
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -418,15 +420,41 @@ ORDER BY articles.ID DESC
 
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
-
-    <title>Articles</title>
+    <title><?= ($lang == 'fa') ? 'مقالات' : 'Articles'; ?></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
+    <Style>
+        html[dir="rtl"] .main-wrapper,
+        html[dir="rtl"] .table-section,
+        html[dir="rtl"] .form-section,
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card {
+            direction: rtl;
+            text-align: right;
+        }
 
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] textarea,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
+            text-align: right;
+            display: block;
+        }
+    </Style>
 </head>
 <script>
     function validateForm() {
@@ -439,7 +467,9 @@ ORDER BY articles.ID DESC
 
         if (teacher === "" && student === "") {
 
-            alert("Please select at least one Teacher or Student.");
+            alert("<?= ($lang == 'fa')
+                        ? 'حداقل یک استاد یا محصل را انتخاب کنید.'
+                        : 'Please select at least one Teacher or Student.'; ?>");
 
             return false;
         }
@@ -461,7 +491,9 @@ ORDER BY articles.ID DESC
 
             if (extension !== "pdf") {
 
-                alert("Only PDF files are allowed!");
+                alert("<?= ($lang == 'fa')
+                            ? 'فقط فایل PDF مجاز است.'
+                            : 'Only PDF files are allowed!'; ?>");
 
                 input.value = "";
             }
@@ -478,26 +510,21 @@ ORDER BY articles.ID DESC
 
         <div class="table-section">
 
-            <div class="search-wrapper">
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی مقالات...'
+                                            : 'Search articles...'; ?>"
+                        value="<?= $search; ?>">
 
-                        placeholder="Search articles..."
-
-                        value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -512,16 +539,16 @@ ORDER BY articles.ID DESC
 
                         <tr>
 
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Teacher</th>
-                            <th>Student</th>
-                            <th>Department</th>
-                            <th>Date</th>
-                            <th>PDF File</th>
-                            <th width="160">Action</th>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'محصل' : 'Student'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تاریخ' : 'Date'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?></th>
 
                         </tr>
 
@@ -556,13 +583,13 @@ ORDER BY articles.ID DESC
                                             target="_blank"
                                             class="pdf-btn">
 
-                                            View PDF
+                                            <?= ($lang == 'fa') ? 'مشاهده PDF' : 'View PDF'; ?>
 
                                         </a>
 
                                     <?php } else { ?>
 
-                                        No File
+                                        <?= ($lang == 'fa') ? 'بدون فایل' : 'No File'; ?>
 
                                     <?php } ?>
 
@@ -575,16 +602,18 @@ ORDER BY articles.ID DESC
                                         <a href="articles.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            Edit
+                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
 
                                         </a>
 
                                         <a href="articles.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
 
-                                            onclick="return confirm('Delete this article?')">
+                                            onclick="return confirm('<?= ($lang == 'fa')
+                                                                            ? 'آیا از حذف این مقاله مطمئن هستید؟'
+                                                                            : 'Delete this article?'; ?>')">
 
-                                            Delete
+                                            <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
                                         </a>
 
@@ -614,8 +643,12 @@ ORDER BY articles.ID DESC
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? "Edit Article"
-                        : "Add Article";
+                        ? (($lang == 'fa')
+                            ? 'ویرایش مقاله'
+                            : 'Edit Article')
+                        : (($lang == 'fa')
+                            ? 'افزودن مقاله'
+                            : 'Add Article');
                     ?>
 
                 </div>
@@ -635,7 +668,9 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">ID</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                        </label>
 
                         <input type="text"
 
@@ -651,7 +686,10 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Title</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?>
+                        </label>
+
 
                         <input type="text"
 
@@ -668,7 +706,9 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Description</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?>
+                        </label>
 
                         <textarea name="description"
 
@@ -680,7 +720,10 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Category</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                        </label>
+
 
                         <input type="text"
 
@@ -697,7 +740,9 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Teacher</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?>
+                        </label>
 
                         <select name="teacher_id"
                             class="custom-select">
@@ -732,7 +777,10 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-2">
 
-                        <label class="form-label">Student</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'محصل' : 'Student'; ?>
+                        </label>
+
 
                         <select name="student_id"
                             class="custom-select">
@@ -766,8 +814,9 @@ ORDER BY articles.ID DESC
                     </div>
 
                     <div class="mb-2">
-
-                        <label class="form-label">Department</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
+                        </label>
 
                         <select name="department"
                             class="custom-select">
@@ -780,7 +829,9 @@ ORDER BY articles.ID DESC
 
                             ?>
                                 <option value="">
-                                    Select Department
+                                    <?= ($lang == 'fa')
+                                        ? 'انتخاب دیپارتمنت'
+                                        : 'Select Department'; ?>
                                 </option>
 
                                 <option value="<?php echo $d['ID']; ?>"
@@ -802,7 +853,9 @@ ORDER BY articles.ID DESC
 
                     <div class="mb-3">
 
-                        <label class="form-label">PDF File</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
+                        </label>
 
                         <input
                             type="file"
@@ -814,8 +867,9 @@ ORDER BY articles.ID DESC
 
                     </div>
                     <div class="mb-3">
-
-                        <label class="form-label">Date</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تاریخ' : 'Date'; ?>
+                        </label>
 
                         <input type="date"
 
@@ -830,20 +884,18 @@ ORDER BY articles.ID DESC
                     </div>
 
                     <button type="submit"
-
                         class="save-btn"
-
-                        name="<?php
-                                echo isset($_GET['edit'])
+                        name="<?= isset($_GET['edit'])
                                     ? 'update_article'
-                                    : 'save_article';
-                                ?>">
+                                    : 'save_article'; ?>">
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? 'Update Article'
-                            : 'Save Article';
-                        ?>
+                        <?= isset($_GET['edit'])
+                            ? (($lang == 'fa')
+                                ? 'بروزرسانی مقاله'
+                                : 'Update Article')
+                            : (($lang == 'fa')
+                                ? 'ذخیره مقاله'
+                                : 'Save Article'); ?>
 
                     </button>
 

@@ -1,9 +1,25 @@
 <?php
 // index.php
+
+session_start();
+
+
+
+
+
+
+if (isset($_GET['lang'])) {
+    $_SESSION['lang'] = $_GET['lang'];
+}
+
+$lang = $_SESSION['lang'] ?? 'en';
+
+$dir = ($lang == 'fa') ? 'rtl' : 'ltr';
 ?>
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $lang ?>" dir="<?= $dir ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -38,13 +54,28 @@
 
 </head>
 
-<body>
+<body class="<?php echo ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
     <!-- Header -->
 
-    <header class="main-header">
+    <header class="main-header d-flex justify-content-between align-items-center">
 
-        Research Management System for Information & Communication Technology
+        <div>
+            <?php
+            echo ($lang == 'fa')
+                ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابراتی'
+                : 'Research Management System for Information & Communication Technology';
+            ?>
+        </div>
+        <div>
+            <a href="?lang=en" class="btn btn-light btn-sm">
+                English
+            </a>
+
+            <a href="?lang=fa" class="btn btn-warning btn-sm">
+                فارسی
+            </a>
+        </div>
 
     </header>
 
@@ -55,21 +86,28 @@
         <div class="hero-content">
 
             <h1 class="hero-title">
-                Welcome to Research Management System
+                <?php
+                echo ($lang == 'fa')
+                    ? 'به سیستم مدیریت تحقیقات خوش آمدید'
+                    : 'Welcome to Research Management System';
+                ?>
             </h1>
 
             <p class="hero-text">
-                Manage Researches, Users and Academic Information Easily
+                <?php
+                echo ($lang == 'fa')
+                    ? 'مدیریت تحقیقات، کاربران و اطلاعات علمی به آسانی'
+                    : 'Manage Researches, Users and Academic Information Easily';
+                ?>
             </p>
-
             <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
 
                 <a href="login.php" class="btn btn-custom btn-signin">
-                    Sign In
+                    <?php echo ($lang == 'fa') ? 'ورود' : 'Sign In'; ?>
                 </a>
 
                 <a href="signup.php" class="btn btn-custom btn-signup">
-                    Sign Up
+                    <?php echo ($lang == 'fa') ? 'ثبت نام' : 'Sign Up'; ?>
                 </a>
 
             </div>

@@ -2,6 +2,8 @@
 // login.php
 
 session_start();
+$lang = $_SESSION['lang'] ?? 'en';
+$dir = ($lang == 'fa') ? 'rtl' : 'ltr';
 
 // جلوگیری از cache مرورگر
 
@@ -61,17 +63,21 @@ if (isset($_POST['login'])) {
             }
         } else {
 
-            $error = "Incorrect Password!";
+            $error = ($lang == 'fa')
+                ? "رمز عبور اشتباه است!"
+                : "Incorrect Password!";
         }
     } else {
 
-        $error = "User not found!";
+        $error = ($lang == 'fa')
+            ? "کاربر یافت نشد!"
+            : "User not found!";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $lang; ?>" dir="<?php echo $dir; ?>">
 
 <head>
 
@@ -184,12 +190,9 @@ if (isset($_POST['login'])) {
         }
 
         .custom-input {
-
-            border-radius: 10px;
-
-            padding: 12px;
-
-            font-size: 14px;
+            padding: 10px 12px;
+            min-height: 45px;
+            line-height: 1.5;
         }
 
         .login-btn {
@@ -240,11 +243,64 @@ if (isset($_POST['login'])) {
 
             font-size: 14px;
         }
+
+        .rtl {
+            direction: rtl;
+        }
+
+        .rtl .form-label {
+            display: block;
+            text-align: right;
+        }
+
+        .rtl .form-control,
+        .rtl .form-select {
+            text-align: right;
+        }
+
+        .rtl .links {
+            text-align: right;
+        }
+
+        .rtl input::placeholder,
+        .rtl textarea::placeholder {
+            text-align: right;
+        }
+
+        .rtl select {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .custom-input {
+            text-align: right;
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+
+        .rtl .form-check {
+            text-align: right;
+        }
+
+        .rtl .form-check-input {
+            float: right;
+            margin-left: 8px;
+            margin-right: 0;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        html[dir="rtl"] .form-check {
+            flex-direction: row-reverse;
+        }
     </style>
 
 </head>
 
-<body>
+<body class="<?php echo ($lang == 'fa') ? 'rtl' : ''; ?>">
 
     <!-- Header -->
 
@@ -258,15 +314,21 @@ align-items-center">
 
                 <div class="header-title">
 
-                    Research Management of Information
-                    and Communication Technology Faculty
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابراتی'
+                        : 'Research Management of Information and Communication Technology Faculty';
+                    ?>
 
                 </div>
 
-                <a href="index.php"
-                    class="btn home-btn">
+                <a href="index.php" class="btn home-btn">
 
-                    Home Page
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'صفحه اصلی'
+                        : 'Home Page';
+                    ?>
 
                 </a>
 
@@ -284,7 +346,11 @@ align-items-center">
 
             <h2 class="login-title">
 
-                Login Form
+                <?php
+                echo ($lang == 'fa')
+                    ? 'فورم ورود'
+                    : 'Login Form';
+                ?>
 
             </h2>
 
@@ -310,7 +376,11 @@ align-items-center">
 
                     <label class="form-label">
 
-                        Username or Email
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'نام کاربری یا ایمیل'
+                            : 'Username or Email';
+                        ?>
 
                     </label>
 
@@ -318,16 +388,19 @@ align-items-center">
                         type="text"
                         name="username_email"
                         class="form-control custom-input"
-                        placeholder="Enter username or email"
+                        placeholder="<?php echo ($lang == 'fa') ? 'نام کاربری یا ایمیل را وارد کنید' : 'Enter username or email'; ?>"
                         required>
-
                 </div>
 
                 <div class="mb-3">
 
                     <label class="form-label">
 
-                        User Type
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'نوع کاربر'
+                            : 'User Type';
+                        ?>
 
                     </label>
 
@@ -336,21 +409,24 @@ align-items-center">
                         class="form-select custom-input"
                         required>
 
-                        <option value="">
-
-                            Select User Type
-
-                        </option>
 
                         <option value="admin">
 
-                            Admin
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'مدیر'
+                                : 'Admin';
+                            ?>
 
                         </option>
 
                         <option value="user">
 
-                            User
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'کاربر'
+                                : 'User';
+                            ?>
 
                         </option>
 
@@ -362,7 +438,11 @@ align-items-center">
 
                     <label class="form-label">
 
-                        Password
+                        <?php
+                        echo ($lang == 'fa')
+                            ? 'رمز عبور'
+                            : 'Password';
+                        ?>
 
                     </label>
 
@@ -372,20 +452,38 @@ align-items-center">
                         name="password"
                         class="form-control"
                         required>
+                    <div style="display:flex; align-items:center; gap:8px;
+     flex-direction:<?= ($lang == 'fa') ? 'row' : 'row'; ?>;">
 
-                    <input
-                        type="checkbox"
-                        onclick="password.type = this.checked ? 'text' : 'password'">
-                    Show Password
+                        <input
+                            type="checkbox"
+                            id="showPassword"
+                            onclick="document.getElementById('password').type = this.checked ? 'text' : 'password';">
+
+                        <label for="showPassword" style="margin:0;">
+
+                            <?php
+                            echo ($lang == 'fa')
+                                ? 'نمایش رمز عبور'
+                                : 'Show Password';
+                            ?>
+
+                        </label>
+
+                    </div>
+
 
                 </div>
-
                 <button
                     type="submit"
                     name="login"
                     class="btn btn-success w-100 login-btn">
 
-                    Login
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'ورود'
+                        : 'Login';
+                    ?>
 
                 </button>
 
@@ -395,13 +493,21 @@ align-items-center">
 
                 <a href="signup.php">
 
-                    Don't have account?
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'حساب ندارید؟ ثبت نام کنید'
+                        : "Don't have account?";
+                    ?>
 
                 </a>
 
                 <a href="forgotpassword.php">
 
-                    Forgot Password
+                    <?php
+                    echo ($lang == 'fa')
+                        ? 'رمز عبور را فراموش کرده‌اید؟'
+                        : 'Forgot Password';
+                    ?>
 
                 </a>
 
