@@ -1,7 +1,7 @@
 <?php
 include('../auth.php');
 
-
+$lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
 
@@ -10,6 +10,7 @@ include('../db_connection.php');
 // ===========================
 if (isset($_POST['save_teacher'])) {
 
+    $id          = $_POST['id'];
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
     $email       = $_POST['email'];
@@ -22,7 +23,7 @@ if (isset($_POST['save_teacher'])) {
 
     VALUES
 
-    ('$name','$lastname','$email','$contact','$education','$department')");
+    ( '  $id '  ,'$name','$lastname','$email','$contact','$education','$department')");
 
     header("Location: teachers.php");
     exit();
@@ -69,7 +70,8 @@ if (isset($_GET['search'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -77,15 +79,36 @@ if (isset($_GET['search'])) {
 
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
-
-    <title>Teachers</title>
+    <title><?= ($lang == 'fa') ? 'استادان' : 'Teachers'; ?></title>
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+        html[dir="rtl"] .form-label {
+            display: block;
+            width: 100%;
+            text-align: right !important;
+        }
 
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-card {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .mb-3,
+        html[dir="rtl"] .mb-4 {
+            text-align: right;
+        }
+    </Style>
 </head>
 
 <body>
@@ -98,25 +121,24 @@ if (isset($_GET['search'])) {
 
         <div class="table-section">
 
-            <div class="search-wrapper">
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی استادان...'
+                                            : 'Search teachers...'; ?>"
+                        value="<?= $search; ?>">
 
-                        placeholder="Search teachers..."
+                    <button type="submit" class="search-btn">
 
-                        value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
+                        <?= ($lang == 'fa')
+                            ? 'جستجو'
+                            : 'Search'; ?>
 
                     </button>
 
@@ -131,22 +153,19 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
 
-                            <th>ID</th>
+                            <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
 
-                            <th>Name</th>
+                            <th><?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?></th>
 
-                            <th>Last Name</th>
+                            <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
 
-                            <th>Email</th>
+                            <th><?= ($lang == 'fa') ? 'تماس' : 'Contact'; ?></th>
 
-                            <th>Contact</th>
+                            <th><?= ($lang == 'fa') ? 'تحصیلات' : 'Education'; ?></th>
 
-                            <th>Education</th>
-
-                            <th>Department</th>
-
-
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
 
                         </tr>
 
@@ -189,33 +208,56 @@ if (isset($_GET['search'])) {
         <div class="form-section">
 
             <div class="form-card">
-
                 <div class="form-title">
 
-                    Add Teacher
+                    <?= ($lang == 'fa')
+                        ? 'افزودن استاد'
+                        : 'Add Teacher'; ?>
 
                 </div>
 
                 <form method="POST">
+                    <div class="mb-3">
 
+                        <label class="form-label">
+
+                            <?= ($lang == 'fa')
+                                ? 'شناسه'
+                                : 'ID'; ?>
+
+                        </label>
+
+                        <input type="text"
+
+                            name="id"
+
+                            class="form-control"
+
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'شناسه استاد را وارد کنید'
+                                                : 'Enter teacher ID'; ?>"
+
+                            required>
+
+                    </div>
                     <!-- Name -->
 
                     <div class="mb-3">
 
                         <label class="form-label">
 
-                            Name
+                            <?= ($lang == 'fa')
+                                ? 'نام'
+                                : 'Name'; ?>
 
                         </label>
 
                         <input type="text"
-
                             name="name"
-
                             class="form-control"
-
-                            placeholder="Enter teacher name"
-
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'نام استاد را وارد کنید'
+                                                : 'Enter teacher name'; ?>"
                             required>
 
                     </div>
@@ -226,7 +268,9 @@ if (isset($_GET['search'])) {
 
                         <label class="form-label">
 
-                            Last Name
+                            <?= ($lang == 'fa')
+                                ? 'تخلص'
+                                : 'Last Name'; ?>
 
                         </label>
 
@@ -236,7 +280,9 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter last name"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'تخلص استاد را وارد کنید'
+                                                : 'Enter last name'; ?>"
 
                             required>
 
@@ -248,7 +294,9 @@ if (isset($_GET['search'])) {
 
                         <label class="form-label">
 
-                            Email
+                            <?= ($lang == 'fa')
+                                ? 'ایمیل'
+                                : 'Email'; ?>
 
                         </label>
 
@@ -258,7 +306,9 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter email"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'ایمیل استاد را وارد کنید'
+                                                : 'Enter email'; ?>"
 
                             required>
 
@@ -270,7 +320,9 @@ if (isset($_GET['search'])) {
 
                         <label class="form-label">
 
-                            Contact
+                            <?= ($lang == 'fa')
+                                ? 'تماس'
+                                : 'Contact'; ?>
 
                         </label>
 
@@ -280,7 +332,9 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter contact"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'شماره تماس استاد را وارد کنید'
+                                                : 'Enter contact'; ?>"
 
                             required>
 
@@ -292,7 +346,9 @@ if (isset($_GET['search'])) {
 
                         <label class="form-label">
 
-                            Education
+                            <?= ($lang == 'fa')
+                                ? 'تحصیلات'
+                                : 'Degree'; ?>
 
                         </label>
 
@@ -302,7 +358,9 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="Enter education"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'تحصیلات استاد را وارد کنید'
+                                                : 'Enter Degree'; ?>"
 
                             required>
 
@@ -314,24 +372,30 @@ if (isset($_GET['search'])) {
 
                         <label class="form-label">
 
-                            Department
+                            <?= ($lang == 'fa')
+                                ? 'دیپارتمنت'
+                                : 'Department'; ?>
 
                         </label>
+                        <select name="department" class="custom-select">
 
-                        <select name="department"
-                            class="custom-select">
+                            <option value="">
+
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب دیپارتمنت'
+                                    : 'Select Department'; ?>
+
+                            </option>
 
                             <?php
-
                             $d = $conn->query("SELECT * FROM department");
 
                             while ($dep = $d->fetch_assoc()) {
-
                             ?>
 
-                                <option value="<?php echo $dep['ID']; ?>">
+                                <option value="<?= $dep['ID']; ?>">
 
-                                    <?php echo $dep['Name']; ?>
+                                    <?= $dep['Name']; ?>
 
                                 </option>
 
@@ -344,10 +408,11 @@ if (isset($_GET['search'])) {
                     <!-- Button -->
 
                     <button class="save-btn"
-
                         name="save_teacher">
 
-                        Save Teacher
+                        <?= ($lang == 'fa')
+                            ? 'ذخیره استاد'
+                            : 'Save Teacher'; ?>
 
                     </button>
 

@@ -1,7 +1,7 @@
 <?php
 
 include('../auth.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 include('../db_connection.php');
 
 // ===========================
@@ -173,7 +173,8 @@ if (isset($_GET['search'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -182,14 +183,45 @@ if (isset($_GET['search'])) {
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Books</title>
-
+    <title><?= ($lang == 'fa') ? 'کتاب‌ها' : 'Books'; ?></title>
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+        html[dir="rtl"] .form-label {
+            display: block;
+            width: 100%;
+            text-align: right !important;
+        }
+
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card,
+        html[dir="rtl"] .search-wrapper {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
+            display: block;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] textarea,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+            direction: rtl;
+        }
+    </Style>
 
 </head>
 
@@ -205,24 +237,22 @@ if (isset($_GET['search'])) {
 
                 <form method="GET"
                     class="search-form">
-
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
-
-                        placeholder="Search books..."
-
-                        value="<?php echo $search; ?>">
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی کتاب‌ها...'
+                                            : 'Search books...'; ?>"
+                        value="<?= $search; ?>">
 
                     <button type="submit"
                         class="search-btn">
 
-                        Search
+                        <?= ($lang == 'fa')
+                            ? 'جستجو'
+                            : 'Search'; ?>
 
                     </button>
-
                 </form>
 
             </div>
@@ -234,18 +264,23 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
 
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Department</th>
-                            <th>Pages</th>
-                            <th>Publish Date</th>
-                            <th>PDF File</th>
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
 
+                            <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
 
+                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'تعداد صفحات' : 'Pages'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
+
+                            <th><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?></th>
                         </tr>
 
                     </thead>
@@ -280,13 +315,13 @@ if (isset($_GET['search'])) {
                                             target="_blank"
                                             class="pdf-btn">
 
-                                            View PDF
+                                            <?= ($lang == 'fa') ? 'نمایش PDF' : 'View PDF'; ?>
 
                                         </a>
 
                                     <?php } else { ?>
 
-                                        No File
+                                        <?= ($lang == 'fa') ? 'فایلی موجود نیست' : 'No File'; ?>
 
                                     <?php } ?>
 
@@ -313,7 +348,7 @@ if (isset($_GET['search'])) {
             <div class="form-card">
 
                 <div class="form-title">
-                    Add Book
+                    <?= ($lang == 'fa') ? 'افزودن کتاب' : 'Add Book'; ?>
                 </div>
 
                 <form method="POST"
@@ -321,61 +356,79 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">ID</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                        </label>
 
                         <input type="text"
                             name="id"
                             class="form-control"
                             required
-                            placeholder="Enter Book ID">
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'شناسه کتاب را وارد کنید'
+                                                : 'Enter Book ID'; ?>">
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Title</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?>
+                        </label>
 
                         <input type="text"
                             name="title"
                             class="form-control"
                             required
-                            placeholder="Enter Book Title">
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'عنوان کتاب را وارد کنید'
+                                                : 'Enter Book Title'; ?>">
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Description</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?>
+                        </label>
 
                         <textarea name="description"
                             class="form-control"
                             required
-                            placeholder="Enter Description"></textarea>
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'توضیحات کتاب را وارد کنید'
+                                                : 'Enter Description'; ?>"></textarea>
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Category</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                        </label>
 
                         <input type="text"
                             name="category"
                             class="form-control"
                             required
-                            placeholder="Enter Category">
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'دسته‌بندی کتاب را وارد کنید'
+                                                : 'Enter Category'; ?>">
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Author</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?>
+                        </label>
 
                         <select name="author"
                             class="custom-select"
                             required>
 
                             <option value="">
-                                Select Author
+                                <?= ($lang == 'fa') ? 'انتخاب نویسنده' : 'Select Author'; ?>
                             </option>
 
                             <?php
@@ -400,14 +453,16 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Department</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
+                        </label>
 
                         <select name="department"
                             class="custom-select"
                             required>
 
                             <option value="">
-                                Select Department
+                                <?= ($lang == 'fa') ? 'انتخاب دیپارتمنت' : 'Select Department'; ?>
                             </option>
 
                             <?php
@@ -432,7 +487,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Pages</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'صفحات' : 'Pages'; ?>
+                        </label>
 
                         <input type="number"
                             name="pages"
@@ -443,7 +500,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">PDF File</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
+                        </label>
 
                         <input type="file"
                             name="pdf_file"
@@ -453,7 +512,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-3">
 
-                        <label class="form-label">Publish Date</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تاریخ انتشار' : 'Publish Date'; ?>
+                        </label>
 
                         <input type="date"
                             name="publish_date"
@@ -466,7 +527,7 @@ if (isset($_GET['search'])) {
                         class="save-btn"
                         name="save_book">
 
-                        Save Book
+                        <?= ($lang == 'fa') ? 'ذخیره کتاب' : 'Save Book'; ?>
 
                     </button>
 

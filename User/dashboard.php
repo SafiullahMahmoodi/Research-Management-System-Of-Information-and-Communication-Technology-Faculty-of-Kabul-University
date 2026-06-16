@@ -6,7 +6,7 @@ include('../auth.php');
 
 
 include('../db_connection.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 // ===============================
 // Articles Graph
 // ===============================
@@ -98,7 +98,8 @@ while ($row = $thesis_result->fetch_assoc()) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -107,7 +108,11 @@ while ($row = $thesis_result->fetch_assoc()) {
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard</title>
+    <title>
+        <?= ($lang == 'fa')
+            ? 'داشبورد'
+            : 'Dashboard'; ?>
+    </title>
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap -->
 
@@ -120,7 +125,34 @@ while ($row = $thesis_result->fetch_assoc()) {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <Style>
+        html[dir="rtl"] {
+            direction: rtl;
+        }
 
+        html[dir="rtl"] .main-container {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .sidebar {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .sidebar-menu li a {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .header-title,
+        html[dir="rtl"] .page-title,
+        html[dir="rtl"] .graph-title,
+        html[dir="rtl"] .graph-count {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .main-header {
+            direction: rtl;
+        }
+    </Style>
 </head>
 
 <body>
@@ -131,13 +163,16 @@ while ($row = $thesis_result->fetch_assoc()) {
 
         <div class="header-title">
 
-            Research Management System of Information and Communication Technology Faculty
+            <?= ($lang == 'fa')
+                ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابرات'
+                : 'Research Management System of Information and Communication Technology Faculty'; ?>
 
         </div>
-
         <a href="../logout.php" class="logout-btn">
 
-            Logout
+            <?= ($lang == 'fa')
+                ? 'خروج'
+                : 'Logout'; ?>
 
         </a>
 
@@ -156,7 +191,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 <li>
                     <a href="dashboard.php" class="active">
                         <i class="bi bi-speedometer2"></i>
-                        Dashboard
+                        <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
                     </a>
                 </li>
 
@@ -164,49 +199,49 @@ while ($row = $thesis_result->fetch_assoc()) {
                 <li>
                     <a href="departments.php">
                         <i class="bi bi-building"></i>
-                        Departments
+                        <?= ($lang == 'fa') ? 'دیپارتمنت‌ها' : 'Departments'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="teachers.php">
                         <i class="bi bi-person-workspace"></i>
-                        Teachers
+                        <?= ($lang == 'fa') ? 'معلمان' : 'Teachers'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="students.php">
                         <i class="bi bi-mortarboard-fill"></i>
-                        Students
+                        <?= ($lang == 'fa') ? 'دانشجویان' : 'Students'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="articles.php">
                         <i class="bi bi-file-earmark-text-fill"></i>
-                        Articles
+                        <?= ($lang == 'fa') ? 'مقالات' : 'Articles'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="thesises.php">
                         <i class="bi bi-journal-richtext"></i>
-                        Thesises
+                        <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesises'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="books.php">
                         <i class="bi bi-book-fill"></i>
-                        Books
+                        <?= ($lang == 'fa') ? 'کتاب‌ها' : 'Books'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="translatedbooks.php">
                         <i class="bi bi-translate"></i>
-                        Translated Books
+                        <?= ($lang == 'fa') ? 'کتاب‌های ترجمه‌شده' : 'Translated Books'; ?>
                     </a>
                 </li>
 
@@ -220,7 +255,9 @@ while ($row = $thesis_result->fetch_assoc()) {
 
             <h2 class="page-title">
 
-                Dashboard
+                <?= ($lang == 'fa')
+                    ? 'داشبورد'
+                    : 'Dashboard'; ?>
 
             </h2>
 
@@ -234,13 +271,13 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Articles By Category
+                            <?= ($lang == 'fa') ? 'مقالات بر اساس دسته‌بندی' : 'Articles By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
-
-                            Total: <?php echo $total_articles; ?>
+                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>:
+                            <?php echo $total_articles; ?>
 
                         </div>
 
@@ -258,13 +295,13 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Books By Category
+                            <?= ($lang == 'fa') ? 'کتاب‌ها بر اساس دسته‌بندی' : 'Books By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
 
-                            Total: <?php echo $total_books; ?>
+                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>: <?php echo $total_books; ?>
 
                         </div>
 
@@ -282,13 +319,13 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Translated Books
+                            <?= ($lang == 'fa') ? 'کتاب های ترجمه شده بر اساس دسته بندی' : 'Translated Books by Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
 
-                            Total: <?php echo $total_translate; ?>
+                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>: <?php echo $total_translate; ?>
 
                         </div>
 
@@ -306,13 +343,13 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Thesis By Category
+                            <?= ($lang == 'fa') ? 'پایان‌نامه‌ها بر اساس دسته‌بندی' : 'Thesis By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
 
-                            Total: <?php echo $total_thesis; ?>
+                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>: <?php echo $total_thesis; ?>
 
                         </div>
 
@@ -343,8 +380,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 labels: <?php echo json_encode($article_labels); ?>,
 
                 datasets: [{
-
-                    label: 'Articles',
+                    label: '<?= ($lang == "fa") ? "مقالات" : "Articles"; ?>',
 
                     data: <?php echo json_encode($article_data); ?>,
 
@@ -418,6 +454,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                 datasets: [{
 
+
                     data: <?php echo json_encode($translate_data); ?>,
 
                     backgroundColor: [
@@ -451,7 +488,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                 datasets: [{
 
-                    label: 'Thesis',
+                    label: '<?= ($lang == "fa") ? "پایان‌نامه‌ها" : "Thesis"; ?>',
 
                     data: <?php echo json_encode($thesis_data); ?>,
 

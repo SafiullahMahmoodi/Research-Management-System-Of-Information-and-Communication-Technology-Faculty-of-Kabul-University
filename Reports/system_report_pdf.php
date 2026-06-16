@@ -3,11 +3,18 @@
 require_once '../dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 include('../auth.php');
 include('../db_connection.php');
 
-// Statistics
+$lang = $_SESSION['lang'] ?? 'en';
+
+$dir = ($lang == 'fa') ? 'rtl' : 'ltr';
+
+// ======================
+// STATISTICS
+// ======================
 
 $users       = $conn->query("SELECT COUNT(*) AS total FROM users")->fetch_assoc()['total'];
 $teachers    = $conn->query("SELECT COUNT(*) AS total FROM teacher")->fetch_assoc()['total'];
@@ -19,87 +26,123 @@ $translated  = $conn->query("SELECT COUNT(*) AS total FROM translated_books")->f
 $thesis      = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc()['total'];
 
 $total_records =
-    $users +
-    $departments +
-    $teachers +
-    $students +
-    $articles +
-    $books +
-    $translated +
-    $thesis;
+    $users + $teachers + $students + $departments +
+    $articles + $books + $translated + $thesis;
+
+// ======================
+// TEXTS
+// ======================
+
+$titleText = ($lang == 'fa')
+    ? 'گزارش سیستم مدیریت تحقیقات'
+    : 'Research Management System Report';
+
+$moduleText = ($lang == 'fa') ? 'ماژول' : 'Module';
+$totalText  = ($lang == 'fa') ? 'تعداد ریکاردها' : 'Total Records';
+$finalText  = ($lang == 'fa') ? 'مجموع کل سیستم' : 'Total System Records';
+
+// ======================
+// HTML
+// ======================
 
 $html = '
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
 
-<h2 style="text-align:center;">
-Research Management System Report
-</h2>
+<style>
+body {
+    font-family: DejaVu Sans, sans-serif;
+    direction: ' . $dir . ';
+}
 
-<table border="1" width="100%" cellpadding="8" cellspacing="0">
+.container {
+    width: 100%;
+}
 
-<tr style="background-color:#dddddd;">
-<th>Module</th>
-<th>Total Records</th>
-</tr>
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #198754;
+    color: white;
+    padding: 8px;
+    text-align: center;
+}
+
+td {
+    padding: 8px;
+    text-align: center;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>' . $titleText . '</h2>
+
+<table border="1">
 
 <tr>
-<td>Users</td>
-<td>' . $users . '</td>
+<th>' . $moduleText . '</th>
+<th>' . $totalText . '</th>
 </tr>
 
-<tr>
-<td>Departments</td>
-<td>' . $departments . '</td>
-</tr>
-
-<tr>
-<td>Teachers</td>
-<td>' . $teachers . '</td>
-</tr>
-
-<tr>
-<td>Students</td>
-<td>' . $students . '</td>
-</tr>
-
-<tr>
-<td>Articles</td>
-<td>' . $articles . '</td>
-</tr>
-
-<tr>
-<td>Books</td>
-<td>' . $books . '</td>
-</tr>
-
-<tr>
-<td>Translated Books</td>
-<td>' . $translated . '</td>
-</tr>
-
-<tr>
-<td>Thesis</td>
-<td>' . $thesis . '</td>
-</tr>
+<tr><td>' . ($lang == 'fa' ? 'کاربران' : 'Users') . '</td><td>' . $users . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'دیپارتمنت‌ها' : 'Departments') . '</td><td>' . $departments . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'استادان' : 'Teachers') . '</td><td>' . $teachers . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'محصلین' : 'Students') . '</td><td>' . $students . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'مقالات' : 'Articles') . '</td><td>' . $articles . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'کتاب‌ها' : 'Books') . '</td><td>' . $books . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'کتاب‌های ترجمه شده' : 'Translated Books') . '</td><td>' . $translated . '</td></tr>
+<tr><td>' . ($lang == 'fa' ? 'پایان‌نامه‌ها' : 'Thesis') . '</td><td>' . $thesis . '</td></tr>
 
 </table>
 
-<br><br>
+<div class="footer">
+' . $finalText . ' : ' . $total_records . '
+</div>
 
-<h3>
-Total Records In System : ' . $total_records . '
-</h3>
+</div>
 
+</body>
+</html>
 ';
 
-$dompdf = new Dompdf();
+// ======================
+// DOMPDF CONFIG
+// ======================
+
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isRemoteEnabled', true);
+$options->set('defaultFont', 'DejaVu Sans');
+
+$dompdf = new Dompdf($options);
 
 $dompdf->loadHtml($html);
-
 $dompdf->setPaper('A4', 'portrait');
-
 $dompdf->render();
 
 $dompdf->stream(
-    "System_Report.pdf",
-    array("Attachment" => true)
+    ($lang == 'fa') ? "گزارش_سیستم.pdf" : "System_Report.pdf",
+    ["Attachment" => true]
 );

@@ -3,28 +3,36 @@
 include('../auth.php');
 include('../db_connection.php');
 
-// Statistics
+$lang = $_SESSION['lang'] ?? 'en';
 
-$users      = $conn->query("SELECT COUNT(*) AS total FROM users")->fetch_assoc()['total'];
-$teachers   = $conn->query("SELECT COUNT(*) AS total FROM teacher")->fetch_assoc()['total'];
-$students   = $conn->query("SELECT COUNT(*) AS total FROM students")->fetch_assoc()['total'];
+// ======================
+// STATISTICS
+// ======================
+
+$users       = $conn->query("SELECT COUNT(*) AS total FROM users")->fetch_assoc()['total'];
+$teachers    = $conn->query("SELECT COUNT(*) AS total FROM teacher")->fetch_assoc()['total'];
+$students    = $conn->query("SELECT COUNT(*) AS total FROM students")->fetch_assoc()['total'];
 $departments = $conn->query("SELECT COUNT(*) AS total FROM department")->fetch_assoc()['total'];
-$articles   = $conn->query("SELECT COUNT(*) AS total FROM articles")->fetch_assoc()['total'];
-$books      = $conn->query("SELECT COUNT(*) AS total FROM books")->fetch_assoc()['total'];
-$translated = $conn->query("SELECT COUNT(*) AS total FROM translated_books")->fetch_assoc()['total'];
-$thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc()['total'];
+$articles    = $conn->query("SELECT COUNT(*) AS total FROM articles")->fetch_assoc()['total'];
+$books       = $conn->query("SELECT COUNT(*) AS total FROM books")->fetch_assoc()['total'];
+$translated  = $conn->query("SELECT COUNT(*) AS total FROM translated_books")->fetch_assoc()['total'];
+$thesis      = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc()['total'];
+
+$total_all = $users + $teachers + $students + $departments + $articles + $books + $translated + $thesis;
 
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $lang ?>">
 
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>System Report</title>
+    <title>
+        <?= ($lang == 'fa') ? 'گزارش سیستم' : 'System Report'; ?>
+    </title>
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
@@ -32,11 +40,9 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
         body {
             background: #f4f6f9;
             font-family: Segoe UI;
-
             overflow-y: auto !important;
             height: auto !important;
         }
-
 
         .report-container {
             width: 90%;
@@ -53,7 +59,6 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
         }
 
         table {
@@ -70,12 +75,7 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
             text-align: center;
         }
 
-        .print-btn {
-            margin-bottom: 15px;
-        }
-
         @media print {
-
             .no-print {
                 display: none !important;
             }
@@ -88,98 +88,88 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
                 box-shadow: none !important;
                 border: none !important;
             }
-
-            .report-container {
-                width: 100% !important;
-                margin: 0 !important;
-            }
-
-            .report-title {
-                text-align: center;
-                margin-bottom: 20px;
-            }
         }
     </style>
 
-
 </head>
 
-<body>
+<body dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
+
     <div class="no-print">
         <?php include('header.php'); ?>
     </div>
-
 
     <div class="report-container">
 
         <div class="report-card">
 
+            <!-- TITLE -->
             <h2 class="report-title">
-                Research Management System Report
+                <?= ($lang == 'fa')
+                    ? 'گزارش سیستم مدیریت تحقیقات'
+                    : 'Research Management System Report';
+                ?>
             </h2>
 
-            <button class="btn btn-success print-btn"
-                onclick="window.print()">
-                Print Report
+            <!-- BUTTONS -->
+            <button class="btn btn-success" onclick="window.print()">
+                <?= ($lang == 'fa') ? 'پرنت گزارش' : 'Print Report'; ?>
             </button>
 
-            <a href="system_report_pdf.php"
-                class="btn btn-danger print-btn">
-
-                Download PDF
-
+            <a href="system_report_pdf.php" class="btn btn-danger">
+                <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
             </a>
-            <table class="table table-bordered">
+
+            <!-- TABLE -->
+            <table class="table table-bordered mt-3">
 
                 <thead>
-
                     <tr>
-                        <th>Module</th>
-                        <th>Total Records</th>
+                        <th><?= ($lang == 'fa') ? 'ماژول' : 'Module'; ?></th>
+                        <th><?= ($lang == 'fa') ? 'تعداد' : 'Total Records'; ?></th>
                     </tr>
-
                 </thead>
 
                 <tbody>
 
                     <tr>
-                        <td>Users</td>
-                        <td><?php echo $users; ?></td>
+                        <td><?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?></td>
+                        <td><?= $users; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Departments</td>
-                        <td><?php echo $departments; ?></td>
+                        <td><?= ($lang == 'fa') ? 'دیپارتمنت‌ها' : 'Departments'; ?></td>
+                        <td><?= $departments; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Teachers</td>
-                        <td><?php echo $teachers; ?></td>
+                        <td><?= ($lang == 'fa') ? 'استادان' : 'Teachers'; ?></td>
+                        <td><?= $teachers; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Students</td>
-                        <td><?php echo $students; ?></td>
+                        <td><?= ($lang == 'fa') ? 'محصلین' : 'Students'; ?></td>
+                        <td><?= $students; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Articles</td>
-                        <td><?php echo $articles; ?></td>
+                        <td><?= ($lang == 'fa') ? 'مقالات' : 'Articles'; ?></td>
+                        <td><?= $articles; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Books</td>
-                        <td><?php echo $books; ?></td>
+                        <td><?= ($lang == 'fa') ? 'کتاب‌ها' : 'Books'; ?></td>
+                        <td><?= $books; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Translated Books</td>
-                        <td><?php echo $translated; ?></td>
+                        <td><?= ($lang == 'fa') ? 'کتاب‌های ترجمه شده' : 'Translated Books'; ?></td>
+                        <td><?= $translated; ?></td>
                     </tr>
 
                     <tr>
-                        <td>Thesis</td>
-                        <td><?php echo $thesis; ?></td>
+                        <td><?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesis'; ?></td>
+                        <td><?= $thesis; ?></td>
                     </tr>
 
                 </tbody>
@@ -188,17 +178,10 @@ $thesis     = $conn->query("SELECT COUNT(*) AS total FROM thesis")->fetch_assoc(
 
             <br>
 
-            <h5>Total Records In System:
-                <?php
-                echo $users +
-                    $departments +
-                    $teachers +
-                    $students +
-                    $articles +
-                    $books +
-                    $translated +
-                    $thesis;
-                ?>
+            <!-- TOTAL -->
+            <h5>
+                <?= ($lang == 'fa') ? 'مجموع کل سیستم' : 'Total Records in System'; ?> :
+                <?= $total_all; ?>
             </h5>
 
         </div>

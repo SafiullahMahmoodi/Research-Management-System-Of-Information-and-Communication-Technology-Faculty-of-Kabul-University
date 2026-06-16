@@ -3,6 +3,34 @@
 include('../auth.php');
 include('../db_connection.php');
 
+$lang = $_SESSION['lang'] ?? 'en';
+
+// ======================
+// TEXTS
+// ======================
+
+$title = ($lang == 'fa') ? 'گزارش کتاب‌های ترجمه شده' : 'Translated Books Report';
+$translator_text = ($lang == 'fa') ? 'مترجم' : 'Translator';
+$category_text = ($lang == 'fa') ? 'کتگوری' : 'Category';
+$department_text = ($lang == 'fa') ? 'دیپارتمنت' : 'Department';
+$date_from_text = ($lang == 'fa') ? 'از تاریخ' : 'Date From';
+$date_to_text = ($lang == 'fa') ? 'تا تاریخ' : 'Date To';
+
+$print_text = ($lang == 'fa') ? 'چاپ گزارش' : 'Print Report';
+$pdf_text = ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF';
+$filter_text = ($lang == 'fa') ? 'فیلتر گزارش' : 'Filter Report';
+
+$th_id = ($lang == 'fa') ? 'آی‌دی' : 'ID';
+$th_title = ($lang == 'fa') ? 'عنوان' : 'Title';
+$th_author = ($lang == 'fa') ? 'نویسنده' : 'Author';
+$th_translator = ($lang == 'fa') ? 'مترجم' : 'Translator';
+$th_category = ($lang == 'fa') ? 'کتگوری' : 'Category';
+$th_department = ($lang == 'fa') ? 'دیپارتمنت' : 'Department';
+$th_pages = ($lang == 'fa') ? 'صفحات' : 'Pages';
+$th_date = ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date';
+
+$total_text = ($lang == 'fa') ? 'کتاب‌های ترجمه شده' : 'Translated Books';
+
 // ======================
 // FILTERS
 // ======================
@@ -10,48 +38,23 @@ include('../db_connection.php');
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['translator'])) {
-
-    $translator = $_GET['translator'];
-
-    $where .= "
-    AND translated_books.translated_by='$translator'
-    ";
+    $where .= " AND translated_books.translated_by='" . $_GET['translator'] . "' ";
 }
 
 if (!empty($_GET['department'])) {
-
-    $department = $_GET['department'];
-
-    $where .= "
-    AND translated_books.Department='$department'
-    ";
+    $where .= " AND translated_books.Department='" . $_GET['department'] . "' ";
 }
 
 if (!empty($_GET['category'])) {
-
-    $category = $_GET['category'];
-
-    $where .= "
-    AND translated_books.Category LIKE '%$category%'
-    ";
+    $where .= " AND translated_books.Category LIKE '%" . $_GET['category'] . "%' ";
 }
 
 if (!empty($_GET['date_from'])) {
-
-    $date_from = $_GET['date_from'];
-
-    $where .= "
-    AND translated_books.Publish_Date >= '$date_from'
-    ";
+    $where .= " AND translated_books.Publish_Date >= '" . $_GET['date_from'] . "' ";
 }
 
 if (!empty($_GET['date_to'])) {
-
-    $date_to = $_GET['date_to'];
-
-    $where .= "
-    AND translated_books.Publish_Date <= '$date_to'
-    ";
+    $where .= " AND translated_books.Publish_Date <= '" . $_GET['date_to'] . "' ";
 }
 
 // ======================
@@ -66,11 +69,8 @@ department.Name AS department_name
 
 FROM translated_books
 
-LEFT JOIN teacher
-ON translated_books.translated_by = teacher.ID
-
-LEFT JOIN department
-ON translated_books.Department = department.ID
+LEFT JOIN teacher ON translated_books.translated_by = teacher.ID
+LEFT JOIN department ON translated_books.Department = department.ID
 
 $where
 
@@ -78,21 +78,15 @@ ORDER BY translated_books.ID DESC
 
 ");
 
-// ======================
 // TOTAL
-// ======================
 
 $total = $conn->query("
 
 SELECT COUNT(*) AS total
-
 FROM translated_books
 
-LEFT JOIN teacher
-ON translated_books.translated_by = teacher.ID
-
-LEFT JOIN department
-ON translated_books.Department = department.ID
+LEFT JOIN teacher ON translated_books.translated_by = teacher.ID
+LEFT JOIN department ON translated_books.Department = department.ID
 
 $where
 
@@ -104,43 +98,12 @@ $where
 <html>
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Translated Books Report</title>
+    <title><?php echo $title; ?></title>
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <style>
-        .form-label {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .form-control {
-            font-size: 13px;
-            height: 34px;
-            padding: 4px 8px;
-        }
-
-        .btn {
-            font-size: 13px;
-            padding: 5px 12px;
-        }
-
-        .table {
-            font-size: 13px;
-        }
-
-        .report-title {
-            font-size: 24px;
-        }
-
-        h5 {
-            font-size: 15px;
-        }
-
         body {
             background: #f4f6f9;
             font-family: Segoe UI;
@@ -166,8 +129,32 @@ $where
             font-weight: bold;
         }
 
-        @media print {
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
 
+        .form-control {
+            font-size: 13px;
+            height: 34px;
+            padding: 4px 8px;
+        }
+
+        .btn {
+            font-size: 13px;
+            padding: 5px 12px;
+        }
+
+        .table {
+            font-size: 13px;
+        }
+
+        h5 {
+            font-size: 15px;
+        }
+
+        @media print {
             .no-print {
                 display: none !important;
             }
@@ -180,208 +167,119 @@ $where
                 box-shadow: none !important;
                 border: none !important;
             }
-
-            .report-container {
-                width: 100% !important;
-                margin: 0 !important;
-            }
-
-            .report-title {
-                text-align: center;
-                margin-bottom: 20px;
-            }
         }
     </style>
 
 </head>
 
 <body>
+
     <div class="no-print">
         <?php include('header.php'); ?>
     </div>
-
 
     <div class="report-container">
 
         <div class="report-card">
 
             <h2 class="report-title">
-                Translated Books Report
+                <?php echo $title; ?>
             </h2>
 
             <div class="mb-3 no-print">
 
-
-                <button
-                    class="btn btn-success"
-                    onclick="window.print()">
-                    Print Report
+                <button class="btn btn-success" onclick="window.print()">
+                    <?php echo $print_text; ?>
                 </button>
 
                 <a href="translatedbooks_report_pdf.php?<?php echo http_build_query($_GET); ?>"
                     class="btn btn-danger">
-                    Download PDF
+                    <?php echo $pdf_text; ?>
                 </a>
+
             </div>
 
+            <!-- FILTER -->
             <form method="GET" class="row mb-3 no-print">
 
                 <div class="col-md-3">
-
-                    <label class="form-label">
-                        Translator
-                    </label>
-
+                    <label class="form-label"><?php echo $translator_text; ?></label>
                     <select name="translator" class="form-control">
-
-                        <option value="">
-                            All Translators
-                        </option>
-
+                        <option value="">All</option>
                         <?php
-
                         $teacher = $conn->query("SELECT * FROM teacher");
-
                         while ($t = $teacher->fetch_assoc()) {
-
+                            echo "<option value='{$t['ID']}'>{$t['Name']}</option>";
+                        }
                         ?>
-
-                            <option value="<?php echo $t['ID']; ?>">
-
-                                <?php echo $t['Name']; ?>
-
-                            </option>
-
-                        <?php } ?>
-
                     </select>
-
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Category
-                    </label>
-
-                    <input type="text"
-                        name="category"
-                        class="form-control">
-
+                    <label class="form-label"><?php echo $category_text; ?></label>
+                    <input type="text" name="category" class="form-control">
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Department
-                    </label>
-
-                    <select name="department"
-                        class="form-control">
-
-                        <option value="">
-                            All Departments
-                        </option>
-
+                    <label class="form-label"><?php echo $department_text; ?></label>
+                    <select name="department" class="form-control">
+                        <option value="">All</option>
                         <?php
-
                         $dep = $conn->query("SELECT * FROM department");
-
                         while ($d = $dep->fetch_assoc()) {
-
+                            echo "<option value='{$d['ID']}'>{$d['Name']}</option>";
+                        }
                         ?>
-
-                            <option value="<?php echo $d['ID']; ?>">
-                                <?php echo $d['Name']; ?>
-                            </option>
-
-                        <?php } ?>
-
                     </select>
-
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Date From
-                    </label>
-
-                    <input type="date"
-                        name="date_from"
-                        class="form-control">
-
+                    <label class="form-label"><?php echo $date_from_text; ?></label>
+                    <input type="date" name="date_from" class="form-control">
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Date To
-                    </label>
-
-                    <input type="date"
-                        name="date_to"
-                        class="form-control">
-
+                    <label class="form-label"><?php echo $date_to_text; ?></label>
+                    <input type="date" name="date_to" class="form-control">
                 </div>
 
                 <div class="col-md-12 mt-2">
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-
-                        Filter Report
-
+                    <button class="btn btn-primary" type="submit">
+                        <?php echo $filter_text; ?>
                     </button>
-
                 </div>
 
             </form>
 
+            <!-- TABLE -->
             <table class="table table-bordered table-striped">
 
                 <thead>
-
                     <tr>
-
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Translator</th>
-                        <th>Category</th>
-                        <th>Department</th>
-                        <th>Pages</th>
-                        <th>Publish Date</th>
-
+                        <th><?php echo $th_id; ?></th>
+                        <th><?php echo $th_title; ?></th>
+                        <th><?php echo $th_author; ?></th>
+                        <th><?php echo $th_translator; ?></th>
+                        <th><?php echo $th_category; ?></th>
+                        <th><?php echo $th_department; ?></th>
+                        <th><?php echo $th_pages; ?></th>
+                        <th><?php echo $th_date; ?></th>
                     </tr>
-
                 </thead>
 
                 <tbody>
 
                     <?php while ($row = $book_result->fetch_assoc()) { ?>
-
                         <tr>
-
                             <td><?php echo $row['ID']; ?></td>
-
                             <td><?php echo $row['Title']; ?></td>
-
                             <td><?php echo $row['Author']; ?></td>
-
                             <td><?php echo $row['translator_name']; ?></td>
-
                             <td><?php echo $row['Category']; ?></td>
-
                             <td><?php echo $row['department_name']; ?></td>
-
                             <td><?php echo $row['Pages']; ?></td>
-
                             <td><?php echo $row['Publish_Date']; ?></td>
-
                         </tr>
-
                     <?php } ?>
 
                 </tbody>
@@ -389,10 +287,7 @@ $where
             </table>
 
             <h5>
-
-                Total Translated Books :
-                <?php echo $total; ?>
-
+                <?php echo $total_text; ?> : <?php echo $total; ?>
             </h5>
 
         </div>

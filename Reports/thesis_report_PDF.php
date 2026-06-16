@@ -7,6 +7,12 @@ require_once '../dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 
+$lang = $_SESSION['lang'] ?? 'en';
+
+// ======================
+// FILTERS
+// ======================
+
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['student'])) {
@@ -33,6 +39,10 @@ if (!empty($_GET['date_to'])) {
     $where .= " AND thesis.Publish_Date <= '" . $_GET['date_to'] . "'";
 }
 
+// ======================
+// QUERY
+// ======================
+
 $thesis_result = $conn->query("
 
 SELECT thesis.*,
@@ -42,14 +52,9 @@ department.Name AS department_name
 
 FROM thesis
 
-LEFT JOIN students
-ON thesis.Student_ID = students.ID
-
-LEFT JOIN teacher
-ON thesis.Instructor = teacher.ID
-
-LEFT JOIN department
-ON thesis.Department = department.ID
+LEFT JOIN students ON thesis.Student_ID = students.ID
+LEFT JOIN teacher ON thesis.Instructor = teacher.ID
+LEFT JOIN department ON thesis.Department = department.ID
 
 $where
 
@@ -60,85 +65,105 @@ ORDER BY thesis.ID DESC
 $total = $conn->query("
 
 SELECT COUNT(*) AS total
-
 FROM thesis
-
-LEFT JOIN students
-ON thesis.Student_ID = students.ID
-
-LEFT JOIN teacher
-ON thesis.Instructor = teacher.ID
-
-LEFT JOIN department
-ON thesis.Department = department.ID
+LEFT JOIN students ON thesis.Student_ID = students.ID
+LEFT JOIN teacher ON thesis.Instructor = teacher.ID
+LEFT JOIN department ON thesis.Department = department.ID
 
 $where
 
 ")->fetch_assoc()['total'];
+
+// ======================
+// LANGUAGE
+// ======================
+
+$isFa = ($lang == 'fa');
+
+$title = $isFa ? 'گزارش پایان‌نامه‌ها' : 'Thesis Report';
+$generated = $isFa ? 'تاریخ تولید' : 'Generated Date';
+$totalText = $isFa ? 'تعداد کل پایان‌نامه‌ها' : 'Total Thesis';
+
+$th_id = $isFa ? 'آی‌دی' : 'ID';
+$th_title = $isFa ? 'عنوان' : 'Title';
+$th_category = $isFa ? 'کتگوری' : 'Category';
+$th_student = $isFa ? 'محصل' : 'Student';
+$th_instructor = $isFa ? 'استاد' : 'Instructor';
+$th_department = $isFa ? 'دیپارتمنت' : 'Department';
+$th_date = $isFa ? 'تاریخ' : 'Date';
+
+// direction support
+$dir = $isFa ? 'rtl' : 'ltr';
+
+// ======================
+// HTML
+// ======================
 
 $html = '
 
 <style>
 
 body{
-font-family:DejaVu Sans,sans-serif;
+    font-family: DejaVu Sans, sans-serif;
+    direction: ' . $dir . ';
 }
 
 .report-title{
-text-align:center;
-font-size:24px;
-font-weight:bold;
-margin-bottom:20px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
 .report-info{
-margin-bottom:15px;
+    margin-bottom:10px;
+    font-size:13px;
+    text-align:center;
 }
 
 table{
-width:100%;
-border-collapse:collapse;
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
 }
 
 th{
-background:#198754;
-color:white;
-padding:8px;
+    background:#198754;
+    color:white;
+    padding:8px;
+    text-align:center;
 }
 
 td{
-padding:6px;
-text-align:center;
+    padding:6px;
+    text-align:center;
 }
 
 .footer{
-margin-top:20px;
-font-size:16px;
-font-weight:bold;
+    margin-top:15px;
+    font-size:14px;
+    font-weight:bold;
+    text-align:center;
 }
 
 </style>
 
-<div class="report-title">
-Thesis Report
-</div>
+<div class="report-title">' . $title . '</div>
 
 <div class="report-info">
-Generated Date : ' . date('Y-m-d') . '
+' . $generated . ' : ' . date("Y-m-d") . '
 </div>
 
 <table border="1">
 
 <tr>
-
-<th>ID</th>
-<th>Title</th>
-<th>Category</th>
-<th>Student</th>
-<th>Instructor</th>
-<th>Department</th>
-<th>Date</th>
-
+<th>' . $th_id . '</th>
+<th>' . $th_title . '</th>
+<th>' . $th_category . '</th>
+<th>' . $th_student . '</th>
+<th>' . $th_instructor . '</th>
+<th>' . $th_department . '</th>
+<th>' . $th_date . '</th>
 </tr>
 
 ';
@@ -148,7 +173,6 @@ while ($row = $thesis_result->fetch_assoc()) {
     $html .= '
 
 <tr>
-
 <td>' . $row['ID'] . '</td>
 <td>' . $row['Title'] . '</td>
 <td>' . $row['Category'] . '</td>
@@ -156,7 +180,6 @@ while ($row = $thesis_result->fetch_assoc()) {
 <td>' . $row['instructor_name'] . '</td>
 <td>' . $row['department_name'] . '</td>
 <td>' . $row['Publish_Date'] . '</td>
-
 </tr>
 
 ';
@@ -167,19 +190,18 @@ $html .= '
 </table>
 
 <div class="footer">
-
-Total Thesis : ' . $total . '
-
+' . $totalText . ' : ' . $total . '
 </div>
 
 ';
 
+// ======================
+// PDF OUTPUT
+// ======================
+
 $dompdf = new Dompdf();
-
 $dompdf->loadHtml($html);
-
 $dompdf->setPaper('A4', 'landscape');
-
 $dompdf->render();
 
 $dompdf->stream(

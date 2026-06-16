@@ -1,6 +1,6 @@
 <?php
 include('../auth.php');
-
+$lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
 
@@ -9,7 +9,7 @@ include('../db_connection.php');
 // ===========================
 
 if (isset($_POST['save_student'])) {
-
+    $id = $_POST['id'];
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
     $email       = $_POST['email'];
@@ -17,11 +17,25 @@ if (isset($_POST['save_student'])) {
     $department  = $_POST['department'];
 
     $insert_query = "INSERT INTO students
-    (Name, Last_Name, Email, Contact, Department)
+(
+    ID,
+    Name,
+    Last_Name,
+    Email,
+    Contact,
+    Department
+)
 
-    VALUES
+VALUES
 
-    ('$name','$lastname','$email','$contact','$department')";
+(
+    '$id',
+    '$name',
+    '$lastname',
+    '$email',
+    '$contact',
+    '$department'
+)";
 
     $conn->query($insert_query);
 
@@ -70,7 +84,8 @@ $student_result = $conn->query($student_query);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -79,12 +94,35 @@ $student_result = $conn->query($student_query);
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Students</title>
+    <title><?= ($lang == 'fa') ? 'محصلان' : 'Students'; ?></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <Style>
+        html[dir="rtl"] .form-label {
+            display: block;
+            width: 100%;
+            text-align: right !important;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+    </Style>
 
 </head>
 
@@ -98,26 +136,24 @@ $student_result = $conn->query($student_query);
         <div class="table-section">
 
             <!-- SEARCH -->
+            <div class="search-wrapper"
+                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
-            <div class="search-wrapper">
-
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی محصلان...'
+                                            : 'Search students...'; ?>"
+                        value="<?= $search; ?>">
 
-                        placeholder="Search students..."
+                    <button type="submit" class="search-btn">
 
-                        value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
+                        <?= ($lang == 'fa')
+                            ? 'جستجو'
+                            : 'Search'; ?>
 
                     </button>
 
@@ -134,18 +170,17 @@ $student_result = $conn->query($student_query);
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
 
-                            <th>ID</th>
+                            <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
 
-                            <th>Name</th>
+                            <th><?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?></th>
 
-                            <th>Last Name</th>
+                            <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
 
-                            <th>Email</th>
+                            <th><?= ($lang == 'fa') ? 'تماس' : 'Contact'; ?></th>
 
-                            <th>Contact</th>
-
-                            <th>Department</th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
 
 
 
@@ -173,70 +208,7 @@ $student_result = $conn->query($student_query);
 
                             </tr>
 
-                            <!-- DELETE MODAL -->
 
-                            <div class="modal fade"
-
-                                id="deleteModal<?php echo $row['ID']; ?>">
-
-                                <div class="modal-dialog modal-dialog-centered">
-
-                                    <div class="modal-content"
-                                        style="border-radius:16px;">
-
-                                        <div class="modal-header bg-danger text-white">
-
-                                            <h5 class="modal-title">
-
-                                                Delete Student
-
-                                            </h5>
-
-                                            <button class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal">
-
-                                            </button>
-
-                                        </div>
-
-                                        <div class="modal-body text-center">
-
-                                            Delete
-
-                                            <strong>
-
-                                                <?php echo $row['Name']; ?>
-
-                                            </strong>
-
-                                            ?
-
-                                        </div>
-
-                                        <div class="modal-footer">
-
-                                            <button class="btn btn-secondary"
-                                                data-bs-dismiss="modal">
-
-                                                Cancel
-
-                                            </button>
-
-                                            <a href="students.php?delete=<?php echo $row['ID']; ?>"
-
-                                                class="btn btn-danger">
-
-                                                Delete
-
-                                            </a>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
 
                         <?php } ?>
 
@@ -255,11 +227,32 @@ $student_result = $conn->query($student_query);
 
                 <div class="form-title">
 
-                    Add Student
+                    <?= ($lang == 'fa')
+                        ? 'افزودن محصل'
+                        : 'Add Student'; ?>
 
                 </div>
 
                 <form method="POST">
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            <?= ($lang == 'fa')
+                                ? 'آی‌دی'
+                                : 'ID'; ?>
+
+                        </label>
+
+                        <input type="text"
+                            name="id"
+                            class="form-control"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'شناسه محصل را وارد کنید'
+                                                : 'Enter student ID'; ?>"
+                            required>
+
+                    </div>
 
                     <!-- Name -->
 
@@ -267,7 +260,9 @@ $student_result = $conn->query($student_query);
 
                         <label class="form-label">
 
-                            Name
+                            <?= ($lang == 'fa')
+                                ? 'نام'
+                                : 'Name'; ?>
 
                         </label>
 
@@ -277,7 +272,9 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter student name"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'نام محصل را وارد کنید'
+                                                : 'Enter student name'; ?>"
 
                             required>
 
@@ -289,7 +286,9 @@ $student_result = $conn->query($student_query);
 
                         <label class="form-label">
 
-                            Last Name
+                            <?= ($lang == 'fa')
+                                ? 'تخلص'
+                                : 'Last Name'; ?>
 
                         </label>
 
@@ -299,7 +298,9 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter last name"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'تخلص محصل را وارد کنید'
+                                                : 'Enter last name'; ?>"
 
                             required>
 
@@ -311,7 +312,9 @@ $student_result = $conn->query($student_query);
 
                         <label class="form-label">
 
-                            Email
+                            <?= ($lang == 'fa')
+                                ? 'ایمیل'
+                                : 'Email'; ?>
 
                         </label>
 
@@ -321,7 +324,9 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter email"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'ایمیل محصل را وارد کنید'
+                                                : 'Enter email'; ?>"
 
                             required>
 
@@ -333,7 +338,9 @@ $student_result = $conn->query($student_query);
 
                         <label class="form-label">
 
-                            Contact
+                            <?= ($lang == 'fa')
+                                ? 'نمبر تماس'
+                                : 'Contact'; ?>
 
                         </label>
 
@@ -343,7 +350,9 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="Enter contact"
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'شماره تماس محصل را وارد کنید'
+                                                : 'Enter contact'; ?>"
 
                             required>
 
@@ -355,26 +364,36 @@ $student_result = $conn->query($student_query);
 
                         <label class="form-label">
 
-                            Department
+                            <?= ($lang == 'fa')
+                                ? 'دیپارتمنت'
+                                : 'Department'; ?>
 
                         </label>
 
                         <select name="department"
-                            class="custom-select">
+                            class="custom-select"
+                            required>
+
+                            <option value="">
+
+                                <?= ($lang == 'fa')
+                                    ? 'انتخاب دیپارتمنت'
+                                    : 'Select Department'; ?>
+
+                            </option>
 
                             <?php
 
                             $department_query = "SELECT * FROM department";
-
                             $department_result = $conn->query($department_query);
 
                             while ($department = $department_result->fetch_assoc()) {
 
                             ?>
 
-                                <option value="<?php echo $department['ID']; ?>">
+                                <option value="<?= $department['ID']; ?>">
 
-                                    <?php echo $department['Name']; ?>
+                                    <?= $department['Name']; ?>
 
                                 </option>
 
@@ -387,10 +406,11 @@ $student_result = $conn->query($student_query);
                     <!-- BUTTON -->
 
                     <button class="save-btn"
-
                         name="save_student">
 
-                        Save Student
+                        <?= ($lang == 'fa')
+                            ? 'ذخیره محصل'
+                            : 'Save Student'; ?>
 
                     </button>
 

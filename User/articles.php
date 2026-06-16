@@ -3,7 +3,7 @@
 include('../auth.php');
 
 
-
+$lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
 
@@ -160,185 +160,6 @@ if (isset($_POST['save_article'])) {
     exit();
 }
 
-// // ===========================
-// // DELETE ARTICLE
-// // ===========================
-
-// if(isset($_GET['delete'])){
-
-//     $id = $_GET['delete'];
-
-//     $pdf = $conn->query("
-//     SELECT PDF_File
-//     FROM articles
-//     WHERE ID='$id'
-//     ");
-
-//     if($pdf->num_rows > 0){
-
-//         $p = $pdf->fetch_assoc();
-
-//         if(
-//             $p['PDF_File'] != ""
-//             &&
-//             file_exists("../PDF_File/".$p['PDF_File'])
-//         ){
-
-//             unlink("../PDF_File/".$p['PDF_File']);
-//         }
-//     }
-
-//     $conn->query("
-//     DELETE FROM articles
-//     WHERE ID='$id'
-//     ");
-
-//     header("Location: articles.php");
-//     exit();
-// }
-
-// // ===========================
-// // EDIT ARTICLE
-// // ===========================
-
-// $edit_id          = "";
-// $edit_title       = "";
-// $edit_description = "";
-// $edit_category    = "";
-// $edit_teacher     = "";
-// $edit_student     = "";
-// $edit_department  = "";
-// $edit_date        = "";
-
-// if(isset($_GET['edit'])){
-
-//     $id = $_GET['edit'];
-
-//     $res = $conn->query("
-//     SELECT *
-//     FROM articles
-//     WHERE ID='$id'
-//     ");
-
-//     if($res->num_rows > 0){
-
-//         $row = $res->fetch_assoc();
-
-//         $edit_id          = $row['ID'];
-//         $edit_title       = $row['Title'];
-//         $edit_description = $row['Description'];
-//         $edit_category    = $row['Category'];
-//         $edit_teacher     = $row['Teacher_ID'];
-//         $edit_student     = $row['Student_ID'];
-//         $edit_department  = $row['Department'];
-//         $edit_date        = $row['Date'];
-//     }
-// }
-
-// // ===========================
-// // UPDATE ARTICLE
-// // ===========================
-
-// if(isset($_POST['update_article'])){
-
-//     $id          = mysqli_real_escape_string($conn,$_POST['id']);
-//     $title       = mysqli_real_escape_string($conn,$_POST['title']);
-//     $description = mysqli_real_escape_string($conn,$_POST['description']);
-//     $category    = mysqli_real_escape_string($conn,$_POST['category']);
-//     $teacher_id  = mysqli_real_escape_string($conn,$_POST['teacher_id']);
-//     $student_id  = mysqli_real_escape_string($conn,$_POST['student_id']);
-//     $department  = mysqli_real_escape_string($conn,$_POST['department']);
-//     $date        = mysqli_real_escape_string($conn,$_POST['date']);
-
-//     if(empty($teacher_id) && empty($student_id)){
-
-//         die("Please select Teacher or Student.");
-//     }
-
-//     $teacher_value = !empty($teacher_id)
-//     ? "'$teacher_id'"
-//     : "NULL";
-
-//     $student_value = !empty($student_id)
-//     ? "'$student_id'"
-//     : "NULL";
-
-//     $query = "
-//     UPDATE articles SET
-
-//     Title='$title',
-//     Description='$description',
-//     Category='$category',
-//     Teacher_ID=$teacher_value,
-//     Student_ID=$student_value,
-//     Department='$department',
-//     Date='$date'
-//     ";
-
-//     // ===========================
-//     // UPDATE PDF
-//     // ===========================
-
-//     if(isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != ""){
-
-//         $file_name = $_FILES['pdf_file']['name'];
-//         $file_tmp  = $_FILES['pdf_file']['tmp_name'];
-//         $file_size = $_FILES['pdf_file']['size'];
-
-//         $extension = strtolower(
-//             pathinfo($file_name, PATHINFO_EXTENSION)
-//         );
-
-//         if($extension != "pdf"){
-
-//             die("Only PDF files are allowed.");
-//         }
-
-//         if($file_size > 209715200){
-
-//             die("File size must be less than 200MB.");
-//         }
-
-//         // DELETE OLD PDF
-
-//         $old = $conn->query("
-//         SELECT PDF_File
-//         FROM articles
-//         WHERE ID='$id'
-//         ");
-
-//         if($old->num_rows > 0){
-
-//             $o = $old->fetch_assoc();
-
-//             if(
-//                 $o['PDF_File'] != ""
-//                 &&
-//                 file_exists("../PDF_File/".$o['PDF_File'])
-//             ){
-
-//                 unlink("../PDF_File/".$o['PDF_File']);
-//             }
-//         }
-
-//         $pdf_file = time() . "_" . $file_name;
-
-//         move_uploaded_file(
-//             $file_tmp,
-//             "../PDF_File/" . $pdf_file
-//         );
-
-//         $query .= ", PDF_File='$pdf_file'";
-//     }
-
-//     $query .= " WHERE ID='$id'";
-
-//     $conn->query($query);
-
-//     header("Location: articles.php");
-//     exit();
-// }
-
 // ===========================
 // SEARCH ARTICLES
 // ===========================
@@ -409,7 +230,8 @@ if (isset($_GET['search'])) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= ($lang == 'fa') ? 'fa' : 'en'; ?>"
+    dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
 <head>
 
@@ -418,14 +240,42 @@ if (isset($_GET['search'])) {
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Articles</title>
+    <title><?= ($lang == 'fa') ? 'مقالات' : 'Articles'; ?></title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <Style>
+        html[dir="rtl"] .form-label {
+            display: block;
+            width: 100%;
+            text-align: right !important;
+        }
 
+        html[dir="rtl"] .form-card,
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .search-wrapper {
+            direction: rtl;
+        }
 
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] textarea,
+        html[dir="rtl"] .search-input {
+            text-align: right;
+        }
+
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
+        }
+    </Style>
 </head>
 
 <body>
@@ -443,20 +293,15 @@ if (isset($_GET['search'])) {
                     class="search-form">
 
                     <input type="text"
-
                         name="search"
-
                         class="search-input"
+                        placeholder="<?= ($lang == 'fa')
+                                            ? 'جستجوی مقالات...'
+                                            : 'Search articles...'; ?>"
+                        value="<?= $search; ?>">
 
-                        placeholder="Search articles..."
-
-                        value="<?php echo $search; ?>">
-
-                    <button type="submit"
-                        class="search-btn">
-
-                        Search
-
+                    <button type="submit" class="search-btn">
+                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
                     </button>
 
                 </form>
@@ -470,17 +315,15 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
-
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Category</th>
-                            <th>Teacher</th>
-                            <th>Student</th>
-                            <th>Department</th>
-                            <th>Date</th>
-                            <th>PDF File</th>
-
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'محصل' : 'Student'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تاریخ' : 'Date'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?></th>
 
                         </tr>
 
@@ -514,14 +357,13 @@ if (isset($_GET['search'])) {
                                         <a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
                                             target="_blank"
                                             class="pdf-btn">
-
-                                            View PDF
+                                            <?= ($lang == 'fa') ? 'نمایش PDF' : 'View PDF'; ?>
 
                                         </a>
 
                                     <?php } else { ?>
 
-                                        No File
+                                        <?= ($lang == 'fa') ? 'فایلی موجود نیست' : 'No File'; ?>
 
                                     <?php } ?>
 
@@ -545,9 +387,12 @@ if (isset($_GET['search'])) {
         <div class="form-section">
 
             <div class="form-card">
-
                 <div class="form-title">
-                    Add Article
+
+                    <?= ($lang == 'fa')
+                        ? 'افزودن مقاله'
+                        : 'Add Article'; ?>
+
                 </div>
 
                 <form method="POST"
@@ -555,60 +400,77 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">ID</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
+                        </label>
 
                         <input type="text"
                             name="id"
                             class="form-control"
                             required
-                            placeholder="Enter article ID">
-
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'آی دی مقاله را وارد کنید'
+                                                : 'Enter article ID'; ?>">
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Title</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?>
+                        </label>
 
                         <input type="text"
                             name="title"
                             class="form-control"
                             required
-                            placeholder="Enter Title of Article">
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'عنوان مقاله را وارد کنید'
+                                                : 'Enter Title of Article'; ?>">
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Description</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?>
+                        </label>
 
                         <textarea name="description"
                             class="form-control"
                             required
-                            placeholder="Enter Description"></textarea>
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'توضیحات مقاله را وارد کنید'
+                                                : 'Enter Description'; ?>"></textarea>
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Category</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                        </label>
 
                         <input type="text"
                             name="category"
                             class="form-control"
                             required
-                            placeholder="Enter Category">
+                            placeholder="<?= ($lang == 'fa')
+                                                ? 'دسته‌بندی مقاله را وارد کنید'
+                                                : 'Enter Category'; ?>">
 
                     </div>
 
                     <div class="mb-2">
 
-                        <label class="form-label">Teacher</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'معلم' : 'Teacher'; ?>
+                        </label>
 
                         <select name="teacher_id"
                             class="custom-select">
 
                             <option value="">
-                                Select Teacher
+                                <?= ($lang == 'fa') ? 'انتخاب معلم' : 'Select Teacher'; ?>
                             </option>
 
                             <?php
@@ -633,13 +495,15 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Student</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'محصل' : 'Student'; ?>
+                        </label>
 
                         <select name="student_id"
                             class="custom-select">
 
                             <option value="">
-                                Select Student
+                                <?= ($lang == 'fa') ? 'انتخاب محصل' : 'Select Student'; ?>
                             </option>
 
                             <?php
@@ -664,13 +528,15 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">Department</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
+                        </label>
 
                         <select name="department"
                             class="custom-select" required>
 
                             <option value="">
-                                Select Department
+                                <?= ($lang == 'fa') ? 'انتخاب دیپارتمنت' : 'Select Department'; ?>
                             </option>
 
                             <?php
@@ -695,7 +561,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-2">
 
-                        <label class="form-label">PDF File</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
+                        </label>
 
                         <input type="file"
                             name="pdf_file"
@@ -705,7 +573,9 @@ if (isset($_GET['search'])) {
 
                     <div class="mb-3">
 
-                        <label class="form-label">Date</label>
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تاریخ' : 'Date'; ?>
+                        </label>
 
                         <input type="date"
                             name="date"
@@ -718,7 +588,7 @@ if (isset($_GET['search'])) {
                         class="save-btn"
                         name="save_article">
 
-                        Save Article
+                        <?= ($lang == 'fa') ? 'ذخیره مقاله' : 'Save Article'; ?>
 
                     </button>
 

@@ -3,61 +3,41 @@
 include('../auth.php');
 include('../db_connection.php');
 
+$lang = $_SESSION['lang'] ?? 'en';
+
+// ======================
+// FILTERS
+// ======================
+
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['student'])) {
-
-    $student = $_GET['student'];
-
-    $where .= "
-    AND thesis.Student_ID='$student'
-    ";
+    $where .= " AND thesis.Student_ID='" . $_GET['student'] . "' ";
 }
 
 if (!empty($_GET['instructor'])) {
-
-    $instructor = $_GET['instructor'];
-
-    $where .= "
-    AND thesis.Instructor='$instructor'
-    ";
+    $where .= " AND thesis.Instructor='" . $_GET['instructor'] . "' ";
 }
 
 if (!empty($_GET['department'])) {
-
-    $department = $_GET['department'];
-
-    $where .= "
-    AND thesis.Department='$department'
-    ";
+    $where .= " AND thesis.Department='" . $_GET['department'] . "' ";
 }
 
 if (!empty($_GET['category'])) {
-
-    $category = $_GET['category'];
-
-    $where .= "
-    AND thesis.Category LIKE '%$category%'
-    ";
+    $where .= " AND thesis.Category LIKE '%" . $_GET['category'] . "%' ";
 }
 
 if (!empty($_GET['date_from'])) {
-
-    $date_from = $_GET['date_from'];
-
-    $where .= "
-    AND thesis.Publish_Date >= '$date_from'
-    ";
+    $where .= " AND thesis.Publish_Date >= '" . $_GET['date_from'] . "' ";
 }
 
 if (!empty($_GET['date_to'])) {
-
-    $date_to = $_GET['date_to'];
-
-    $where .= "
-    AND thesis.Publish_Date <= '$date_to'
-    ";
+    $where .= " AND thesis.Publish_Date <= '" . $_GET['date_to'] . "' ";
 }
+
+// ======================
+// QUERY
+// ======================
 
 $thesis_result = $conn->query("
 
@@ -68,14 +48,9 @@ department.Name AS department_name
 
 FROM thesis
 
-LEFT JOIN students
-ON thesis.Student_ID = students.ID
-
-LEFT JOIN teacher
-ON thesis.Instructor = teacher.ID
-
-LEFT JOIN department
-ON thesis.Department = department.ID
+LEFT JOIN students ON thesis.Student_ID = students.ID
+LEFT JOIN teacher ON thesis.Instructor = teacher.ID
+LEFT JOIN department ON thesis.Department = department.ID
 
 $where
 
@@ -83,77 +58,58 @@ ORDER BY thesis.ID DESC
 
 ");
 
+// total
 $total = $conn->query("
 
 SELECT COUNT(*) AS total
-
 FROM thesis
-
-LEFT JOIN students
-ON thesis.Student_ID = students.ID
-
-LEFT JOIN teacher
-ON thesis.Instructor = teacher.ID
-
-LEFT JOIN department
-ON thesis.Department = department.ID
-
+LEFT JOIN students ON thesis.Student_ID = students.ID
+LEFT JOIN teacher ON thesis.Instructor = teacher.ID
+LEFT JOIN department ON thesis.Department = department.ID
 $where
 
 ")->fetch_assoc()['total'];
 
+// ======================
+// TEXTS
+// ======================
+
+$isFa = ($lang == 'fa');
+
+$title = $isFa ? 'گزارش پایان‌نامه‌ها' : 'Thesis Report';
+
+$th_id = $isFa ? 'آی‌دی' : 'ID';
+$th_title = $isFa ? 'عنوان' : 'Title';
+$th_category = $isFa ? 'کتگوری' : 'Category';
+$th_student = $isFa ? 'محصل' : 'Student';
+$th_instructor = $isFa ? 'استاد' : 'Instructor';
+$th_dep = $isFa ? 'دیپارتمنت' : 'Department';
+$th_date = $isFa ? 'تاریخ نشر' : 'Publish Date';
+
+$btn_print = $isFa ? 'پرنت گزارش' : 'Print Report';
+$btn_pdf = $isFa ? 'دانلود PDF' : 'Download PDF';
+$btn_filter = $isFa ? 'فیلتر' : 'Filter Report';
+
+$totalText = $isFa ? 'تعداد کل پایان‌نامه‌ها' : 'Total Thesis';
+
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $lang ?>">
 
 <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <title><?= $title ?></title>
 
-    <title>Thesis Report</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 
-    <link rel="stylesheet"
-        href="../css/bootstrap.min.css">
-
-    <script src="../js/bootstrap.bundle.min.js"></script>
     <style>
-        .form-label {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .form-control {
-            font-size: 13px;
-            height: 34px;
-            padding: 4px 8px;
-        }
-
-        .btn {
-            font-size: 13px;
-            padding: 5px 12px;
-        }
-
-        .table {
-            font-size: 13px;
-        }
-
-        .report-title {
-            font-size: 24px;
-        }
-
-        h5 {
-            font-size: 15px;
-        }
-
         body {
             background: #f4f6f9;
             font-family: Segoe UI;
-            overflow-y: auto !important;
-            height: auto !important;
         }
 
         .report-container {
@@ -165,244 +121,141 @@ $where
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
         }
 
         .report-title {
             text-align: center;
-            margin-bottom: 20px;
             font-weight: bold;
+            margin-bottom: 20px;
         }
 
         @media print {
-
             .no-print {
                 display: none !important;
             }
 
             body {
-                background: white !important;
+                background: white;
             }
 
             .report-card {
-                box-shadow: none !important;
-                border: none !important;
+                box-shadow: none;
+                border: none;
             }
+        }
 
-            .report-container {
-                width: 100% !important;
-                margin: 0 !important;
-            }
+        .form-label {
+            font-size: 13px;
+        }
 
-            .report-title {
-                text-align: center;
-                margin-bottom: 20px;
-            }
+        .table {
+            font-size: 13px;
         }
     </style>
 
 </head>
 
-<body>
+<body dir="<?= $isFa ? 'rtl' : 'ltr'; ?>">
 
     <div class="no-print">
         <?php include('header.php'); ?>
     </div>
 
-
     <div class="report-container">
 
         <div class="report-card">
 
-            <h2 class="report-title">
-                Thesis Report
-            </h2>
+            <h2 class="report-title"><?= $title ?></h2>
 
             <div class="mb-3 no-print">
 
-
-                <button
-                    class="btn btn-success"
-                    onclick="window.print()">
-
-                    Print Report
-
+                <button class="btn btn-success" onclick="window.print()">
+                    <?= $btn_print ?>
                 </button>
 
-                <a href="thesis_report_pdf.php?<?php echo http_build_query($_GET); ?>"
+                <a href="thesis_report_pdf.php?<?= http_build_query($_GET); ?>"
                     class="btn btn-danger">
-
-                    Download PDF
-
+                    <?= $btn_pdf ?>
                 </a>
 
             </div>
 
-            <!-- FILTER FORM -->
-
+            <!-- FILTER -->
             <form method="GET" class="row mb-3 no-print">
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Student
-                    </label>
-
-                    <select name="student"
-                        class="form-control">
-
-                        <option value="">
-                            All Students
-                        </option>
-
+                    <label class="form-label"><?= $isFa ? 'محصل' : 'Student'; ?></label>
+                    <select name="student" class="form-control">
+                        <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
                         <?php
                         $s = $conn->query("SELECT * FROM students");
-
-                        while ($row = $s->fetch_assoc()) {
+                        while ($r = $s->fetch_assoc()) {
+                            echo "<option value='{$r['ID']}'>{$r['Name']}</option>";
+                        }
                         ?>
-
-                            <option value="<?php echo $row['ID']; ?>">
-
-                                <?php echo $row['Name']; ?>
-
-                            </option>
-
-                        <?php } ?>
-
                     </select>
-
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Instructor
-                    </label>
-
-                    <select name="instructor"
-                        class="form-control">
-
-                        <option value="">
-                            All Instructors
-                        </option>
-
+                    <label class="form-label"><?= $isFa ? 'استاد' : 'Instructor'; ?></label>
+                    <select name="instructor" class="form-control">
+                        <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
                         <?php
                         $t = $conn->query("SELECT * FROM teacher");
-
-                        while ($row = $t->fetch_assoc()) {
+                        while ($r = $t->fetch_assoc()) {
+                            echo "<option value='{$r['ID']}'>{$r['Name']}</option>";
+                        }
                         ?>
-
-                            <option value="<?php echo $row['ID']; ?>">
-
-                                <?php echo $row['Name']; ?>
-
-                            </option>
-
-                        <?php } ?>
-
                     </select>
-
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Category
-                    </label>
-
-                    <input type="text"
-                        name="category"
-                        class="form-control">
-
+                    <label class="form-label"><?= $isFa ? 'کتگوری' : 'Category'; ?></label>
+                    <input type="text" name="category" class="form-control">
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Department
-                    </label>
-
-                    <select name="department"
-                        class="form-control">
-
-                        <option value="">
-                            All Departments
-                        </option>
-
+                    <label class="form-label"><?= $isFa ? 'دیپارتمنت' : 'Department'; ?></label>
+                    <select name="department" class="form-control">
+                        <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
                         <?php
                         $d = $conn->query("SELECT * FROM department");
-
-                        while ($row = $d->fetch_assoc()) {
+                        while ($r = $d->fetch_assoc()) {
+                            echo "<option value='{$r['ID']}'>{$r['Name']}</option>";
+                        }
                         ?>
-
-                            <option value="<?php echo $row['ID']; ?>">
-
-                                <?php echo $row['Name']; ?>
-
-                            </option>
-
-                        <?php } ?>
-
                     </select>
-
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Date From
-                    </label>
-
-                    <input type="date"
-                        name="date_from"
-                        class="form-control">
-
+                    <label class="form-label"><?= $isFa ? 'از تاریخ' : 'From Date'; ?></label>
+                    <input type="date" name="date_from" class="form-control">
                 </div>
 
                 <div class="col-md-2">
-
-                    <label class="form-label">
-                        Date To
-                    </label>
-
-                    <input type="date"
-                        name="date_to"
-                        class="form-control">
-
+                    <label class="form-label"><?= $isFa ? 'تا تاریخ' : 'To Date'; ?></label>
+                    <input type="date" name="date_to" class="form-control">
                 </div>
 
                 <div class="col-md-12 mt-2">
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-
-                        Filter Report
-
-                    </button>
-
+                    <button class="btn btn-primary"><?= $btn_filter ?></button>
                 </div>
 
             </form>
 
             <!-- TABLE -->
-
             <table class="table table-bordered table-striped">
 
                 <thead>
-
                     <tr>
-
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Student</th>
-                        <th>Instructor</th>
-                        <th>Department</th>
-                        <th>Publish Date</th>
-
+                        <th><?= $th_id ?></th>
+                        <th><?= $th_title ?></th>
+                        <th><?= $th_category ?></th>
+                        <th><?= $th_student ?></th>
+                        <th><?= $th_instructor ?></th>
+                        <th><?= $th_dep ?></th>
+                        <th><?= $th_date ?></th>
                     </tr>
-
                 </thead>
 
                 <tbody>
@@ -410,21 +263,13 @@ $where
                     <?php while ($row = $thesis_result->fetch_assoc()) { ?>
 
                         <tr>
-
-                            <td><?php echo $row['ID']; ?></td>
-
-                            <td><?php echo $row['Title']; ?></td>
-
-                            <td><?php echo $row['Category']; ?></td>
-
-                            <td><?php echo $row['student_name']; ?></td>
-
-                            <td><?php echo $row['instructor_name']; ?></td>
-
-                            <td><?php echo $row['department_name']; ?></td>
-
-                            <td><?php echo $row['Publish_Date']; ?></td>
-
+                            <td><?= $row['ID'] ?></td>
+                            <td><?= $row['Title'] ?></td>
+                            <td><?= $row['Category'] ?></td>
+                            <td><?= $row['student_name'] ?></td>
+                            <td><?= $row['instructor_name'] ?></td>
+                            <td><?= $row['department_name'] ?></td>
+                            <td><?= $row['Publish_Date'] ?></td>
                         </tr>
 
                     <?php } ?>
@@ -434,10 +279,7 @@ $where
             </table>
 
             <h5>
-
-                Total Thesis :
-                <?php echo $total; ?>
-
+                <?= $totalText ?> : <?= $total ?>
             </h5>
 
         </div>

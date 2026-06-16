@@ -7,6 +7,8 @@ require_once '../dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 
+$lang = $_SESSION['lang'] ?? 'en';
+
 // ======================
 // FILTERS
 // ======================
@@ -14,48 +16,28 @@ use Dompdf\Dompdf;
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['author'])) {
-
     $author = $_GET['author'];
-
-    $where .= "
-    AND books.Author='$author'
-    ";
+    $where .= " AND books.Author='$author' ";
 }
 
 if (!empty($_GET['department'])) {
-
     $department = $_GET['department'];
-
-    $where .= "
-    AND books.Department='$department'
-    ";
+    $where .= " AND books.Department='$department' ";
 }
 
 if (!empty($_GET['category'])) {
-
     $category = $_GET['category'];
-
-    $where .= "
-    AND books.Category LIKE '%$category%'
-    ";
+    $where .= " AND books.Category LIKE '%$category%' ";
 }
 
 if (!empty($_GET['date_from'])) {
-
     $date_from = $_GET['date_from'];
-
-    $where .= "
-    AND books.Publish_Date >= '$date_from'
-    ";
+    $where .= " AND books.Publish_Date >= '$date_from' ";
 }
 
 if (!empty($_GET['date_to'])) {
-
     $date_to = $_GET['date_to'];
-
-    $where .= "
-    AND books.Publish_Date <= '$date_to'
-    ";
+    $where .= " AND books.Publish_Date <= '$date_to' ";
 }
 
 // ======================
@@ -70,11 +52,8 @@ department.Name AS department_name
 
 FROM books
 
-LEFT JOIN teacher
-ON books.Author = teacher.ID
-
-LEFT JOIN department
-ON books.Department = department.ID
+LEFT JOIN teacher ON books.Author = teacher.ID
+LEFT JOIN department ON books.Department = department.ID
 
 $where
 
@@ -85,21 +64,31 @@ ORDER BY books.ID DESC
 $total = $conn->query("
 
 SELECT COUNT(*) AS total
-
 FROM books
-
-LEFT JOIN teacher
-ON books.Author = teacher.ID
-
-LEFT JOIN department
-ON books.Department = department.ID
-
+LEFT JOIN teacher ON books.Author = teacher.ID
+LEFT JOIN department ON books.Department = department.ID
 $where
 
 ")->fetch_assoc()['total'];
 
 // ======================
-// HTML DESIGN
+// TEXT VARIABLES
+// ======================
+
+$title = ($lang == 'fa') ? 'گزارش کتاب‌ها' : 'Books Report';
+$generated = ($lang == 'fa') ? 'تاریخ تولید' : 'Generated Date';
+$totalText = ($lang == 'fa') ? 'تعداد کل کتاب‌ها' : 'Total Books';
+
+$th_id = ($lang == 'fa') ? 'آی‌دی' : 'ID';
+$th_title = ($lang == 'fa') ? 'عنوان' : 'Title';
+$th_category = ($lang == 'fa') ? 'کتگوری' : 'Category';
+$th_author = ($lang == 'fa') ? 'نویسنده' : 'Author';
+$th_department = ($lang == 'fa') ? 'دیپارتمنت' : 'Department';
+$th_pages = ($lang == 'fa') ? 'صفحات' : 'Pages';
+$th_date = ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date';
+
+// ======================
+// HTML
 // ======================
 
 $html = '
@@ -148,23 +137,23 @@ td{
 </style>
 
 <div class="report-title">
-    Books Report
+    ' . $title . '
 </div>
 
 <div class="report-info">
-    Generated Date: ' . date("Y-m-d") . '
+    ' . $generated . ': ' . date("Y-m-d") . '
 </div>
 
 <table border="1">
 
 <tr>
-<th>ID</th>
-<th>Title</th>
-<th>Category</th>
-<th>Author</th>
-<th>Department</th>
-<th>Pages</th>
-<th>Publish Date</th>
+<th>' . $th_id . '</th>
+<th>' . $th_title . '</th>
+<th>' . $th_category . '</th>
+<th>' . $th_author . '</th>
+<th>' . $th_department . '</th>
+<th>' . $th_pages . '</th>
+<th>' . $th_date . '</th>
 </tr>
 
 ';
@@ -174,21 +163,13 @@ while ($row = $book_result->fetch_assoc()) {
     $html .= '
 
     <tr>
-
         <td>' . $row['ID'] . '</td>
-
         <td>' . $row['Title'] . '</td>
-
         <td>' . $row['Category'] . '</td>
-
         <td>' . $row['author_name'] . '</td>
-
         <td>' . $row['department_name'] . '</td>
-
         <td>' . $row['Pages'] . '</td>
-
         <td>' . $row['Publish_Date'] . '</td>
-
     </tr>
 
     ';
@@ -199,21 +180,18 @@ $html .= '
 </table>
 
 <div class="footer">
-    Total Books : ' . $total . '
+    ' . $totalText . ' : ' . $total . '
 </div>
 
 ';
 
 // ======================
-// PDF
+// PDF GENERATE
 // ======================
 
 $dompdf = new Dompdf();
-
 $dompdf->loadHtml($html);
-
 $dompdf->setPaper('A4', 'landscape');
-
 $dompdf->render();
 
 $dompdf->stream(

@@ -7,6 +7,8 @@ require_once '../dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 
+$lang = $_SESSION['lang'] ?? 'en';
+
 // ======================
 // FILTERS
 // ======================
@@ -14,57 +16,33 @@ use Dompdf\Dompdf;
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['teacher'])) {
-
     $teacher = mysqli_real_escape_string($conn, $_GET['teacher']);
-
-    $where .= "
-    AND articles.Teacher_ID='$teacher'
-    ";
+    $where .= " AND articles.Teacher_ID='$teacher' ";
 }
 
 if (!empty($_GET['student'])) {
-
     $student = mysqli_real_escape_string($conn, $_GET['student']);
-
-    $where .= "
-    AND articles.Student_ID='$student'
-    ";
+    $where .= " AND articles.Student_ID='$student' ";
 }
 
 if (!empty($_GET['category'])) {
-
     $category = mysqli_real_escape_string($conn, $_GET['category']);
-
-    $where .= "
-    AND articles.Category LIKE '%$category%'
-    ";
+    $where .= " AND articles.Category LIKE '%$category%' ";
 }
 
 if (!empty($_GET['department'])) {
-
     $department = mysqli_real_escape_string($conn, $_GET['department']);
-
-    $where .= "
-    AND articles.Department='$department'
-    ";
+    $where .= " AND articles.Department='$department' ";
 }
 
 if (!empty($_GET['date_from'])) {
-
     $date_from = mysqli_real_escape_string($conn, $_GET['date_from']);
-
-    $where .= "
-    AND articles.Date >= '$date_from'
-    ";
+    $where .= " AND articles.Date >= '$date_from' ";
 }
 
 if (!empty($_GET['date_to'])) {
-
     $date_to = mysqli_real_escape_string($conn, $_GET['date_to']);
-
-    $where .= "
-    AND articles.Date <= '$date_to'
-    ";
+    $where .= " AND articles.Date <= '$date_to' ";
 }
 
 // ======================
@@ -96,7 +74,7 @@ ORDER BY articles.ID DESC
 ");
 
 // ======================
-// TOTAL FILTERED RECORDS
+// TOTAL
 // ======================
 
 $total_query = $conn->query("
@@ -121,7 +99,15 @@ $where
 $total = $total_query->fetch_assoc()['total'];
 
 // ======================
-// HTML DESIGN
+// TEXTS
+// ======================
+
+$titleText = ($lang == 'fa') ? 'گزارش مقالات' : 'Articles Report';
+$dateText  = ($lang == 'fa') ? 'تاریخ تولید' : 'Generated Date';
+$totalText = ($lang == 'fa') ? 'تعداد کل مقالات' : 'Total Filtered Articles';
+
+// ======================
+// HTML
 // ======================
 
 $html = '
@@ -170,24 +156,24 @@ td{
 </style>
 
 <div class="report-title">
-    Articles Report
+    ' . $titleText . '
 </div>
 
 <div class="report-info">
-    Generated Date: ' . date("Y-m-d") . '
+    ' . $dateText . ': ' . date("Y-m-d") . '
 </div>
 
 <table border="1">
 
 <tr>
 
-<th>ID</th>
-<th>Title</th>
-<th>Category</th>
-<th>Teacher</th>
-<th>Student</th>
-<th>Department</th>
-<th>Date</th>
+<th>' . ($lang == 'fa' ? 'آی‌دی' : 'ID') . '</th>
+<th>' . ($lang == 'fa' ? 'عنوان' : 'Title') . '</th>
+<th>' . ($lang == 'fa' ? 'کتگوری' : 'Category') . '</th>
+<th>' . ($lang == 'fa' ? 'استاد' : 'Teacher') . '</th>
+<th>' . ($lang == 'fa' ? 'محصل' : 'Student') . '</th>
+<th>' . ($lang == 'fa' ? 'دیپارتمنت' : 'Department') . '</th>
+<th>' . ($lang == 'fa' ? 'تاریخ' : 'Date') . '</th>
 
 </tr>
 
@@ -200,17 +186,11 @@ while ($row = $article_result->fetch_assoc()) {
     <tr>
 
         <td>' . $row['ID'] . '</td>
-
         <td>' . $row['Title'] . '</td>
-
         <td>' . $row['Category'] . '</td>
-
         <td>' . $row['teacher_name'] . '</td>
-
         <td>' . $row['student_name'] . '</td>
-
         <td>' . $row['department_name'] . '</td>
-
         <td>' . $row['Date'] . '</td>
 
     </tr>
@@ -223,13 +203,13 @@ $html .= '
 </table>
 
 <div class="footer">
-    Total Filtered Articles : ' . $total . '
+    ' . $totalText . ' : ' . $total . '
 </div>
 
 ';
 
 // ======================
-// PDF
+// PDF OUTPUT
 // ======================
 
 $dompdf = new Dompdf();
@@ -241,7 +221,7 @@ $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 
 $dompdf->stream(
-    "Articles_Report.pdf",
+    ($lang == 'fa') ? "گزارش_مقالات.pdf" : "Articles_Report.pdf",
     array("Attachment" => true)
 );
 

@@ -7,6 +7,8 @@ require_once '../dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 
+$lang = $_SESSION['lang'] ?? 'en';
+
 // ======================
 // FILTERS
 // ======================
@@ -14,48 +16,23 @@ use Dompdf\Dompdf;
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['translator'])) {
-
-    $translator = mysqli_real_escape_string($conn, $_GET['translator']);
-
-    $where .= "
-    AND translated_books.translated_by='$translator'
-    ";
+    $where .= " AND translated_books.translated_by='" . $_GET['translator'] . "' ";
 }
 
 if (!empty($_GET['department'])) {
-
-    $department = mysqli_real_escape_string($conn, $_GET['department']);
-
-    $where .= "
-    AND translated_books.Department='$department'
-    ";
+    $where .= " AND translated_books.Department='" . $_GET['department'] . "' ";
 }
 
 if (!empty($_GET['category'])) {
-
-    $category = mysqli_real_escape_string($conn, $_GET['category']);
-
-    $where .= "
-    AND translated_books.Category LIKE '%$category%'
-    ";
+    $where .= " AND translated_books.Category LIKE '%" . $_GET['category'] . "%' ";
 }
 
 if (!empty($_GET['date_from'])) {
-
-    $date_from = mysqli_real_escape_string($conn, $_GET['date_from']);
-
-    $where .= "
-    AND translated_books.Publish_Date >= '$date_from'
-    ";
+    $where .= " AND translated_books.Publish_Date >= '" . $_GET['date_from'] . "' ";
 }
 
 if (!empty($_GET['date_to'])) {
-
-    $date_to = mysqli_real_escape_string($conn, $_GET['date_to']);
-
-    $where .= "
-    AND translated_books.Publish_Date <= '$date_to'
-    ";
+    $where .= " AND translated_books.Publish_Date <= '" . $_GET['date_to'] . "' ";
 }
 
 // ======================
@@ -70,11 +47,8 @@ department.Name AS department_name
 
 FROM translated_books
 
-LEFT JOIN teacher
-ON translated_books.translated_by = teacher.ID
-
-LEFT JOIN department
-ON translated_books.Department = department.ID
+LEFT JOIN teacher ON translated_books.translated_by = teacher.ID
+LEFT JOIN department ON translated_books.Department = department.ID
 
 $where
 
@@ -82,28 +56,39 @@ ORDER BY translated_books.ID DESC
 
 ");
 
-// ======================
 // TOTAL
-// ======================
 
 $total = $conn->query("
 
 SELECT COUNT(*) AS total
-
 FROM translated_books
 
-LEFT JOIN teacher
-ON translated_books.translated_by = teacher.ID
-
-LEFT JOIN department
-ON translated_books.Department = department.ID
+LEFT JOIN teacher ON translated_books.translated_by = teacher.ID
+LEFT JOIN department ON translated_books.Department = department.ID
 
 $where
 
 ")->fetch_assoc()['total'];
 
 // ======================
-// PDF DESIGN
+// TEXTS (MULTI LANGUAGE)
+// ======================
+
+$title = ($lang == 'fa') ? 'گزارش کتاب‌های ترجمه شده' : 'Translated Books Report';
+$date_text = ($lang == 'fa') ? 'تاریخ تولید' : 'Generated Date';
+$total_text = ($lang == 'fa') ? 'کتاب‌های ترجمه شده' : 'Total Translated Books';
+
+$th_id = ($lang == 'fa') ? 'آی‌دی' : 'ID';
+$th_title = ($lang == 'fa') ? 'عنوان' : 'Title';
+$th_author = ($lang == 'fa') ? 'نویسنده' : 'Author';
+$th_translator = ($lang == 'fa') ? 'مترجم' : 'Translator';
+$th_category = ($lang == 'fa') ? 'کتگوری' : 'Category';
+$th_department = ($lang == 'fa') ? 'دیپارتمنت' : 'Department';
+$th_pages = ($lang == 'fa') ? 'صفحات' : 'Pages';
+$th_date = ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date';
+
+// ======================
+// HTML
 // ======================
 
 $html = '
@@ -152,26 +137,24 @@ td{
 </style>
 
 <div class="report-title">
-Translated Books Report
+' . $title . '
 </div>
 
 <div class="report-info">
-Generated Date : ' . date("Y-m-d") . '
+' . $date_text . ' : ' . date("Y-m-d") . '
 </div>
 
 <table border="1">
 
 <tr>
-
-<th>ID</th>
-<th>Title</th>
-<th>Author</th>
-<th>Translator</th>
-<th>Category</th>
-<th>Department</th>
-<th>Pages</th>
-<th>Publish Date</th>
-
+<th>' . $th_id . '</th>
+<th>' . $th_title . '</th>
+<th>' . $th_author . '</th>
+<th>' . $th_translator . '</th>
+<th>' . $th_category . '</th>
+<th>' . $th_department . '</th>
+<th>' . $th_pages . '</th>
+<th>' . $th_date . '</th>
 </tr>
 
 ';
@@ -181,23 +164,14 @@ while ($row = $book_result->fetch_assoc()) {
     $html .= '
 
     <tr>
-
         <td>' . $row['ID'] . '</td>
-
         <td>' . $row['Title'] . '</td>
-
         <td>' . $row['Author'] . '</td>
-
         <td>' . $row['translator_name'] . '</td>
-
         <td>' . $row['Category'] . '</td>
-
         <td>' . $row['department_name'] . '</td>
-
         <td>' . $row['Pages'] . '</td>
-
         <td>' . $row['Publish_Date'] . '</td>
-
     </tr>
 
     ';
@@ -208,9 +182,7 @@ $html .= '
 </table>
 
 <div class="footer">
-
-Total Translated Books : ' . $total . '
-
+' . $total_text . ' : ' . $total . '
 </div>
 
 ';
@@ -220,11 +192,8 @@ Total Translated Books : ' . $total . '
 // ======================
 
 $dompdf = new Dompdf();
-
 $dompdf->loadHtml($html);
-
 $dompdf->setPaper('A4', 'landscape');
-
 $dompdf->render();
 
 $dompdf->stream(

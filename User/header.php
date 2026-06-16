@@ -1,9 +1,10 @@
 <?php
-// ===========================
-// HEADER FILE
-// FILE NAME: header.php
-// ===========================
+
+
+$lang = $_SESSION['lang'] ?? 'en';
+
 ?>
+
 
 <style>
     * {
@@ -129,75 +130,60 @@
 
     <div class="header-menu">
 
-
-
         <a href="departments.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'departments.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'departments.php' ? 'active' : ''; ?>">
 
-            Departments
+            <?= ($lang == 'fa') ? 'دیپارتمنت‌ها' : 'Departments'; ?>
 
         </a>
 
         <a href="teachers.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'teachers.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'teachers.php' ? 'active' : ''; ?>">
 
-            Teachers
+            <?= ($lang == 'fa') ? 'استادان' : 'Teachers'; ?>
 
         </a>
 
         <a href="students.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'students.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'students.php' ? 'active' : ''; ?>">
 
-            Students
+            <?= ($lang == 'fa') ? 'محصلان' : 'Students'; ?>
 
         </a>
 
         <a href="articles.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'articles.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'articles.php' ? 'active' : ''; ?>">
 
-            Articles
+            <?= ($lang == 'fa') ? 'مقالات' : 'Articles'; ?>
 
         </a>
 
         <a href="books.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'books.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'books.php' ? 'active' : ''; ?>">
 
-            Books
+            <?= ($lang == 'fa') ? 'کتاب‌ها' : 'Books'; ?>
 
         </a>
 
         <a href="translatedbooks.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'translatedbooks.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'translatedbooks.php' ? 'active' : ''; ?>">
 
-            Translated Books
+            <?= ($lang == 'fa') ? 'کتاب‌های ترجمه‌شده' : 'Translated Books'; ?>
 
         </a>
 
         <a href="thesises.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
+            class="<?= basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
 
-            Thesises
-
-        </a>
-
-    </div>
-
-    <div class="header-buttons">
-
-        <a href="dashboard.php"
-            class="header-btn">
-
-            Dashboard
+            <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesises'; ?>
 
         </a>
+        <a href="../Reports/systemreports.php"
+            class="<?= basename($_SERVER['PHP_SELF']) == 'systemreports.php' ? 'active' : ''; ?>">
 
-        <a href="../logout.php"
-            class="header-btn">
-
-            Logout
+            <?= ($lang == 'fa') ? 'گزارشات سیستم' : 'System Reports'; ?>
 
         </a>
-
     </div>
 
 </header>
