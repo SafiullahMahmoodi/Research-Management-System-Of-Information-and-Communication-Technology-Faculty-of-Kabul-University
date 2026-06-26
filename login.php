@@ -2,10 +2,17 @@
 // login.php
 
 session_start();
-$lang = $_SESSION['lang'] ?? 'en';
-$dir = ($lang == 'fa') ? 'rtl' : 'ltr';
 
-// جلوگیری از cache مرورگر
+// اگر زبان از Cookie موجود است، آن را در Session نیز قرار بده
+if (isset($_COOKIE['lang'])) {
+    $_SESSION['lang'] = $_COOKIE['lang'];
+}
+
+// زبان
+$lang = $_SESSION['lang'] ?? 'en';
+
+// جهت صفحه
+$dir = ($lang == 'fa') ? 'rtl' : 'ltr';
 
 header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");
@@ -95,17 +102,11 @@ if (isset($_POST['login'])) {
         href="css/style.css">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
 
             background: #f3f6fb;
 
-            font-family: Segoe UI;
+            font-family: 'Bahij Zar', Tahoma, sans-serif;
 
             min-height: 100vh;
 

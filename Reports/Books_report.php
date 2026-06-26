@@ -89,53 +89,7 @@ $where
     </title>
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-
-    <style>
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-
-            body {
-                background: white !important;
-            }
-
-            .report-card {
-                box-shadow: none !important;
-                border: none !important;
-            }
-        }
-
-        body {
-            background: #f4f6f9;
-            font-family: Segoe UI;
-        }
-
-        .report-container {
-            width: 95%;
-            margin: 20px auto;
-        }
-
-        .report-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .report-title {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            font-size: 13px;
-        }
-
-        .table {
-            font-size: 13px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 

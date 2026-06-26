@@ -1,0 +1,134 @@
+/* ==========================================
+   REPORT STYLE
+   Research Management System
+========================================== */
+
+/* ==========================
+   GENERAL
+========================== */
+
+body {
+    background: #f4f6f9;
+    font-family: "Segoe UI", sans-serif;
+    overflow-y: auto;
+    height: auto;
+}
+
+.report-container {
+    width: 95%;
+    margin: 20px auto;
+}
+
+.report-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+}
+
+.report-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    width: 100%;
+    font-size: 13px;
+}
+
+.form-control,
+.form-select {
+    text-align: inherit;
+}
+
+.table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* رنگ سرستون جدول */
+
+.table th {
+    background: #198754;
+    color: #fff;
+}
+
+.btn {
+    font-size: 13px;
+    padding: 5px 12px;
+}
+
+h5 {
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* ==========================
+   PRINT
+========================== */
+
+@media print {
+
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #ffffff !important;
+    }
+
+    .report-card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+}
+
+/* ==========================
+   RTL
+========================== */
+
+body[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+body[dir="ltr"] {
+    direction: ltr;
+    text-align: left;
+}
+
+body[dir="rtl"] .report-card,
+body[dir="rtl"] form,
+body[dir="rtl"] .table {
+    direction: rtl;
+}
+
+body[dir="rtl"] .row {
+    flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .form-label {
+    text-align: right;
+}
+
+body[dir="rtl"] .form-control,
+body[dir="rtl"] .form-select {
+    text-align: right;
+}
+
+body[dir="rtl"] .no-print .btn {
+    float: right;
+    margin-left: 5px;
+}
+
+

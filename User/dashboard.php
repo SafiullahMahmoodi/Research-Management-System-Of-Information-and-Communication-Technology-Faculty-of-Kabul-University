@@ -113,7 +113,7 @@ while ($row = $thesis_result->fetch_assoc()) {
             ? 'داشبورد'
             : 'Dashboard'; ?>
     </title>
-    <link rel="stylesheet" href="style.css">
+
     <!-- Bootstrap -->
 
     <link rel="stylesheet"
@@ -126,6 +126,18 @@ while ($row = $thesis_result->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <Style>
+        @font-face {
+            font-family: 'Bahij Zar';
+            src: url('../fonts/bahij-zar.ttf') format('truetype');
+        }
+
+        body {
+            background: #eef2f7;
+            font-family: "Bahij Zar", "Segoe UI", sans-serif;
+            overflow: hidden;
+            font-size: 17px;
+        }
+
         html[dir="rtl"] {
             direction: rtl;
         }

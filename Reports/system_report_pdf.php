@@ -1,16 +1,21 @@
 <?php
 
-require_once '../dompdf/autoload.inc.php';
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
-
 include('../auth.php');
 include('../db_connection.php');
 
-$lang = $_SESSION['lang'] ?? 'en';
+require_once '../vendor/autoload.php';
 
-$dir = ($lang == 'fa') ? 'rtl' : 'ltr';
+use Mpdf\Mpdf;
+
+// ======================
+// LANGUAGE
+// ======================
+
+$lang = $_SESSION['lang'] ?? 'en';
+$isFa = ($lang == 'fa');
+
+$dir   = $isFa ? 'rtl' : 'ltr';
+$align = $isFa ? 'right' : 'left';
 
 // ======================
 // STATISTICS
@@ -33,116 +38,112 @@ $total_records =
 // TEXTS
 // ======================
 
-$titleText = ($lang == 'fa')
+$titleText = $isFa
     ? 'گزارش سیستم مدیریت تحقیقات'
     : 'Research Management System Report';
 
-$moduleText = ($lang == 'fa') ? 'ماژول' : 'Module';
-$totalText  = ($lang == 'fa') ? 'تعداد ریکاردها' : 'Total Records';
-$finalText  = ($lang == 'fa') ? 'مجموع کل سیستم' : 'Total System Records';
+$moduleText = $isFa ? 'ماژول' : 'Module';
+$totalText  = $isFa ? 'تعداد ریکاردها' : 'Total Records';
+$finalText  = $isFa ? 'مجموع کل سیستم' : 'Total System Records';
 
 // ======================
 // HTML
 // ======================
 
 $html = '
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-
 <style>
-body {
-    font-family: DejaVu Sans, sans-serif;
+
+body{
+    font-family: dejavu sans;
     direction: ' . $dir . ';
+    text-align: ' . $align . ';
 }
 
-.container {
-    width: 100%;
+.title{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+th{
+    background:#198754;
+    color:#fff;
+    padding:10px;
+    text-align:center;
 }
 
-th {
-    background-color: #198754;
-    color: white;
-    padding: 8px;
-    text-align: center;
+td{
+    padding:8px;
+    border:1px solid #ddd;
+    text-align:center;
 }
 
-td {
-    padding: 8px;
-    text-align: center;
+.footer{
+    margin-top:20px;
+    font-size:16px;
+    font-weight:bold;
+    text-align:center;
 }
 
-.footer {
-    margin-top: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-}
 </style>
 
-</head>
+<div class="title">' . $titleText . '</div>
 
-<body>
-
-<div class="container">
-
-<h2>' . $titleText . '</h2>
-
-<table border="1">
+<table>
 
 <tr>
-<th>' . $moduleText . '</th>
-<th>' . $totalText . '</th>
+    <th>' . $moduleText . '</th>
+    <th>' . $totalText . '</th>
 </tr>
 
-<tr><td>' . ($lang == 'fa' ? 'کاربران' : 'Users') . '</td><td>' . $users . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'دیپارتمنت‌ها' : 'Departments') . '</td><td>' . $departments . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'استادان' : 'Teachers') . '</td><td>' . $teachers . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'محصلین' : 'Students') . '</td><td>' . $students . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'مقالات' : 'Articles') . '</td><td>' . $articles . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'کتاب‌ها' : 'Books') . '</td><td>' . $books . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'کتاب‌های ترجمه شده' : 'Translated Books') . '</td><td>' . $translated . '</td></tr>
-<tr><td>' . ($lang == 'fa' ? 'پایان‌نامه‌ها' : 'Thesis') . '</td><td>' . $thesis . '</td></tr>
+<tr><td>' . ($isFa ? 'کاربران' : 'Users') . '</td><td>' . $users . '</td></tr>
+<tr><td>' . ($isFa ? 'دیپارتمنت‌ها' : 'Departments') . '</td><td>' . $departments . '</td></tr>
+<tr><td>' . ($isFa ? 'استادان' : 'Teachers') . '</td><td>' . $teachers . '</td></tr>
+<tr><td>' . ($isFa ? 'محصلین' : 'Students') . '</td><td>' . $students . '</td></tr>
+<tr><td>' . ($isFa ? 'مقالات' : 'Articles') . '</td><td>' . $articles . '</td></tr>
+<tr><td>' . ($isFa ? 'کتاب‌ها' : 'Books') . '</td><td>' . $books . '</td></tr>
+<tr><td>' . ($isFa ? 'کتاب‌های ترجمه شده' : 'Translated Books') . '</td><td>' . $translated . '</td></tr>
+<tr><td>' . ($isFa ? 'پایان‌نامه‌ها' : 'Thesis') . '</td><td>' . $thesis . '</td></tr>
 
 </table>
 
 <div class="footer">
 ' . $finalText . ' : ' . $total_records . '
 </div>
-
-</div>
-
-</body>
-</html>
 ';
 
 // ======================
-// DOMPDF CONFIG
+// MPDF CONFIG
 // ======================
 
-$options = new Options();
-$options->set('isHtml5ParserEnabled', true);
-$options->set('isRemoteEnabled', true);
-$options->set('defaultFont', 'DejaVu Sans');
+$mpdf = new Mpdf([
+    'mode' => 'utf-8',
+    'format' => 'A4',
+    'orientation' => 'P'
+]);
 
-$dompdf = new Dompdf($options);
+$mpdf->SetDirectionality($dir);
 
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait');
-$dompdf->render();
+// برای بهتر شدن فارسی
+$mpdf->autoScriptToLang = true;
+$mpdf->autoLangToFont   = true;
 
-$dompdf->stream(
-    ($lang == 'fa') ? "گزارش_سیستم.pdf" : "System_Report.pdf",
-    ["Attachment" => true]
+// ======================
+// OUTPUT
+// ======================
+
+$mpdf->WriteHTML($html);
+
+$mpdf->Output(
+    $isFa ? "گزارش_سیستم.pdf" : "System_Report.pdf",
+    "D"
 );
+
+exit();

@@ -106,53 +106,7 @@ $totalText = $isFa ? 'تعداد کل پایان‌نامه‌ها' : 'Total The
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
-    <style>
-        body {
-            background: #f4f6f9;
-            font-family: Segoe UI;
-        }
-
-        .report-container {
-            width: 95%;
-            margin: 20px auto;
-        }
-
-        .report-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .report-title {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-
-            body {
-                background: white;
-            }
-
-            .report-card {
-                box-shadow: none;
-                border: none;
-            }
-        }
-
-        .form-label {
-            font-size: 13px;
-        }
-
-        .table {
-            font-size: 13px;
-        }
-    </style>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body dir="<?= $isFa ? 'rtl' : 'ltr'; ?>">

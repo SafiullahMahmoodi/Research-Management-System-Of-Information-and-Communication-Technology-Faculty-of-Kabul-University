@@ -1,18 +1,13 @@
 <?php
-// index.php
-
 session_start();
-
-
-
-
-
 
 if (isset($_GET['lang'])) {
     $_SESSION['lang'] = $_GET['lang'];
+    setcookie('lang', $_GET['lang'], time() + (86400 * 30), "/");
 }
 
-$lang = $_SESSION['lang'] ?? 'en';
+// فقط از session یا cookie به ترتیب درست
+$lang = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'en';
 
 $dir = ($lang == 'fa') ? 'rtl' : 'ltr';
 ?>
@@ -39,6 +34,7 @@ $dir = ($lang == 'fa') ? 'rtl' : 'ltr';
         }
 
         .main-header {
+            font-family: Bahij Zar;
 
             background: #0f9d58;
             color: white;
@@ -48,8 +44,6 @@ $dir = ($lang == 'fa') ? 'rtl' : 'ltr';
             font-weight: bold;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
-
-        -->
     </style>
 
 </head>

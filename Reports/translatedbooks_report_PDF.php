@@ -3,11 +3,18 @@
 include('../auth.php');
 include('../db_connection.php');
 
-require_once '../dompdf/autoload.inc.php';
+require_once '../vendor/autoload.php';
 
-use Dompdf\Dompdf;
+use Mpdf\Mpdf;
+
+// ======================
+// LANGUAGE
+// ======================
 
 $lang = $_SESSION['lang'] ?? 'en';
+$isFa = ($lang === 'fa');
+
+$dir = $isFa ? 'rtl' : 'ltr';
 
 // ======================
 // FILTERS
@@ -16,23 +23,28 @@ $lang = $_SESSION['lang'] ?? 'en';
 $where = " WHERE 1=1 ";
 
 if (!empty($_GET['translator'])) {
-    $where .= " AND translated_books.translated_by='" . $_GET['translator'] . "' ";
+    $translator = mysqli_real_escape_string($conn, $_GET['translator']);
+    $where .= " AND translated_books.translated_by='$translator' ";
 }
 
 if (!empty($_GET['department'])) {
-    $where .= " AND translated_books.Department='" . $_GET['department'] . "' ";
+    $department = mysqli_real_escape_string($conn, $_GET['department']);
+    $where .= " AND translated_books.Department='$department' ";
 }
 
 if (!empty($_GET['category'])) {
-    $where .= " AND translated_books.Category LIKE '%" . $_GET['category'] . "%' ";
+    $category = mysqli_real_escape_string($conn, $_GET['category']);
+    $where .= " AND translated_books.Category LIKE '%$category%' ";
 }
 
 if (!empty($_GET['date_from'])) {
-    $where .= " AND translated_books.Publish_Date >= '" . $_GET['date_from'] . "' ";
+    $date_from = mysqli_real_escape_string($conn, $_GET['date_from']);
+    $where .= " AND translated_books.Publish_Date >= '$date_from' ";
 }
 
 if (!empty($_GET['date_to'])) {
-    $where .= " AND translated_books.Publish_Date <= '" . $_GET['date_to'] . "' ";
+    $date_to = mysqli_real_escape_string($conn, $_GET['date_to']);
+    $where .= " AND translated_books.Publish_Date <= '$date_to' ";
 }
 
 // ======================
@@ -40,165 +52,191 @@ if (!empty($_GET['date_to'])) {
 // ======================
 
 $book_result = $conn->query("
-
 SELECT translated_books.*,
 teacher.Name AS translator_name,
 department.Name AS department_name
-
 FROM translated_books
-
 LEFT JOIN teacher ON translated_books.translated_by = teacher.ID
 LEFT JOIN department ON translated_books.Department = department.ID
-
 $where
-
 ORDER BY translated_books.ID DESC
-
 ");
 
-// TOTAL
-
-$total = $conn->query("
-
-SELECT COUNT(*) AS total
-FROM translated_books
-
-LEFT JOIN teacher ON translated_books.translated_by = teacher.ID
-LEFT JOIN department ON translated_books.Department = department.ID
-
-$where
-
-")->fetch_assoc()['total'];
-
 // ======================
-// TEXTS (MULTI LANGUAGE)
+// TEXTS
 // ======================
 
-$title = ($lang == 'fa') ? 'گزارش کتاب‌های ترجمه شده' : 'Translated Books Report';
-$date_text = ($lang == 'fa') ? 'تاریخ تولید' : 'Generated Date';
-$total_text = ($lang == 'fa') ? 'کتاب‌های ترجمه شده' : 'Total Translated Books';
+$title      = $isFa ? 'گزارش کتاب‌های ترجمه شده' : 'Translated Books Report';
+$date_text  = $isFa ? 'تاریخ تولید' : 'Generated Date';
+$total_text = $isFa ? 'مجموع کتاب‌های ترجمه شده' : 'Total Translated Books';
 
-$th_id = ($lang == 'fa') ? 'آی‌دی' : 'ID';
-$th_title = ($lang == 'fa') ? 'عنوان' : 'Title';
-$th_author = ($lang == 'fa') ? 'نویسنده' : 'Author';
-$th_translator = ($lang == 'fa') ? 'مترجم' : 'Translator';
-$th_category = ($lang == 'fa') ? 'کتگوری' : 'Category';
-$th_department = ($lang == 'fa') ? 'دیپارتمنت' : 'Department';
-$th_pages = ($lang == 'fa') ? 'صفحات' : 'Pages';
-$th_date = ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date';
+// ======================
+// COLUMN HEADERS (IMPORTANT FIX)
+// ======================
+
+$th = [
+    'id'         => $isFa ? 'آی‌دی' : 'ID',
+    'title'      => $isFa ? 'عنوان' : 'Title',
+    'author'     => $isFa ? 'نویسنده' : 'Author',
+    'translator' => $isFa ? 'مترجم' : 'Translator',
+    'category'   => $isFa ? 'کتگوری' : 'Category',
+    'department' => $isFa ? 'دیپارتمنت' : 'Department',
+    'pages'      => $isFa ? 'صفحات' : 'Pages',
+    'date'       => $isFa ? 'تاریخ نشر' : 'Date'
+];
 
 // ======================
 // HTML
 // ======================
 
-$html = '
-
+$html = "
 <style>
 
-body{
-    font-family: DejaVu Sans, sans-serif;
+body {
+    font-family: dejavusans;
+    direction: $dir;
 }
 
-.report-title{
-    text-align:center;
-    font-size:24px;
-    font-weight:bold;
-    margin-bottom:20px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    direction: $dir;
 }
 
-.report-info{
-    margin-bottom:15px;
-    font-size:14px;
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+th {
+    background: #198754;
+    color: #fff;
 }
 
-th{
-    background:#198754;
-    color:white;
-    padding:8px;
-    text-align:center;
+.title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
-td{
-    padding:6px;
-    text-align:center;
+.info {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
-.footer{
-    margin-top:20px;
-    font-size:16px;
-    font-weight:bold;
+.footer {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 </style>
 
-<div class="report-title">
-' . $title . '
+<div class='title'>$title</div>
+
+<div class='info'>
+$date_text : " . date("Y-m-d") . "
 </div>
 
-<div class="report-info">
-' . $date_text . ' : ' . date("Y-m-d") . '
-</div>
-
-<table border="1">
+<table>
 
 <tr>
-<th>' . $th_id . '</th>
-<th>' . $th_title . '</th>
-<th>' . $th_author . '</th>
-<th>' . $th_translator . '</th>
-<th>' . $th_category . '</th>
-<th>' . $th_department . '</th>
-<th>' . $th_pages . '</th>
-<th>' . $th_date . '</th>
-</tr>
+";
 
-';
+// ======================
+// HEADER (RTL / LTR FIX)
+// ======================
+
+if ($isFa) {
+    echo "
+        <th>{$th['date']}</th>
+        <th>{$th['pages']}</th>
+        <th>{$th['department']}</th>
+        <th>{$th['category']}</th>
+        <th>{$th['translator']}</th>
+        <th>{$th['author']}</th>
+        <th>{$th['title']}</th>
+        <th>{$th['id']}</th>
+    ";
+} else {
+    echo "
+        <th>{$th['id']}</th>
+        <th>{$th['title']}</th>
+        <th>{$th['author']}</th>
+        <th>{$th['translator']}</th>
+        <th>{$th['category']}</th>
+        <th>{$th['department']}</th>
+        <th>{$th['pages']}</th>
+        <th>{$th['date']}</th>
+    ";
+}
+
+$html .= "</tr>";
+
+// ======================
+// ROWS
+// ======================
 
 while ($row = $book_result->fetch_assoc()) {
 
-    $html .= '
-
-    <tr>
-        <td>' . $row['ID'] . '</td>
-        <td>' . $row['Title'] . '</td>
-        <td>' . $row['Author'] . '</td>
-        <td>' . $row['translator_name'] . '</td>
-        <td>' . $row['Category'] . '</td>
-        <td>' . $row['department_name'] . '</td>
-        <td>' . $row['Pages'] . '</td>
-        <td>' . $row['Publish_Date'] . '</td>
-    </tr>
-
-    ';
+    if ($isFa) {
+        $html .= "
+        <tr>
+            <td>{$row['Publish_Date']}</td>
+            <td>{$row['Pages']}</td>
+            <td>{$row['department_name']}</td>
+            <td>{$row['Category']}</td>
+            <td>{$row['translator_name']}</td>
+            <td>{$row['Author']}</td>
+            <td>{$row['Title']}</td>
+            <td>{$row['ID']}</td>
+        </tr>";
+    } else {
+        $html .= "
+        <tr>
+            <td>{$row['ID']}</td>
+            <td>{$row['Title']}</td>
+            <td>{$row['Author']}</td>
+            <td>{$row['translator_name']}</td>
+            <td>{$row['Category']}</td>
+            <td>{$row['department_name']}</td>
+            <td>{$row['Pages']}</td>
+            <td>{$row['Publish_Date']}</td>
+        </tr>";
+    }
 }
 
-$html .= '
-
+$html .= "
 </table>
 
-<div class="footer">
-' . $total_text . ' : ' . $total . '
+<div class='footer'>
+$total_text : " . $book_result->num_rows . "
 </div>
-
-';
+";
 
 // ======================
-// GENERATE PDF
+// MPDF (RTL FIX)
 // ======================
 
-$dompdf = new Dompdf();
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'landscape');
-$dompdf->render();
+$mpdf = new Mpdf([
+    'mode' => 'utf-8',
+    'format' => 'A4-L'
+]);
 
-$dompdf->stream(
-    "Translated_Books_Report.pdf",
-    array("Attachment" => true)
+$mpdf->SetDirectionality($dir);
+$mpdf->autoScriptToLang = true;
+$mpdf->autoLangToFont = true;
+
+$mpdf->WriteHTML($html);
+
+$mpdf->Output(
+    $isFa ? "گزارش_کتاب‌های_ترجمه_شده.pdf" : "Translated_Books_Report.pdf",
+    "D"
 );
 
 exit();

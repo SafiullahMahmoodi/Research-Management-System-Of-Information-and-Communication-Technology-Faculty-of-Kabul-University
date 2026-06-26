@@ -1,17 +1,15 @@
 <?php
-// logout.php
 
 session_start();
 
-// ======================
-// حذف تمام متغیرهای سیشن
-// ======================
+// ✅ اول از session یا cookie بخوان
+$lang = $_SESSION['lang'] ?? $_COOKIE['lang'] ?? 'en';
 
-$_SESSION = array();
+// ذخیره در cookie
+setcookie('lang', $lang, time() + (86400 * 30), "/");
 
-// ======================
-// حذف کوکی سیشن از مرورگر
-// ======================
+// پاک کردن session
+$_SESSION = [];
 
 if (ini_get("session.use_cookies")) {
 
@@ -28,23 +26,8 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// ======================
-// نابود کردن کامل سیشن
-// ======================
-
 session_destroy();
 
-// ======================
-// جلوگیری از cache
-// ======================
-
-header("Cache-Control: no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
-
-// ======================
-// انتقال به login
-// ======================
-
+// redirect
 header("Location: login.php");
 exit();

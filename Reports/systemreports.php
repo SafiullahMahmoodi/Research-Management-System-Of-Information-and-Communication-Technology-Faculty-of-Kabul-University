@@ -35,61 +35,7 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
     </title>
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-
-    <style>
-        body {
-            background: #f4f6f9;
-            font-family: Segoe UI;
-            overflow-y: auto !important;
-            height: auto !important;
-        }
-
-        .report-container {
-            width: 90%;
-            margin: 30px auto;
-        }
-
-        .report-title {
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-
-        .report-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        th {
-            background: #198754;
-            color: white;
-            text-align: center;
-        }
-
-        td {
-            text-align: center;
-        }
-
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-
-            body {
-                background: white !important;
-            }
-
-            .report-card {
-                box-shadow: none !important;
-                border: none !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -112,13 +58,17 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
             </h2>
 
             <!-- BUTTONS -->
-            <button class="btn btn-success" onclick="window.print()">
-                <?= ($lang == 'fa') ? 'پرنت گزارش' : 'Print Report'; ?>
-            </button>
+            <div class="no-print mb-3" style="text-align: <?= ($lang == 'fa') ? 'left' : 'left'; ?>;">
 
-            <a href="system_report_pdf.php" class="btn btn-danger">
-                <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
-            </a>
+                <button class="btn btn-success">
+                    <?= ($lang == 'fa') ? 'پرنت گزارش' : 'Print Report'; ?>
+                </button>
+
+                <a href="system_report_pdf.php" class="btn btn-danger">
+                    <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
+                </a>
+
+            </div>
 
             <!-- TABLE -->
             <table class="table table-bordered mt-3">

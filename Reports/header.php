@@ -127,7 +127,7 @@ $lang = $_SESSION['lang'] ?? 'en';
 
     <div class="header-buttons">
 
-        <a href="../admin/dashboard.php" class="header-btn">
+        <a href="dashboard.php" class="header-btn">
             <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
         </a>
 

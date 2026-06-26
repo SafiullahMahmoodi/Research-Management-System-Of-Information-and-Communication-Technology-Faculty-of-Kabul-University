@@ -3,11 +3,19 @@
 include('../auth.php');
 include('../db_connection.php');
 
-require_once '../dompdf/autoload.inc.php';
+require_once '../vendor/autoload.php';
 
-use Dompdf\Dompdf;
+use Mpdf\Mpdf;
+
+// ======================
+// LANGUAGE
+// ======================
 
 $lang = $_SESSION['lang'] ?? 'en';
+$isFa = ($lang == 'fa');
+
+$dir   = $isFa ? 'rtl' : 'ltr';
+$align = $isFa ? 'right' : 'left';
 
 // ======================
 // FILTERS
@@ -50,141 +58,123 @@ if (!empty($_GET['date_to'])) {
 // ======================
 
 $article_result = $conn->query("
-
 SELECT articles.*,
 teacher.Name AS teacher_name,
 students.Name AS student_name,
 department.Name AS department_name
-
 FROM articles
-
-LEFT JOIN teacher
-ON articles.Teacher_ID = teacher.ID
-
-LEFT JOIN students
-ON articles.Student_ID = students.ID
-
-LEFT JOIN department
-ON articles.Department = department.ID
-
+LEFT JOIN teacher ON articles.Teacher_ID = teacher.ID
+LEFT JOIN students ON articles.Student_ID = students.ID
+LEFT JOIN department ON articles.Department = department.ID
 $where
-
 ORDER BY articles.ID DESC
-
 ");
 
-// ======================
-// TOTAL
-// ======================
-
-$total_query = $conn->query("
-
+$total = $conn->query("
 SELECT COUNT(*) AS total
-
 FROM articles
-
-LEFT JOIN teacher
-ON articles.Teacher_ID = teacher.ID
-
-LEFT JOIN students
-ON articles.Student_ID = students.ID
-
-LEFT JOIN department
-ON articles.Department = department.ID
-
+LEFT JOIN teacher ON articles.Teacher_ID = teacher.ID
+LEFT JOIN students ON articles.Student_ID = students.ID
+LEFT JOIN department ON articles.Department = department.ID
 $where
-
-");
-
-$total = $total_query->fetch_assoc()['total'];
+")->fetch_assoc()['total'];
 
 // ======================
-// TEXTS
+// TEXTS (MULTI LANGUAGE)
 // ======================
 
-$titleText = ($lang == 'fa') ? 'گزارش مقالات' : 'Articles Report';
-$dateText  = ($lang == 'fa') ? 'تاریخ تولید' : 'Generated Date';
-$totalText = ($lang == 'fa') ? 'تعداد کل مقالات' : 'Total Filtered Articles';
+$titleText = $isFa ? 'گزارش مقالات' : 'Articles Report';
+$dateText  = $isFa ? 'تاریخ تولید' : 'Generated Date';
+$totalText = $isFa ? 'تعداد کل مقالات' : 'Total Articles';
+
+// Table headers
+$th_id         = $isFa ? 'آی‌دی' : 'ID';
+$th_title      = $isFa ? 'عنوان' : 'Title';
+$th_category   = $isFa ? 'کتگوری' : 'Category';
+$th_teacher    = $isFa ? 'استاد' : 'Teacher';
+$th_student    = $isFa ? 'محصل' : 'Student';
+$th_department = $isFa ? 'دیپارتمنت' : 'Department';
+$th_date       = $isFa ? 'تاریخ' : 'Date';
 
 // ======================
 // HTML
 // ======================
 
 $html = '
-
 <style>
 
 body{
-    font-family: DejaVu Sans, sans-serif;
+    font-family: dejavu sans;
+    direction: ' . $dir . ';
+    text-align: ' . $align . ';
 }
 
-.report-title{
+.title{
     text-align:center;
-    font-size:24px;
+    font-size:22px;
     font-weight:bold;
-    margin-bottom:20px;
+    margin-bottom:10px;
 }
 
-.report-info{
-    margin-bottom:15px;
-    font-size:14px;
+.info{
+    text-align:center;
+    font-size:13px;
+    margin-bottom:10px;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    font-size:12px;
 }
 
 th{
     background:#198754;
-    color:white;
+    color:#fff;
     padding:8px;
     text-align:center;
 }
 
 td{
     padding:6px;
+    border:1px solid #ddd;
     text-align:center;
 }
 
 .footer{
-    margin-top:20px;
-    font-size:16px;
+    margin-top:15px;
+    text-align:center;
     font-weight:bold;
 }
 
 </style>
 
-<div class="report-title">
-    ' . $titleText . '
+<div class="title">' . $titleText . '</div>
+
+<div class="info">
+' . $dateText . ' : ' . date("Y-m-d") . '
 </div>
 
-<div class="report-info">
-    ' . $dateText . ': ' . date("Y-m-d") . '
-</div>
-
-<table border="1">
+<table>
 
 <tr>
-
-<th>' . ($lang == 'fa' ? 'آی‌دی' : 'ID') . '</th>
-<th>' . ($lang == 'fa' ? 'عنوان' : 'Title') . '</th>
-<th>' . ($lang == 'fa' ? 'کتگوری' : 'Category') . '</th>
-<th>' . ($lang == 'fa' ? 'استاد' : 'Teacher') . '</th>
-<th>' . ($lang == 'fa' ? 'محصل' : 'Student') . '</th>
-<th>' . ($lang == 'fa' ? 'دیپارتمنت' : 'Department') . '</th>
-<th>' . ($lang == 'fa' ? 'تاریخ' : 'Date') . '</th>
-
+    <th>' . $th_id . '</th>
+    <th>' . $th_title . '</th>
+    <th>' . $th_category . '</th>
+    <th>' . $th_teacher . '</th>
+    <th>' . $th_student . '</th>
+    <th>' . $th_department . '</th>
+    <th>' . $th_date . '</th>
 </tr>
-
 ';
 
+// ======================
+// ROWS
+// ======================
+
 while ($row = $article_result->fetch_assoc()) {
-
     $html .= '
-
     <tr>
-
         <td>' . $row['ID'] . '</td>
         <td>' . $row['Title'] . '</td>
         <td>' . $row['Category'] . '</td>
@@ -192,37 +182,41 @@ while ($row = $article_result->fetch_assoc()) {
         <td>' . $row['student_name'] . '</td>
         <td>' . $row['department_name'] . '</td>
         <td>' . $row['Date'] . '</td>
-
-    </tr>
-
-    ';
+    </tr>';
 }
 
 $html .= '
-
 </table>
 
 <div class="footer">
-    ' . $totalText . ' : ' . $total . '
+' . $totalText . ' : ' . $total . '
 </div>
-
 ';
 
 // ======================
-// PDF OUTPUT
+// MPDF SETTINGS
 // ======================
 
-$dompdf = new Dompdf();
+$mpdf = new Mpdf([
+    'mode' => 'utf-8',
+    'format' => 'A4-L'
+]);
 
-$dompdf->loadHtml($html);
+$mpdf->SetDirectionality($dir);
 
-$dompdf->setPaper('A4', 'landscape');
+// فارسی بهتر
+$mpdf->autoScriptToLang = true;
+$mpdf->autoLangToFont   = true;
 
-$dompdf->render();
+// ======================
+// OUTPUT
+// ======================
 
-$dompdf->stream(
-    ($lang == 'fa') ? "گزارش_مقالات.pdf" : "Articles_Report.pdf",
-    array("Attachment" => true)
+$mpdf->WriteHTML($html);
+
+$mpdf->Output(
+    $isFa ? "گزارش_مقالات.pdf" : "Articles_Report.pdf",
+    "D"
 );
 
 exit();

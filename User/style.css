@@ -14,16 +14,26 @@
 
 body {
   background: #eef2f7;
-  font-family:
-    Segoe UI,
-    sans-serif;
+  font-family: "Bahij Zar", "Segoe UI", sans-serif;
   overflow: hidden;
+  font-size: 17px;
 }
-
 /* =========================
    HEADER
 ========================= */
+.header-title {
+  font-size: 18px;
+  font-weight: 600;
+}
 
+.header-menu a {
+  font-size: 16px;
+}
+
+.header-btn,
+.logout-btn {
+  font-size: 15px;
+}
 .main-header {
   background: #0f9d58;
   height: 65px;
@@ -102,7 +112,13 @@ body {
 /* =========================
    SIDEBAR
 ========================= */
+.sidebar-menu a {
+  font-size: 15px;
+}
 
+.sidebar-menu a i {
+  font-size: 17px;
+}
 .sidebar {
   width: 210px;
   background: white;
@@ -161,11 +177,18 @@ body {
   color: #1f2937;
   margin-bottom: 12px;
 }
+.page-title {
+  font-size: 28px;
+}
 
 /* =========================
    TABLE SECTION
 ========================= */
-
+.table th,
+.table td {
+  font-size: 15px;
+  padding: 12px;
+}
 .table-section {
   width: 78%;
   display: flex;
@@ -202,7 +225,13 @@ body {
 /* =========================
    SEARCH
 ========================= */
+.search-input {
+  font-size: 15px;
+}
 
+.search-btn {
+  font-size: 15px;
+}
 .search-wrapper {
   display: flex;
   justify-content: center;
@@ -246,7 +275,12 @@ body {
 /* =========================
    BUTTONS
 ========================= */
-
+.edit-btn,
+.delete-btn,
+.pdf-btn {
+  font-size: 14px;
+  padding: 8px 14px;
+}
 .action-icons {
   display: flex;
   gap: 8px;
@@ -290,7 +324,23 @@ body {
 /* =========================
    FORM SECTION
 ========================= */
+.form-title {
+  font-size: 18px;
+}
 
+.form-label {
+  font-size: 15px;
+}
+
+.form-control,
+.custom-select {
+  font-size: 15px;
+  height: 45px;
+}
+
+textarea {
+  font-size: 15px;
+}
 .form-section {
   width: 22%;
   min-width: 270px;
@@ -355,7 +405,10 @@ textarea {
 /* =========================
    SAVE BUTTON
 ========================= */
-
+.save-btn {
+  font-size: 16px;
+  padding: 12px;
+}
 .save-btn {
   width: 100%;
   background: #0f9d58;
@@ -376,7 +429,13 @@ textarea {
 /* =========================
    GRAPH
 ========================= */
+.graph-title {
+  font-size: 18px;
+}
 
+.graph-count {
+  font-size: 14px;
+}
 .graph-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

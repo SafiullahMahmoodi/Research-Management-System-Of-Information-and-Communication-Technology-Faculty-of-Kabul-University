@@ -15,7 +15,7 @@ $lang = $_SESSION['lang'] ?? 'en';
 
     body {
         background: #eef2f7;
-        font-family: Segoe UI;
+        font-family: BahijZar;
         overflow: hidden;
     }
 
@@ -186,4 +186,14 @@ $lang = $_SESSION['lang'] ?? 'en';
         </a>
     </div>
 
+    <div class="header-buttons">
+
+        <a href="dashboard.php" class="header-btn">
+            <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
+        </a>
+
+        <a href="../logout.php" class="header-btn">
+            <?= ($lang == 'fa') ? 'خروج' : 'Logout'; ?>
+        </a>
+    </div>
 </header>
