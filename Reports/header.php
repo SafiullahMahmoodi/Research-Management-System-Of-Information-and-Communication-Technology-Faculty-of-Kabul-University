@@ -12,7 +12,25 @@ $lang = $_SESSION['lang'] ?? 'en';
     body {
         background: #eef2f7;
         font-family: Segoe UI;
-        overflow: hidden;
+
+        overflow: auto;
+    }
+
+    header {
+        position: fixed;
+        /* یا sticky */
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 70px;
+        /* ارتفاع هدر */
+        z-index: 1000;
+        background: #fff;
+    }
+
+    .report-container {
+        padding-top: 80px;
     }
 
     .main-header {

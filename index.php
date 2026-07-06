@@ -32,18 +32,6 @@ $dir = ($lang == 'fa') ? 'rtl' : 'ltr';
             background-position: center;
             background-attachment: fixed;
         }
-
-        .main-header {
-            font-family: Bahij Zar;
-
-            background: #0f9d58;
-            color: white;
-            padding: 18px 10px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-        }
     </style>
 
 </head>

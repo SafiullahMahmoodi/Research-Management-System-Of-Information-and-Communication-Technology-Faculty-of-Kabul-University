@@ -197,13 +197,120 @@ if (isset($_GET['search'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesis'; ?>
+        <?= ($lang == 'fa') ? 'مونوگراف ها‌ها' : 'Thesis'; ?>
     </title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/bootstrap.bundle.min.js"></script>
     <style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            align-items: center;
+
+            background: #fff;
+
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+
+            overflow: hidden;
+
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 12px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
         html[dir="rtl"] .form-label {
             display: block;
             width: 100%;
@@ -236,19 +343,19 @@ if (isset($_GET['search'])) {
 
         <!-- ================= SEARCH ================= -->
         <div class="table-section">
-
             <div class="search-wrapper">
 
                 <form method="GET" class="search-form">
 
-                    <input type="text"
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa') ? 'جستجوی پایان‌نامه...' : 'Search thesis...'; ?>"
-                        value="<?= htmlspecialchars($search ?? '') ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی مونوگراف ها...' : 'Search Theses...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
 
                     <button type="submit" class="search-btn">
-                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
+                        🔍
                     </button>
 
                 </form>
@@ -320,11 +427,12 @@ if (isset($_GET['search'])) {
 
             <div class="form-card">
 
-                <div class="form-title">
-                    <?= isset($_GET['edit'])
-                        ? (($lang == 'fa') ? 'ویرایش پایان‌نامه' : 'Edit Thesis')
-                        : (($lang == 'fa') ? 'افزودن پایان‌نامه' : 'Add Thesis');
-                    ?>
+                <div class="form-title" style="text-align: center; font-size: 1rem;">
+
+                    <?= ($lang == 'fa')
+                        ? 'اضافه نمودن مونوگراف'
+                        : 'Add Thesises'; ?>
+
                 </div>
 
                 <form method="POST" enctype="multipart/form-data">
@@ -332,7 +440,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-2">
                         <label class="form-label"><?= ($lang == 'fa') ? 'آی‌دی' : 'ID'; ?></label>
                         <input type="text" name="id" class="form-control"
-                            placeholder="<?= ($lang == 'fa') ? 'آی‌دی را وارد کنید' : 'Enter Thesis ID'; ?>" required>
+                            required>
                     </div>
 
                     <div class="mb-2">
@@ -421,7 +529,7 @@ if (isset($_GET['search'])) {
                     </div>
 
                     <button type="submit" class="save-btn" name="save_thesis">
-                        <?= ($lang == 'fa') ? 'ذخیره پایان‌نامه' : 'Save Thesis'; ?>
+                        <?= ($lang == 'fa') ? 'ذخیره مونوگراف ها' : 'Save Thesis'; ?>
                     </button>
 
                 </form>

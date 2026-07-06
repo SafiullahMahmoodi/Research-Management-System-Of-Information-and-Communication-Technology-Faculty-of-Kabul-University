@@ -3,10 +3,11 @@
 
 include('../auth.php');
 
+$lang = $_SESSION['lang'] ?? 'en';
 
 
 include('../db_connection.php');
-$lang = $_SESSION['lang'] ?? 'en';
+
 // ===============================
 // Articles Graph
 // ===============================
@@ -109,11 +110,9 @@ while ($row = $thesis_result->fetch_assoc()) {
         content="width=device-width, initial-scale=1.0">
 
     <title>
-        <?= ($lang == 'fa')
-            ? 'داشبورد'
-            : 'Dashboard'; ?>
+        <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
     </title>
-
+    <link rel="stylesheet" href="style.css">
     <!-- Bootstrap -->
 
     <link rel="stylesheet"
@@ -125,46 +124,12 @@ while ($row = $thesis_result->fetch_assoc()) {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <Style>
-        @font-face {
-            font-family: 'Bahij Zar';
-            src: url('../fonts/bahij-zar.ttf') format('truetype');
-        }
-
+    <style>
         body {
-            background: #eef2f7;
-            font-family: "Bahij Zar", "Segoe UI", sans-serif;
-            overflow: hidden;
-            font-size: 17px;
-        }
+            font-family: "Segoe UI", sans-serif;
 
-        html[dir="rtl"] {
-            direction: rtl;
         }
-
-        html[dir="rtl"] .main-container {
-            direction: rtl;
-        }
-
-        html[dir="rtl"] .sidebar {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .sidebar-menu li a {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .header-title,
-        html[dir="rtl"] .page-title,
-        html[dir="rtl"] .graph-title,
-        html[dir="rtl"] .graph-count {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .main-header {
-            direction: rtl;
-        }
-    </Style>
+    </style>
 </head>
 
 <body>
@@ -173,18 +138,17 @@ while ($row = $thesis_result->fetch_assoc()) {
 
     <header class="main-header">
 
-        <div class="header-title">
+        <div class="header-title" style="font-size: 18px;">
 
             <?= ($lang == 'fa')
-                ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابرات'
+                ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابراتی'
                 : 'Research Management System of Information and Communication Technology Faculty'; ?>
 
         </div>
+
         <a href="../logout.php" class="logout-btn">
 
-            <?= ($lang == 'fa')
-                ? 'خروج'
-                : 'Logout'; ?>
+            <?= ($lang == 'fa') ? 'خروج' : 'Logout'; ?>
 
         </a>
 
@@ -218,14 +182,14 @@ while ($row = $thesis_result->fetch_assoc()) {
                 <li>
                     <a href="teachers.php">
                         <i class="bi bi-person-workspace"></i>
-                        <?= ($lang == 'fa') ? 'معلمان' : 'Teachers'; ?>
+                        <?= ($lang == 'fa') ? 'استادان' : 'Teachers'; ?>
                     </a>
                 </li>
 
                 <li>
                     <a href="students.php">
                         <i class="bi bi-mortarboard-fill"></i>
-                        <?= ($lang == 'fa') ? 'دانشجویان' : 'Students'; ?>
+                        <?= ($lang == 'fa') ? 'محصلان' : 'Students'; ?>
                     </a>
                 </li>
 
@@ -239,7 +203,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 <li>
                     <a href="thesises.php">
                         <i class="bi bi-journal-richtext"></i>
-                        <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesises'; ?>
+                        <?= ($lang == 'fa') ? 'مونوگراف‌ها' : 'Thesises'; ?>
                     </a>
                 </li>
 
@@ -257,6 +221,13 @@ while ($row = $thesis_result->fetch_assoc()) {
                     </a>
                 </li>
 
+                <li>
+                    <a href="../Reports/systemreports.php">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        <?= ($lang == 'fa') ? 'گزارش‌ها' : 'Reports'; ?>
+                    </a>
+                </li>
+
             </ul>
 
         </aside>
@@ -264,15 +235,11 @@ while ($row = $thesis_result->fetch_assoc()) {
         <!-- Content -->
 
         <main class="content">
+            <h2 class="page-title" style="text-align: center;">
 
-            <h2 class="page-title">
-
-                <?= ($lang == 'fa')
-                    ? 'داشبورد'
-                    : 'Dashboard'; ?>
+                <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
 
             </h2>
-
             <div class="graph-grid">
 
                 <!-- Articles -->
@@ -282,14 +249,12 @@ while ($row = $thesis_result->fetch_assoc()) {
                     <div class="graph-top">
 
                         <div class="graph-title">
-
-                            <?= ($lang == 'fa') ? 'مقالات بر اساس دسته‌بندی' : 'Articles By Category'; ?>
-
+                            <?= $lang === 'fa' ? 'مقالات بر اساس کتگوری' : 'Articles By Category'; ?>
                         </div>
 
                         <div class="graph-count">
-                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>:
-                            <?php echo $total_articles; ?>
+
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_articles; ?>
 
                         </div>
 
@@ -307,13 +272,13 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            <?= ($lang == 'fa') ? 'کتاب‌ها بر اساس دسته‌بندی' : 'Books By Category'; ?>
+                            <?= $lang === 'fa' ? 'کتاب‌ها بر اساس کتگوری' : 'Books By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
 
-                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>: <?php echo $total_books; ?>
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_books; ?>
 
                         </div>
 
@@ -331,14 +296,12 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            <?= ($lang == 'fa') ? 'کتاب های ترجمه شده بر اساس دسته بندی' : 'Translated Books by Category'; ?>
+                            <?= $lang === 'fa' ? 'کتاب‌های ترجمه‌شده به اساس کتگوری' : 'Translated Books'; ?>
 
                         </div>
 
                         <div class="graph-count">
-
-                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>: <?php echo $total_translate; ?>
-
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_translate; ?>
                         </div>
 
                     </div>
@@ -355,14 +318,12 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            <?= ($lang == 'fa') ? 'پایان‌نامه‌ها بر اساس دسته‌بندی' : 'Thesis By Category'; ?>
+                            <?= $lang === 'fa' ? 'مونوگراف ها بر اساس کتگوری' : 'Thesis By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
-
-                            <?= ($lang == 'fa') ? 'مجموع' : 'Total'; ?>: <?php echo $total_thesis; ?>
-
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_thesis; ?>
                         </div>
 
                     </div>
@@ -382,7 +343,6 @@ while ($row = $thesis_result->fetch_assoc()) {
         // Articles Chart
         // Line Chart
         // ==========================
-
         new Chart(document.getElementById('articlesChart'), {
 
             type: 'line',
@@ -392,6 +352,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 labels: <?php echo json_encode($article_labels); ?>,
 
                 datasets: [{
+
                     label: '<?= ($lang == "fa") ? "مقالات" : "Articles"; ?>',
 
                     data: <?php echo json_encode($article_data); ?>,
@@ -411,18 +372,56 @@ while ($row = $thesis_result->fetch_assoc()) {
                     pointRadius: 4
                 }]
             },
-
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+                    title: {
+                        display: true,
+
+                        color: '#333333',
+                        font: {
+                            size: 18,
+
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                },
+
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور X
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور Y
+                            }
+                        }
+                    }
+                }
             }
+
         });
 
         // ==========================
         // Books Chart
         // Doughnut Chart
         // ==========================
-
         new Chart(document.getElementById('booksChart'), {
 
             type: 'doughnut',
@@ -432,6 +431,8 @@ while ($row = $thesis_result->fetch_assoc()) {
                 labels: <?php echo json_encode($book_labels); ?>,
 
                 datasets: [{
+
+                    label: '<?= ($lang == "fa") ? "کتاب‌ها" : "Books"; ?>',
 
                     data: <?php echo json_encode($book_data); ?>,
 
@@ -444,10 +445,30 @@ while ($row = $thesis_result->fetch_assoc()) {
                     ]
                 }]
             },
-
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+                    title: {
+                        display: true,
+
+                        color: '#333333',
+                        font: {
+                            size: 18, // فقط فونت عنوان بزرگ‌تر
+
+                        }
+                    },
+
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 14 // فقط فونت Legend بزرگ‌تر
+                            }
+                        }
+                    }
+                }
             }
         });
 
@@ -455,7 +476,6 @@ while ($row = $thesis_result->fetch_assoc()) {
         // Translate Books Chart
         // Pie Chart
         // ==========================
-
         new Chart(document.getElementById('translateChart'), {
 
             type: 'pie',
@@ -466,6 +486,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                 datasets: [{
 
+                    label: '<?= ($lang == "fa") ? "کتاب‌های ترجمه‌شده" : "Translated Books"; ?>',
 
                     data: <?php echo json_encode($translate_data); ?>,
 
@@ -478,18 +499,36 @@ while ($row = $thesis_result->fetch_assoc()) {
                     ]
                 }]
             },
-
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+                    title: {
+                        display: true,
+
+                        color: '#333333',
+                        font: {
+                            size: 18, // فقط فونت عنوان بزرگ‌تر
+
+                        }
+                    },
+
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 18 // فقط فونت Legend بزرگ‌تر
+                            }
+                        }
+                    }
+                }
             }
         });
-
         // ==========================
         // Thesis Chart
         // Bar Chart
         // ==========================
-
         new Chart(document.getElementById('thesisChart'), {
 
             type: 'bar',
@@ -500,7 +539,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                 datasets: [{
 
-                    label: '<?= ($lang == "fa") ? "پایان‌نامه‌ها" : "Thesis"; ?>',
+                    label: '<?= ($lang == "fa") ? "مونوگراف‌ها" : "Thesis"; ?>',
 
                     data: <?php echo json_encode($thesis_data); ?>,
 
@@ -518,7 +557,45 @@ while ($row = $thesis_result->fetch_assoc()) {
 
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+
+                        color: '#333333',
+                        font: {
+                            size: 18, // فقط فونت عنوان بزرگ‌تر
+
+                        }
+                    },
+
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 18 // فقط فونت Legend بزرگ‌تر
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور X
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور Y
+                            }
+                        }
+                    }
+                }
             }
         });
     </script>

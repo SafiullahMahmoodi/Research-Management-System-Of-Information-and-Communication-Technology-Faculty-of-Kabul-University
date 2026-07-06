@@ -370,7 +370,114 @@ ORDER BY translated_books.ID DESC
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
-    <style>
+    <Style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 13px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+            overflow: hidden;
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 13px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 26px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
+        html[dir="rtl"] {
+            direction: rtl;
+        }
+
         .form-buttons {
             display: flex;
             gap: 8px;
@@ -401,32 +508,31 @@ ORDER BY translated_books.ID DESC
             color: white;
         }
 
-        html[dir="rtl"] .main-wrapper,
-        html[dir="rtl"] .table-section,
-        html[dir="rtl"] .form-section,
+
         html[dir="rtl"] .table-card,
-        html[dir="rtl"] .form-card {
-            direction: rtl;
+        html[dir="rtl"] .form-card,
+        html[dir="rtl"] .search-form,
+        html[dir="rtl"] .table,
+        html[dir="rtl"] .form-control,
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
             text-align: right;
+        }
+
+        html[dir="rtl"] .action-icons {
+            justify-content: flex-start;
+        }
+
+        html[dir="rtl"] .search-wrapper {
+            direction: rtl;
         }
 
         html[dir="rtl"] .table th,
         html[dir="rtl"] .table td {
             text-align: right;
         }
-
-        html[dir="rtl"] .form-control,
-        html[dir="rtl"] .custom-select,
-        html[dir="rtl"] textarea,
-        html[dir="rtl"] .search-input {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .form-label,
-        html[dir="rtl"] .form-title {
-            text-align: right;
-        }
-    </style>
+    </Style>
 </head>
 <script>
     function checkPDF(input) {
@@ -458,22 +564,17 @@ ORDER BY translated_books.ID DESC
 
             <div class="search-wrapper">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
-                    <input type="text"
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa')
-                                            ? 'جستجوی کتاب‌های ترجمه‌شده...'
-                                            : 'Search translated books...'; ?>"
-                        value="<?php echo $search; ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی کتاب های ترجمه شده...' : 'Search...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
 
-                    <button type="submit"
-                        class="search-btn">
-
-                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
-
+                    <button type="submit" class="search-btn">
+                        🔍
                     </button>
 
                 </form>
@@ -552,11 +653,11 @@ ORDER BY translated_books.ID DESC
                                             class="delete-btn"
                                             onclick="return confirm('<?= ($lang == 'fa')
                                                                             ? 'آیا از حذف این کتاب مطمئن هستید؟'
-                                                                            : 'Delete this book?'; ?>')"
+                                                                            : 'Delete this book?'; ?>')">
 
                                             <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
 
-                                            </a>
+                                        </a>
 
                                     </div>
 

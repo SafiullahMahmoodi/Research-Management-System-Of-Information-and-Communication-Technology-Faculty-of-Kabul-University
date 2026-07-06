@@ -378,8 +378,110 @@ OR thesis.Publish_Date LIKE '%$search%'
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-
     <Style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 13px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+            overflow: hidden;
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 13px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 26px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
         html[dir="rtl"] {
             direction: rtl;
         }
@@ -439,7 +541,6 @@ OR thesis.Publish_Date LIKE '%$search%'
             text-align: right;
         }
     </Style>
-
 </head>
 <script>
     function checkPDF(input) {
@@ -471,24 +572,22 @@ OR thesis.Publish_Date LIKE '%$search%'
 
             <div class="search-wrapper">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
-                    <input type="text"
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa')
-                                            ? 'جستجوی مونوگراف ها...'
-                                            : 'Search thesis...'; ?>"
-                        value="<?php echo $search; ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی مونوگراف ها...' : 'Search...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
+
                     <button type="submit" class="search-btn">
-                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
+                        🔍
                     </button>
 
                 </form>
 
             </div>
-
             <div class="table-card">
 
                 <table class="table table-hover">

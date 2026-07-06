@@ -235,7 +235,7 @@ if (isset($_POST['update_password'])) {
 
                     <?php
                     echo ($lang == 'fa')
-                        ? 'به‌روزرسانی رمز عبور'
+                        ? 'تغییر  رمز عبور'
                         : 'Update Password';
                     ?>
 

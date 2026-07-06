@@ -101,6 +101,113 @@ $student_result = $conn->query($student_query);
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <Style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            align-items: center;
+
+            background: #fff;
+
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+
+            overflow: hidden;
+
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 12px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
         html[dir="rtl"] .form-label {
             display: block;
             width: 100%;
@@ -136,25 +243,19 @@ $student_result = $conn->query($student_query);
         <div class="table-section">
 
             <!-- SEARCH -->
-            <div class="search-wrapper"
-                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
+            <div class="search-wrapper">
 
                 <form method="GET" class="search-form">
 
-                    <input type="text"
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa')
-                                            ? 'جستجوی محصلان...'
-                                            : 'Search students...'; ?>"
-                        value="<?= $search; ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی محصلان...' : 'Search Students...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
 
                     <button type="submit" class="search-btn">
-
-                        <?= ($lang == 'fa')
-                            ? 'جستجو'
-                            : 'Search'; ?>
-
+                        🔍
                     </button>
 
                 </form>
@@ -170,7 +271,7 @@ $student_result = $conn->query($student_query);
                     <thead>
 
                         <tr>
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
 
@@ -225,10 +326,10 @@ $student_result = $conn->query($student_query);
 
             <div class="form-card">
 
-                <div class="form-title">
+                <div class="form-title" style="text-align: center; font-size: 1rem;">
 
                     <?= ($lang == 'fa')
-                        ? 'افزودن محصل'
+                        ? 'اضافه نمودن محصل'
                         : 'Add Student'; ?>
 
                 </div>
@@ -247,9 +348,7 @@ $student_result = $conn->query($student_query);
                         <input type="text"
                             name="id"
                             class="form-control"
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'شناسه محصل را وارد کنید'
-                                                : 'Enter student ID'; ?>"
+
                             required>
 
                     </div>
@@ -271,10 +370,6 @@ $student_result = $conn->query($student_query);
                             name="name"
 
                             class="form-control"
-
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'نام محصل را وارد کنید'
-                                                : 'Enter student name'; ?>"
 
                             required>
 
@@ -298,10 +393,6 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'تخلص محصل را وارد کنید'
-                                                : 'Enter last name'; ?>"
-
                             required>
 
                     </div>
@@ -324,10 +415,6 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'ایمیل محصل را وارد کنید'
-                                                : 'Enter email'; ?>"
-
                             required>
 
                     </div>
@@ -339,7 +426,7 @@ $student_result = $conn->query($student_query);
                         <label class="form-label">
 
                             <?= ($lang == 'fa')
-                                ? 'نمبر تماس'
+                                ? 'شماره تماس'
                                 : 'Contact'; ?>
 
                         </label>
@@ -350,9 +437,7 @@ $student_result = $conn->query($student_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'شماره تماس محصل را وارد کنید'
-                                                : 'Enter contact'; ?>"
+
 
                             required>
 

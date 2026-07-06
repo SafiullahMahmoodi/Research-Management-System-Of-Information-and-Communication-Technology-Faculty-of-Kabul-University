@@ -247,6 +247,117 @@ if (isset($_GET['search'])) {
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <Style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            align-items: center;
+
+            background: #fff;
+
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+
+            overflow: hidden;
+
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 12px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
         html[dir="rtl"] .form-label {
             display: block;
             width: 100%;
@@ -289,19 +400,17 @@ if (isset($_GET['search'])) {
 
             <div class="search-wrapper">
 
-                <form method="GET"
-                    class="search-form">
+                <form method="GET" class="search-form">
 
-                    <input type="text"
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa')
-                                            ? 'جستجوی مقالات...'
-                                            : 'Search articles...'; ?>"
-                        value="<?= $search; ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی مقالات...' : 'Search...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
 
                     <button type="submit" class="search-btn">
-                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
+                        🔍
                     </button>
 
                 </form>
@@ -318,7 +427,7 @@ if (isset($_GET['search'])) {
                             <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
-                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
                             <th><?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?></th>
                             <th><?= ($lang == 'fa') ? 'محصل' : 'Student'; ?></th>
                             <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
@@ -387,10 +496,10 @@ if (isset($_GET['search'])) {
         <div class="form-section">
 
             <div class="form-card">
-                <div class="form-title">
+                <div class="form-title" style="text-align: center; font-size: 1rem;">
 
                     <?= ($lang == 'fa')
-                        ? 'افزودن مقاله'
+                        ? 'اضافه نمودن مقاله'
                         : 'Add Article'; ?>
 
                 </div>
@@ -407,10 +516,8 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="id"
                             class="form-control"
-                            required
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'آی دی مقاله را وارد کنید'
-                                                : 'Enter article ID'; ?>">
+                            required>
+
                     </div>
 
                     <div class="mb-2">
@@ -422,10 +529,8 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="title"
                             class="form-control"
-                            required
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'عنوان مقاله را وارد کنید'
-                                                : 'Enter Title of Article'; ?>">
+                            required>
+
 
                     </div>
 
@@ -437,40 +542,35 @@ if (isset($_GET['search'])) {
 
                         <textarea name="description"
                             class="form-control"
-                            required
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'توضیحات مقاله را وارد کنید'
-                                                : 'Enter Description'; ?>"></textarea>
+                            required></textarea>
 
                     </div>
 
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                            <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
                         </label>
 
                         <input type="text"
                             name="category"
                             class="form-control"
-                            required
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'دسته‌بندی مقاله را وارد کنید'
-                                                : 'Enter Category'; ?>">
+                            required>
+
 
                     </div>
 
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'معلم' : 'Teacher'; ?>
+                            <?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?>
                         </label>
 
                         <select name="teacher_id"
                             class="custom-select">
 
                             <option value="">
-                                <?= ($lang == 'fa') ? 'انتخاب معلم' : 'Select Teacher'; ?>
+                                <?= ($lang == 'fa') ? 'انتخاب استاد' : 'Select Teacher'; ?>
                             </option>
 
                             <?php

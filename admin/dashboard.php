@@ -237,7 +237,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
         <main class="content">
 
-            <h2 class="page-title">
+            <h2 class="page-title" style="text-align: center;">
 
                 <?= ($lang == 'fa') ? 'داشبورد' : 'Dashboard'; ?>
 
@@ -381,7 +381,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 plugins: {
                     title: {
                         display: true,
-                        text: '<?= ($lang == "fa") ? "مقالات براساس کتگوری" : "Articles By Category"; ?>',
+
                         color: '#333333',
                         font: {
                             size: 18,
@@ -454,7 +454,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 plugins: {
                     title: {
                         display: true,
-                        text: '<?= ($lang == "fa") ? "کتاب‌ها براساس کتگوری" : "Books By Category"; ?>',
+
                         color: '#333333',
                         font: {
                             size: 18, // فقط فونت عنوان بزرگ‌تر
@@ -508,7 +508,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 plugins: {
                     title: {
                         display: true,
-                        text: '<?= ($lang == "fa") ? "کتاب‌های ترجمه‌شده براساس کتگوری" : "Translated Books By Category"; ?>',
+
                         color: '#333333',
                         font: {
                             size: 18, // فقط فونت عنوان بزرگ‌تر
@@ -563,7 +563,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 plugins: {
                     title: {
                         display: true,
-                        text: '<?= ($lang == "fa") ? "مونوگراف‌ها براساس کتگوری" : "Thesis By Category"; ?>',
+
                         color: '#333333',
                         font: {
                             size: 18, // فقط فونت عنوان بزرگ‌تر

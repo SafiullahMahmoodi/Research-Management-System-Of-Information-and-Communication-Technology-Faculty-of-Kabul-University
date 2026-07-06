@@ -189,7 +189,7 @@ if (isset($_POST['signup'])) {
 
                 <?php
                 echo ($lang == 'fa')
-                    ? 'ایجاد حساب کاربری'
+                    ? 'ایجاد حساب استفاده کننده'
                     : 'Create Account';
                 ?>
 
@@ -218,7 +218,7 @@ if (isset($_POST['signup'])) {
 
                         <?php
                         echo ($lang == 'fa')
-                            ? 'نام کاربری'
+                            ? 'نام استفاده کننده'
                             : 'Username';
                         ?>
 
@@ -228,7 +228,7 @@ if (isset($_POST['signup'])) {
                         type="text"
                         name="username"
                         class="form-control custom-input"
-                        placeholder="<?php echo ($lang == 'fa') ? 'نام کاربری را وارد کنید' : 'Enter username'; ?>"
+                        placeholder="<?php echo ($lang == 'fa') ? 'نام استفاده کننده را وارد کنید' : 'Enter username'; ?>"
                         required>
 
                 </div>
@@ -263,7 +263,7 @@ if (isset($_POST['signup'])) {
 
                         <?php
                         echo ($lang == 'fa')
-                            ? 'نوع کاربر'
+                            ? 'نوع استفاده کننده'
                             : 'User Type';
                         ?>
 
@@ -278,7 +278,7 @@ if (isset($_POST['signup'])) {
 
                             <?php
                             echo ($lang == 'fa')
-                                ? 'نوع کاربر را انتخاب کنید'
+                                ? 'نوع استفاده کننده را انتخاب کنید'
                                 : 'Select User Type';
                             ?>
 
@@ -298,7 +298,7 @@ if (isset($_POST['signup'])) {
 
                             <?php
                             echo ($lang == 'fa')
-                                ? 'کاربر'
+                                ? 'استفاده کننده عادی'
                                 : 'User';
                             ?>
 

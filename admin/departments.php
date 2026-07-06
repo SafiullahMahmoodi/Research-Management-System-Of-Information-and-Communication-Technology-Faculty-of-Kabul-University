@@ -164,7 +164,114 @@ $department_result = $conn->query($department_query);
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
-    <style>
+    <Style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 13px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+            overflow: hidden;
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 13px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 26px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
+        html[dir="rtl"] {
+            direction: rtl;
+        }
+
         .form-buttons {
             display: flex;
             gap: 8px;
@@ -195,29 +302,15 @@ $department_result = $conn->query($department_query);
             color: white;
         }
 
-        /* Persian Language */
 
+        html[dir="rtl"] .table-card,
+        html[dir="rtl"] .form-card,
+        html[dir="rtl"] .search-form,
         html[dir="rtl"] .table,
-        html[dir="rtl"] .table th,
-        html[dir="rtl"] .table td {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .form-label {
-            display: block;
-            text-align: right;
-        }
-
         html[dir="rtl"] .form-control,
-        html[dir="rtl"] .search-input {
-            text-align: right;
-        }
-
-        html[dir="rtl"] .search-form {
-            direction: rtl;
-        }
-
-        html[dir="rtl"] .form-card {
+        html[dir="rtl"] .custom-select,
+        html[dir="rtl"] .form-label,
+        html[dir="rtl"] .form-title {
             text-align: right;
         }
 
@@ -225,18 +318,15 @@ $department_result = $conn->query($department_query);
             justify-content: flex-start;
         }
 
-        /* English Language */
-
-        html[dir="ltr"] .table,
-        html[dir="ltr"] .table th,
-        html[dir="ltr"] .table td {
-            text-align: left;
+        html[dir="rtl"] .search-wrapper {
+            direction: rtl;
         }
 
-        html[dir="ltr"] .form-card {
-            text-align: left;
+        html[dir="rtl"] .table th,
+        html[dir="rtl"] .table td {
+            text-align: right;
         }
-    </style>
+    </Style>
 </head>
 
 <body>
@@ -247,19 +337,19 @@ $department_result = $conn->query($department_query);
 
         <div class="table-section">
 
-            <div class="search-wrapper"
-                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
+            <div class="search-wrapper">
 
-                <form method="GET"
-                    class="search-form">
-                    <input type="text"
+                <form method="GET" class="search-form">
+
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa') ? 'جستجوی دیپارتمنت‌ها...' : 'Search departments...'; ?>"
-                        value="<?php echo $search; ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی دیپارتمنت ها...' : 'Search...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
 
                     <button type="submit" class="search-btn">
-                        <?= ($lang == 'fa') ? 'جستجو' : 'Search'; ?>
+                        🔍
                     </button>
 
                 </form>

@@ -15,7 +15,7 @@ $lang = $_SESSION['lang'] ?? 'en';
 
     body {
         background: #eef2f7;
-        font-family: BahijZar;
+        font-family: Segoe UI;
         overflow: hidden;
     }
 
@@ -175,13 +175,13 @@ $lang = $_SESSION['lang'] ?? 'en';
         <a href="thesises.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesises'; ?>
+            <?= ($lang == 'fa') ? 'مونوگراف ها' : 'Thesises'; ?>
 
         </a>
         <a href="../Reports/systemreports.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'systemreports.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'گزارشات سیستم' : 'System Reports'; ?>
+            <?= ($lang == 'fa') ? 'راپور ها ' : 'System Reports'; ?>
 
         </a>
     </div>

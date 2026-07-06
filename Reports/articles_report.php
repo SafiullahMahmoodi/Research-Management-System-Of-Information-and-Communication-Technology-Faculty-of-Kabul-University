@@ -95,6 +95,11 @@ $total = $conn->query("SELECT COUNT(*) AS total FROM articles")
     <link rel="stylesheet" href="style.css">
 
     <style>
+        body {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
         /* ==========================
    FILTER CARD
 ========================== */
@@ -261,7 +266,7 @@ $total = $conn->query("SELECT COUNT(*) AS total FROM articles")
             </div>
 
             <!-- TABLE -->
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped table-scrollable">
 
                 <thead>
                     <tr>

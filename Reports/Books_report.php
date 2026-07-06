@@ -91,6 +91,11 @@ $where
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
+        body {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
         /* ==========================
    FILTER CARD
 ========================== */
@@ -146,6 +151,26 @@ $where
         html[dir="ltr"] .filter-card {
             direction: ltr;
             text-align: left;
+        }
+
+        .table-scroll {
+            max-height: 500px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .table-scroll table {
+            margin-bottom: 0;
+        }
+
+        .table-scroll thead th {
+            position: sticky;
+            top: 0;
+            background: #198754;
+            color: #fff;
+            z-index: 10;
         }
     </style>
 </head>
@@ -261,34 +286,35 @@ $where
             <!-- FILTER FORM -->
 
             <!-- TABLE -->
-            <table class="table table-bordered table-striped">
+            <div class="table-scroll">
+                <table class="table table-bordered table-striped">
 
-                <thead>
-                    <tr>
-                        <th><?= ($lang == 'fa') ? 'آی‌دی' : 'ID'; ?></th>
-                        <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
-                        <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
-                        <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
-                        <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
-                        <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <?php while ($row = $book_result->fetch_assoc()) { ?>
+                    <thead>
                         <tr>
-                            <td><?= $row['ID']; ?></td>
-                            <td><?= $row['Title']; ?></td>
-                            <td><?= $row['Category']; ?></td>
-                            <td><?= $row['author_name']; ?></td>
-                            <td><?= $row['department_name']; ?></td>
-                            <td><?= $row['Publish_Date']; ?></td>
+                            <th><?= ($lang == 'fa') ? 'آی‌دی' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
                         </tr>
-                    <?php } ?>
-                </tbody>
+                    </thead>
 
-            </table>
+                    <tbody>
+                        <?php while ($row = $book_result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= $row['ID']; ?></td>
+                                <td><?= $row['Title']; ?></td>
+                                <td><?= $row['Category']; ?></td>
+                                <td><?= $row['author_name']; ?></td>
+                                <td><?= $row['department_name']; ?></td>
+                                <td><?= $row['Publish_Date']; ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
 
+                </table>
+            </div>
             <br>
 
             <h5>

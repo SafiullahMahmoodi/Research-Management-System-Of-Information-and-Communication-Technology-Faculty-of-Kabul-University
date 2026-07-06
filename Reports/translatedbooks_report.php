@@ -137,6 +137,10 @@ $total = $totalResult->fetch_assoc()['total'] ?? 0;
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
+        body {
+            overflow: auto;
+        }
+
         .filter-card {
             background: #fff;
             border: 1px solid #e5e7eb;
@@ -286,36 +290,37 @@ $total = $totalResult->fetch_assoc()['total'] ?? 0;
                 </form>
             </div>
             <!-- FILTER CARD END -->
-
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th><?= e($th_id); ?></th>
-                        <th><?= e($th_title); ?></th>
-                        <th><?= e($th_author); ?></th>
-                        <th><?= e($th_translator); ?></th>
-                        <th><?= e($th_category); ?></th>
-                        <th><?= e($th_department); ?></th>
-                        <th><?= e($th_pages); ?></th>
-                        <th><?= e($th_date); ?></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <?php while ($row = $book_result->fetch_assoc()) { ?>
+            <div class="table-scroll">
+                <table class="table table-bordered table-striped">
+                    <thead>
                         <tr>
-                            <td><?= e($row['ID']); ?></td>
-                            <td><?= e($row['Title']); ?></td>
-                            <td><?= e($row['Author']); ?></td>
-                            <td><?= e($row['translator_name']); ?></td>
-                            <td><?= e($row['Category']); ?></td>
-                            <td><?= e($row['department_name']); ?></td>
-                            <td><?= e($row['Pages']); ?></td>
-                            <td><?= e($row['Publish_Date']); ?></td>
+                            <th><?= e($th_id); ?></th>
+                            <th><?= e($th_title); ?></th>
+                            <th><?= e($th_author); ?></th>
+                            <th><?= e($th_translator); ?></th>
+                            <th><?= e($th_category); ?></th>
+                            <th><?= e($th_department); ?></th>
+                            <th><?= e($th_pages); ?></th>
+                            <th><?= e($th_date); ?></th>
                         </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        <?php while ($row = $book_result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?= e($row['ID']); ?></td>
+                                <td><?= e($row['Title']); ?></td>
+                                <td><?= e($row['Author']); ?></td>
+                                <td><?= e($row['translator_name']); ?></td>
+                                <td><?= e($row['Category']); ?></td>
+                                <td><?= e($row['department_name']); ?></td>
+                                <td><?= e($row['Pages']); ?></td>
+                                <td><?= e($row['Publish_Date']); ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
 
             <h5><?= e($total_text); ?> : <?= e($total); ?></h5>
 

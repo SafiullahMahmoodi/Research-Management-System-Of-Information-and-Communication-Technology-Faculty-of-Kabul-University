@@ -104,89 +104,58 @@ if (isset($_POST['login'])) {
     <style>
         body {
 
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
             background: #f3f6fb;
-
-            font-family: 'Bahij Zar', Tahoma, sans-serif;
-
             min-height: 100vh;
-
             display: flex;
-
             flex-direction: column;
         }
 
         .main-header {
-
             background: #0f9d58;
-
             color: white;
-
             padding: 16px 25px;
         }
 
         .header-title {
-
             font-size: 18px;
-
             font-weight: 700;
         }
 
         .home-btn {
-
             background: white;
-
             color: #0f9d58;
-
             font-weight: 700;
-
             border-radius: 8px;
-
             padding: 8px 18px;
         }
 
         .home-btn:hover {
-
             background: #e8fff3;
-
             color: #0f9d58;
         }
 
         .main-container {
-
             flex: 1;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             padding: 30px;
         }
 
         .login-card {
-
             width: 100%;
-
             max-width: 430px;
-
             background: white;
-
             border-radius: 18px;
-
             padding: 30px;
-
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
 
         .login-title {
-
             text-align: center;
-
             margin-bottom: 25px;
-
             color: #0f9d58;
-
             font-weight: 700;
         }
 
@@ -197,51 +166,34 @@ if (isset($_POST['login'])) {
         }
 
         .login-btn {
-
             border-radius: 10px;
-
             padding: 12px;
-
             font-size: 15px;
-
             font-weight: 700;
-
             background: #0f9d58;
-
             border: none;
         }
 
         .login-btn:hover {
-
             background: #0c8047;
         }
 
         .links {
-
             margin-top: 18px;
         }
 
         .links a {
-
             text-decoration: none;
-
             font-size: 13px;
-
             color: #0f9d58;
-
             font-weight: 600;
         }
 
         .main-footer {
-
             background: #0f9d58;
-
             color: white;
-
             text-align: center;
-
             padding: 14px;
-
             font-size: 14px;
         }
 
@@ -379,7 +331,7 @@ align-items-center">
 
                         <?php
                         echo ($lang == 'fa')
-                            ? 'نام کاربری یا ایمیل'
+                            ? 'نام استفاده کننده یا ایمیل'
                             : 'Username or Email';
                         ?>
 
@@ -389,7 +341,7 @@ align-items-center">
                         type="text"
                         name="username_email"
                         class="form-control custom-input"
-                        placeholder="<?php echo ($lang == 'fa') ? 'نام کاربری یا ایمیل را وارد کنید' : 'Enter username or email'; ?>"
+                        placeholder="<?php echo ($lang == 'fa') ? 'نام استفاده کننده یا ایمیل را وارد کنید' : 'Enter username or email'; ?>"
                         required>
                 </div>
 
@@ -399,7 +351,7 @@ align-items-center">
 
                         <?php
                         echo ($lang == 'fa')
-                            ? 'نوع کاربر'
+                            ? 'نوع استفاده کننده'
                             : 'User Type';
                         ?>
 
@@ -425,7 +377,7 @@ align-items-center">
 
                             <?php
                             echo ($lang == 'fa')
-                                ? 'کاربر'
+                                ? 'استفاده کننده عادی'
                                 : 'User';
                             ?>
 
@@ -482,7 +434,7 @@ align-items-center">
 
                     <?php
                     echo ($lang == 'fa')
-                        ? 'ورود'
+                        ? 'ورود به سیستم'
                         : 'Login';
                     ?>
 

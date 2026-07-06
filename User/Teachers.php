@@ -87,6 +87,113 @@ if (isset($_GET['search'])) {
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <style>
+        /* ==========================
+   MODERN SEARCH BOX
+========================== */
+
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0;
+        }
+
+        .search-form {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            align-items: center;
+
+            background: #fff;
+
+            border: 2px solid #3d3d3d;
+            border-radius: 50px;
+
+            overflow: hidden;
+
+            transition: .3s;
+        }
+
+        .search-form:focus-within {
+            border-color: #0f9d58;
+            box-shadow: 0 0 15px rgba(15, 157, 88, .18);
+        }
+
+        /* Input */
+
+        .search-input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            padding: 10px 15px;
+
+            font-size: 12px;
+
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* Button */
+
+        .search-btn {
+
+            width: 60px;
+            height: 60px;
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: .25s;
+        }
+
+        .search-btn:hover {
+
+            color: #0f9d58;
+        }
+
+        /* English */
+
+        html[dir="ltr"] .search-form {
+            flex-direction: row;
+        }
+
+        html[dir="ltr"] .search-input {
+            text-align: left;
+        }
+
+        html[dir="ltr"] .search-btn {
+            border-left: 1px solid #ddd;
+        }
+
+        /* Persian */
+
+        html[dir="rtl"] .search-form {
+            flex-direction: row-reverse;
+        }
+
+        html[dir="rtl"] .search-input {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="rtl"] .search-btn {
+            border-right: 1px solid #ddd;
+        }
+
         html[dir="rtl"] .form-label {
             display: block;
             width: 100%;
@@ -121,31 +228,24 @@ if (isset($_GET['search'])) {
 
         <div class="table-section">
 
-            <div class="search-wrapper"
-                dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
+            <div class="search-wrapper">
 
                 <form method="GET" class="search-form">
 
-                    <input type="text"
+                    <input
+                        type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa')
-                                            ? 'جستجوی استادان...'
-                                            : 'Search teachers...'; ?>"
-                        value="<?= $search; ?>">
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی استادان...' : 'Search Teachers...'; ?>"
+                        value="<?= htmlspecialchars($search); ?>">
 
                     <button type="submit" class="search-btn">
-
-                        <?= ($lang == 'fa')
-                            ? 'جستجو'
-                            : 'Search'; ?>
-
+                        🔍
                     </button>
 
                 </form>
 
             </div>
-
             <div class="table-card">
 
                 <table class="table table-hover">
@@ -153,7 +253,7 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی ' : 'ID'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
 
@@ -163,7 +263,7 @@ if (isset($_GET['search'])) {
 
                             <th><?= ($lang == 'fa') ? 'تماس' : 'Contact'; ?></th>
 
-                            <th><?= ($lang == 'fa') ? 'تحصیلات' : 'Education'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'در جه تحصیلی ' : 'Education'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
 
@@ -208,7 +308,7 @@ if (isset($_GET['search'])) {
         <div class="form-section">
 
             <div class="form-card">
-                <div class="form-title">
+                <div class="form-title" style="text-align: center; font-size: 1rem;">
 
                     <?= ($lang == 'fa')
                         ? 'افزودن استاد'
@@ -222,7 +322,7 @@ if (isset($_GET['search'])) {
                         <label class="form-label">
 
                             <?= ($lang == 'fa')
-                                ? 'شناسه'
+                                ? 'آی دی '
                                 : 'ID'; ?>
 
                         </label>
@@ -232,10 +332,6 @@ if (isset($_GET['search'])) {
                             name="id"
 
                             class="form-control"
-
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'شناسه استاد را وارد کنید'
-                                                : 'Enter teacher ID'; ?>"
 
                             required>
 
@@ -255,9 +351,7 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="name"
                             class="form-control"
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'نام استاد را وارد کنید'
-                                                : 'Enter teacher name'; ?>"
+
                             required>
 
                     </div>
@@ -279,11 +373,7 @@ if (isset($_GET['search'])) {
                             name="lastname"
 
                             class="form-control"
-
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'تخلص استاد را وارد کنید'
-                                                : 'Enter last name'; ?>"
-
+                            \
                             required>
 
                     </div>
@@ -306,10 +396,6 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'ایمیل استاد را وارد کنید'
-                                                : 'Enter email'; ?>"
-
                             required>
 
                     </div>
@@ -321,7 +407,7 @@ if (isset($_GET['search'])) {
                         <label class="form-label">
 
                             <?= ($lang == 'fa')
-                                ? 'تماس'
+                                ? 'شماره تماس'
                                 : 'Contact'; ?>
 
                         </label>
@@ -332,9 +418,6 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'شماره تماس استاد را وارد کنید'
-                                                : 'Enter contact'; ?>"
 
                             required>
 
@@ -347,7 +430,7 @@ if (isset($_GET['search'])) {
                         <label class="form-label">
 
                             <?= ($lang == 'fa')
-                                ? 'تحصیلات'
+                                ? 'در جه تحصیلی'
                                 : 'Degree'; ?>
 
                         </label>
@@ -358,9 +441,6 @@ if (isset($_GET['search'])) {
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'تحصیلات استاد را وارد کنید'
-                                                : 'Enter Degree'; ?>"
 
                             required>
 
