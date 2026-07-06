@@ -93,6 +93,15 @@ $dir = ($lang == 'fa') ? 'rtl' : 'ltr';
                 </a>
 
             </div>
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center ">
+
+                <a href="about.php" class="btn btn-custom btn-signin btn-info">
+                    <?php echo ($lang == 'fa') ? 'درباره سیستم' : 'About System'; ?>
+                </a>
+
+
+
+            </div>
 
         </div>
 
