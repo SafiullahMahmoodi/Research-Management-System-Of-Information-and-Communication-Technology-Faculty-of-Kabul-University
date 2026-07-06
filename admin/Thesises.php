@@ -384,6 +384,37 @@ OR thesis.Publish_Date LIKE '%$search%'
             direction: rtl;
         }
 
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+
         html[dir="rtl"] .table-card,
         html[dir="rtl"] .form-card,
         html[dir="rtl"] .search-form,
@@ -447,7 +478,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                         name="search"
                         class="search-input"
                         placeholder="<?= ($lang == 'fa')
-                                            ? 'جستجوی پایان‌نامه‌ها...'
+                                            ? 'جستجوی مونوگراف ها...'
                                             : 'Search thesis...'; ?>"
                         value="<?php echo $search; ?>">
                     <button type="submit" class="search-btn">
@@ -466,10 +497,10 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                         <tr>
 
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
-                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
                             <th><?= ($lang == 'fa') ? 'محصل' : 'Student'; ?></th>
                             <th><?= ($lang == 'fa') ? 'استاد راهنما' : 'Instructor'; ?></th>
                             <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
@@ -531,7 +562,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                                         <a href="thesis.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
                                             <?= ($lang == 'fa')
-                                                ? 'ویرایش'
+                                                ? 'تغییر دادن'
                                                 : 'Edit'; ?>
                                         </a>
 
@@ -566,15 +597,15 @@ OR thesis.Publish_Date LIKE '%$search%'
 
             <div class="form-card">
 
-                <div class="form-title">
+                <div class="form-title" style="text-align: center;">
 
                     <?php
                     echo isset($_GET['edit'])
                         ? (($lang == 'fa')
-                            ? 'ویرایش پایان‌نامه'
+                            ? 'تغییر دادن مونوگراف '
                             : 'Edit Thesis')
                         : (($lang == 'fa')
-                            ? 'افزودن پایان‌نامه'
+                            ? 'اضافه نمودن مونوگراف'
                             : 'Add Thesis');
                     ?>
 
@@ -586,7 +617,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -628,7 +659,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                            <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
                         </label>
 
                         <input type="text"
@@ -794,27 +825,36 @@ OR thesis.Publish_Date LIKE '%$search%'
                             value="<?php echo $edit_publish_date; ?>">
 
                     </div>
+                    <div class="form-buttons">
+                        <button type="submit"
+                            class="save-btn"
 
-                    <button type="submit"
-                        class="save-btn"
+                            name="<?php
+                                    echo isset($_GET['edit'])
+                                        ? 'update_thesis'
+                                        : 'save_thesis';
+                                    ?>">
 
-                        name="<?php
-                                echo isset($_GET['edit'])
-                                    ? 'update_thesis'
-                                    : 'save_thesis';
-                                ?>">
+                            <?php
+                            echo isset($_GET['edit'])
+                                ? (($lang == 'fa')
+                                    ? 'تغییر دادن مونوگراف '
+                                    : 'Update Thesis')
+                                : (($lang == 'fa')
+                                    ? 'ذخیره مونوگراف'
+                                    : 'Save Thesis');
+                            ?>
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? (($lang == 'fa')
-                                ? 'بروزرسانی پایان‌نامه'
-                                : 'Update Thesis')
-                            : (($lang == 'fa')
-                                ? 'ذخیره پایان‌نامه'
-                                : 'Save Thesis');
-                        ?>
+                        </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='Thesises.php'">
 
-                    </button>
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+                    </div>
 
                 </form>
 

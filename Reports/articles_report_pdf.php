@@ -83,7 +83,7 @@ $where
 // TEXTS (MULTI LANGUAGE)
 // ======================
 
-$titleText = $isFa ? 'گزارش مقالات' : 'Articles Report';
+$titleText = $isFa ? 'راپور مقالات' : 'Articles Report';
 $dateText  = $isFa ? 'تاریخ تولید' : 'Generated Date';
 $totalText = $isFa ? 'تعداد کل مقالات' : 'Total Articles';
 
@@ -155,6 +155,40 @@ td{
 ' . $dateText . ' : ' . date("Y-m-d") . '
 </div>
 
+
+<table style="width:100%; border:none; margin-bottom:15px;">
+<tr>
+
+<td style="width:20%; border:none; text-align:left;">
+    <img src="../img/new_logo_6.png" width="90">
+</td>
+
+<td style="width:60%; border:none; text-align:center;">
+
+    <div style="font-size:20px;font-weight:bold;">
+        ' . ($isFa ? 'پوهنتون کابل' : 'Kabul University') . '
+    </div>
+
+    <div style="font-size:17px;margin-top:6px;">
+        ' . ($isFa
+    ? 'پوهنځی تکنالوژی معلوماتی و مخابراتی'
+    : 'Faculty of Information and Communication Technology') . '
+    </div>
+
+    <div style="margin-top:8px;font-size:18px;font-weight:bold;">
+        ' . $titleText . '
+    </div>
+
+</td>
+
+<td style="width:20%; border:none; text-align:right;">
+    <img src="../img/ict_logo.jpeg" width="90">
+</td>
+
+</tr>
+</table>
+
+
 <table>
 
 <tr>
@@ -187,6 +221,29 @@ while ($row = $article_result->fetch_assoc()) {
 
 $html .= '
 </table>
+
+
+<br><br>
+
+<div style="
+font-size:15px;
+font-weight:bold;
+margin-bottom:8px;
+">
+
+' . ($isFa ? 'یادداشت:' : 'Notes:') . '
+
+</div>
+
+<div style="
+border:1px solid #000;
+height:120px;
+border-radius:4px;
+">
+
+</div>
+
+
 
 <div class="footer">
 ' . $totalText . ' : ' . $total . '

@@ -88,72 +88,140 @@ $th = [
 // ======================
 // HTML
 // ======================
-
-$html = "
+$html = '
 <style>
 
-body {
+body{
     font-family: dejavusans;
-    direction: $dir;
+    direction: ' . $dir . ';
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    direction: $dir;
+.header-table{
+    width:100%;
+    border:none;
+    margin-bottom:15px;
 }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 6px;
-    text-align: center;
+.header-table td{
+    border:none;
+    vertical-align:middle;
 }
 
-th {
-    background: #198754;
-    color: #fff;
+.uni-title{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
 }
 
-.title {
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 15px;
+.faculty-title{
+    text-align:center;
+    font-size:16px;
+    margin-top:5px;
 }
 
-.info {
-    text-align: center;
-    font-size: 13px;
-    margin-bottom: 10px;
+.report-title{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    margin-top:8px;
 }
 
-.footer {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
+.info{
+    text-align:center;
+    font-size:12px;
+    margin-bottom:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+}
+
+th{
+    background:#198754;
+    color:#fff;
+    border:1px solid #000;
+    padding:8px;
+    text-align:center;
+}
+
+td{
+    border:1px solid #000;
+    padding:6px;
+    text-align:center;
+}
+
+.footer{
+    margin-top:18px;
+    text-align:center;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.notes-title{
+    margin-top:25px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.notes-box{
+    border:1px solid #000;
+    height:120px;
+    margin-top:8px;
 }
 
 </style>
 
-<div class='title'>$title</div>
+<table class="header-table">
 
-<div class='info'>
-$date_text : " . date("Y-m-d") . "
+<tr>
+
+<td width="20%" align="left">
+<img src="../img/new_logo_6.png" width="80">
+</td>
+
+<td width="60%">
+
+<div class="uni-title">
+' . ($isFa ? 'پوهنتون کابل' : 'Kabul University') . '
+</div>
+
+<div class="faculty-title">
+' . ($isFa
+    ? 'پوهنځی تکنالوژی معلوماتی و مخابراتی'
+    : 'Faculty of Information and Communication Technology') . '
+</div>
+
+<div class="report-title">
+' . $title . '
+</div>
+
+</td>
+
+<td width="20%" align="right">
+<img src="../img/ict_logo.jpeg" width="80">
+</td>
+
+</tr>
+
+</table>
+
+<div class="info">
+' . $date_text . ' : ' . date("Y-m-d") . '
 </div>
 
 <table>
 
 <tr>
-";
+';
 
 // ======================
 // HEADER (RTL / LTR FIX)
 // ======================
-
 if ($isFa) {
-    echo "
+
+    $html .= "
         <th>{$th['date']}</th>
         <th>{$th['pages']}</th>
         <th>{$th['department']}</th>
@@ -164,7 +232,8 @@ if ($isFa) {
         <th>{$th['id']}</th>
     ";
 } else {
-    echo "
+
+    $html .= "
         <th>{$th['id']}</th>
         <th>{$th['title']}</th>
         <th>{$th['author']}</th>
@@ -213,6 +282,18 @@ while ($row = $book_result->fetch_assoc()) {
 
 $html .= "
 </table>
+
+
+<div class='footer'>
+$total_text : " . $book_result->num_rows . "
+</div>
+
+<div class='notes-title'>
+" . ($isFa ? "یادداشت:" : "Notes:") . "
+</div>
+
+<div class='notes-box'></div>
+
 
 <div class='footer'>
 $total_text : " . $book_result->num_rows . "

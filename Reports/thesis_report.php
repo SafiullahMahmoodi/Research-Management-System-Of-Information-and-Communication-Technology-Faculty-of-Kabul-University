@@ -76,7 +76,7 @@ $where
 
 $isFa = ($lang == 'fa');
 
-$title = $isFa ? 'گزارش پایان‌نامه‌ها' : 'Thesis Report';
+$title = $isFa ? 'راپور پایان‌نامه‌ها' : 'Thesis Report';
 
 $th_id = $isFa ? 'آی‌دی' : 'ID';
 $th_title = $isFa ? 'عنوان' : 'Title';
@@ -86,11 +86,11 @@ $th_instructor = $isFa ? 'استاد' : 'Instructor';
 $th_dep = $isFa ? 'دیپارتمنت' : 'Department';
 $th_date = $isFa ? 'تاریخ نشر' : 'Publish Date';
 
-$btn_print = $isFa ? 'پرنت گزارش' : 'Print Report';
+$btn_print = $isFa ? 'پرنت راپور' : 'Print Report';
 $btn_pdf = $isFa ? 'دانلود PDF' : 'Download PDF';
 $btn_filter = $isFa ? 'فیلتر' : 'Filter Report';
 
-$totalText = $isFa ? 'تعداد کل پایان‌نامه‌ها' : 'Total Thesis';
+$totalText = $isFa ? 'تعداد کل مونوگراف ها' : 'Total Thesis';
 
 ?>
 
@@ -107,6 +107,61 @@ $totalText = $isFa ? 'تعداد کل پایان‌نامه‌ها' : 'Total The
     <link rel="stylesheet" href="../css/bootstrap.min.css">
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+        }
+
+        .filter-card .row {
+            row-gap: 18px;
+        }
+
+        .filter-card .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .filter-card .form-control,
+        .filter-card .form-select {
+            width: 100%;
+            height: 45px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .filter-card .form-control:focus,
+        .filter-card .form-select:focus {
+            border-color: #0f9d58;
+            box-shadow: 0 0 0 .15rem rgba(15, 157, 88, .18);
+        }
+
+        .filter-card .btn {
+            min-width: 150px;
+            height: 42px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        html[dir="rtl"] .filter-card {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="ltr"] .filter-card {
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body dir="<?= $isFa ? 'rtl' : 'ltr'; ?>">
@@ -121,81 +176,112 @@ $totalText = $isFa ? 'تعداد کل پایان‌نامه‌ها' : 'Total The
 
             <h2 class="report-title"><?= $title ?></h2>
 
-            <div class="mb-3 no-print">
 
-                <button class="btn btn-success" onclick="window.print()">
-                    <?= $btn_print ?>
-                </button>
 
-                <a href="thesis_report_pdf.php?<?= http_build_query($_GET); ?>"
+            <!-- PDF BUTTON -->
+            <div class="no-print mb-3 text-end">
+
+                <a href="thesis_report_PDF.php?<?= http_build_query($_GET); ?>"
                     class="btn btn-danger">
-                    <?= $btn_pdf ?>
+                    <i class="fas fa-file-pdf"></i>
+                    <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
                 </a>
 
             </div>
+            <!-- FILTER CARD -->
+            <div class="filter-card no-print">
 
-            <!-- FILTER -->
-            <form method="GET" class="row mb-3 no-print">
+                <form method="GET">
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= $isFa ? 'محصل' : 'Student'; ?></label>
-                    <select name="student" class="form-control">
-                        <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
-                        <?php
-                        $s = $conn->query("SELECT * FROM students");
-                        while ($r = $s->fetch_assoc()) {
-                            echo "<option value='{$r['ID']}'>{$r['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <div class="row">
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= $isFa ? 'استاد' : 'Instructor'; ?></label>
-                    <select name="instructor" class="form-control">
-                        <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
-                        <?php
-                        $t = $conn->query("SELECT * FROM teacher");
-                        while ($r = $t->fetch_assoc()) {
-                            echo "<option value='{$r['ID']}'>{$r['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                        <!-- Student -->
+                        <div class="col-md-4">
+                            <label class="form-label"><?= $isFa ? 'محصل' : 'Student'; ?></label>
+                            <select name="student" class="form-control">
+                                <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
+                                <?php
+                                $s = $conn->query("SELECT * FROM students");
+                                while ($r = $s->fetch_assoc()) {
+                                    $sel = (($_GET['student'] ?? '') == $r['ID']) ? 'selected' : '';
+                                    echo "<option value='{$r['ID']}' $sel>{$r['Name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= $isFa ? 'کتگوری' : 'Category'; ?></label>
-                    <input type="text" name="category" class="form-control">
-                </div>
+                        <!-- Instructor -->
+                        <div class="col-md-4">
+                            <label class="form-label"><?= $isFa ? 'استاد' : 'Instructor'; ?></label>
+                            <select name="instructor" class="form-control">
+                                <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
+                                <?php
+                                $t = $conn->query("SELECT * FROM teacher");
+                                while ($r = $t->fetch_assoc()) {
+                                    $sel = (($_GET['instructor'] ?? '') == $r['ID']) ? 'selected' : '';
+                                    echo "<option value='{$r['ID']}' $sel>{$r['Name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= $isFa ? 'دیپارتمنت' : 'Department'; ?></label>
-                    <select name="department" class="form-control">
-                        <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
-                        <?php
-                        $d = $conn->query("SELECT * FROM department");
-                        while ($r = $d->fetch_assoc()) {
-                            echo "<option value='{$r['ID']}'>{$r['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                        <!-- Category -->
+                        <div class="col-md-4">
+                            <label class="form-label"><?= $isFa ? 'کتگوری' : 'Category'; ?></label>
+                            <input type="text" name="category"
+                                class="form-control"
+                                value="<?= $_GET['category'] ?? '' ?>">
+                        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= $isFa ? 'از تاریخ' : 'From Date'; ?></label>
-                    <input type="date" name="date_from" class="form-control">
-                </div>
+                        <!-- Department -->
+                        <div class="col-md-4">
+                            <label class="form-label"><?= $isFa ? 'دیپارتمنت' : 'Department'; ?></label>
+                            <select name="department" class="form-control">
+                                <option value=""><?= $isFa ? 'همه' : 'All'; ?></option>
+                                <?php
+                                $d = $conn->query("SELECT * FROM department");
+                                while ($r = $d->fetch_assoc()) {
+                                    $sel = (($_GET['department'] ?? '') == $r['ID']) ? 'selected' : '';
+                                    echo "<option value='{$r['ID']}' $sel>{$r['Name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= $isFa ? 'تا تاریخ' : 'To Date'; ?></label>
-                    <input type="date" name="date_to" class="form-control">
-                </div>
+                        <!-- Date From -->
+                        <div class="col-md-4">
+                            <label class="form-label"><?= $isFa ? 'از تاریخ' : 'From Date'; ?></label>
+                            <input type="date" name="date_from"
+                                class="form-control"
+                                value="<?= $_GET['date_from'] ?? '' ?>">
+                        </div>
 
-                <div class="col-md-12 mt-2">
-                    <button class="btn btn-primary"><?= $btn_filter ?></button>
-                </div>
+                        <!-- Date To -->
+                        <div class="col-md-4">
+                            <label class="form-label"><?= $isFa ? 'تا تاریخ' : 'To Date'; ?></label>
+                            <input type="date" name="date_to"
+                                class="form-control"
+                                value="<?= $_GET['date_to'] ?? '' ?>">
+                        </div>
 
-            </form>
+                        <!-- Buttons -->
+                        <div class="col-12 text-center mt-3">
+
+                            <button type="submit" class="btn btn-success px-4">
+                                <?= $isFa ? 'اعمال فیلتر' : 'Apply Filter'; ?>
+                            </button>
+
+                            <a href="thesis_report.php" class="btn btn-secondary px-4">
+                                <?= $isFa ? 'پاک کردن' : 'Reset'; ?>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
 
             <!-- TABLE -->
             <table class="table table-bordered table-striped">

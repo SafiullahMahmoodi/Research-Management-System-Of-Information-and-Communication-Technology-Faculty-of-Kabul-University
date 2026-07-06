@@ -85,12 +85,69 @@ $where
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        <?= ($lang == 'fa') ? 'گزارش کتاب‌ها' : 'Books Report'; ?>
+        <?= ($lang == 'fa') ? 'راپور  کتاب‌ها' : 'Books Report'; ?>
     </title>
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ==========================
+   FILTER CARD
+========================== */
+        .filter-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+        }
 
+        .filter-card .row {
+            row-gap: 18px;
+        }
+
+        .filter-card .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .filter-card .form-control,
+        .filter-card .form-select {
+            width: 100%;
+            height: 45px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .filter-card .form-control:focus,
+        .filter-card .form-select:focus {
+            border-color: #0f9d58;
+            box-shadow: 0 0 0 .15rem rgba(15, 157, 88, .18);
+        }
+
+        .filter-card .btn {
+            min-width: 150px;
+            height: 42px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        html[dir="rtl"] .filter-card {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="ltr"] .filter-card {
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
@@ -105,100 +162,103 @@ $where
 
             <!-- TITLE -->
             <h2 class="report-title">
-                <?= ($lang == 'fa') ? 'گزارش کتاب‌ها' : 'Books Report'; ?>
+                <?= ($lang == 'fa') ? 'راپور  کتاب‌ها' : 'Books Report'; ?>
             </h2>
 
-            <!-- BUTTONS -->
-            <div class="mb-3 no-print">
+            <!-- PDF BUTTON -->
+            <div class="no-print mb-3 text-end">
 
-                <button class="btn btn-success" onclick="window.print()">
-                    <?= ($lang == 'fa') ? 'پرنت گزارش' : 'Print Report'; ?>
-                </button>
-
-                <a href="books_report_pdf.php?<?= http_build_query($_GET); ?>"
+                <a href="Books_report_PDF.php?<?= http_build_query($_GET); ?>"
                     class="btn btn-danger">
+                    <i class="fas fa-file-pdf"></i>
                     <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
                 </a>
 
             </div>
+            <div class="filter-card no-print">
 
+                <form method="GET" class="row g-3">
+
+                    <!-- Author -->
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?>
+                        </label>
+
+                        <select name="author" class="form-control">
+                            <option value="">
+                                <?= ($lang == 'fa') ? 'همه نویسندگان' : 'All Authors'; ?>
+                            </option>
+
+                            <?php
+                            $t = $conn->query("SELECT * FROM teacher");
+                            while ($author_row = $t->fetch_assoc()) {
+                                echo "<option value='{$author_row['ID']}'>{$author_row['Name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
+                        </label>
+                        <input type="text" name="category" class="form-control"
+                            placeholder="<?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>">
+                    </div>
+
+                    <!-- Department -->
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
+                        </label>
+
+                        <select name="department" class="form-control">
+                            <option value="">
+                                <?= ($lang == 'fa') ? 'همه دیپارتمنت‌ها' : 'All Departments'; ?>
+                            </option>
+
+                            <?php
+                            $dep = $conn->query("SELECT * FROM department");
+                            while ($d = $dep->fetch_assoc()) {
+                                echo "<option value='{$d['ID']}'>{$d['Name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Date To -->
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'تا تاریخ' : 'Date To'; ?>
+                        </label>
+                        <input type="date" name="date_to" class="form-control">
+                    </div>
+
+                    <!-- Date From -->
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'از تاریخ' : 'Date From'; ?>
+                        </label>
+                        <input type="date" name="date_from" class="form-control">
+                    </div>
+
+
+
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-success px-4">
+                            <?= ($lang == 'fa') ? 'اعمال فیلتر' : 'Apply Filter'; ?>
+                        </button>
+
+                        <a href="Books_report.php" class="btn btn-secondary px-4">
+                            <?= ($lang == 'fa') ? 'پاک کردن' : 'Reset'; ?>
+                        </a>
+                    </div>
+
+                </form>
+            </div>
             <!-- FILTER FORM -->
-            <form method="GET" class="row mb-3 no-print">
-
-                <!-- Author -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?>
-                    </label>
-
-                    <select name="author" class="form-control">
-                        <option value="">
-                            <?= ($lang == 'fa') ? 'همه نویسندگان' : 'All Authors'; ?>
-                        </option>
-
-                        <?php
-                        $t = $conn->query("SELECT * FROM teacher");
-                        while ($author_row = $t->fetch_assoc()) {
-                            echo "<option value='{$author_row['ID']}'>{$author_row['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <!-- Category -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
-                    </label>
-                    <input type="text" name="category" class="form-control"
-                        placeholder="<?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>">
-                </div>
-
-                <!-- Department -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
-                    </label>
-
-                    <select name="department" class="form-control">
-                        <option value="">
-                            <?= ($lang == 'fa') ? 'همه دیپارتمنت‌ها' : 'All Departments'; ?>
-                        </option>
-
-                        <?php
-                        $dep = $conn->query("SELECT * FROM department");
-                        while ($d = $dep->fetch_assoc()) {
-                            echo "<option value='{$d['ID']}'>{$d['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <!-- Date From -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'از تاریخ' : 'Date From'; ?>
-                    </label>
-                    <input type="date" name="date_from" class="form-control">
-                </div>
-
-                <!-- Date To -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'تا تاریخ' : 'Date To'; ?>
-                    </label>
-                    <input type="date" name="date_to" class="form-control">
-                </div>
-
-                <div class="col-md-2">
-                    <label class="form-label">&nbsp;</label>
-
-                    <button type="submit" class="btn btn-primary form-control">
-                        <?= ($lang == 'fa') ? 'فیلتر' : 'Filter'; ?>
-                    </button>
-                </div>
-
-            </form>
 
             <!-- TABLE -->
             <table class="table table-bordered table-striped">

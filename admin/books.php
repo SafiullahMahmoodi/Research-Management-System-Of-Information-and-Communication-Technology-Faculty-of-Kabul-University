@@ -361,6 +361,36 @@ if (isset($_GET['search'])) {
     <script src="../js/bootstrap.bundle.min.js"></script>
 
     <Style>
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         html[dir="rtl"] .main-wrapper,
         html[dir="rtl"] .table-section,
         html[dir="rtl"] .form-section,
@@ -446,13 +476,13 @@ if (isset($_GET['search'])) {
 
                         <tr>
 
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
 
-                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
 
@@ -517,7 +547,7 @@ if (isset($_GET['search'])) {
                                         <a href="books.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
+                                            <?= ($lang == 'fa') ? 'تغییر دادن' : 'Edit'; ?>
 
                                         </a>
 
@@ -554,15 +584,15 @@ if (isset($_GET['search'])) {
 
             <div class="form-card">
 
-                <div class="form-title">
+                <div class="form-title" style="text-align: center;">
 
                     <?php
                     echo isset($_GET['edit'])
                         ? (($lang == 'fa')
-                            ? 'ویرایش کتاب'
+                            ? 'تفییر دادن کتاب'
                             : 'Edit Book')
                         : (($lang == 'fa')
-                            ? 'افزودن کتاب'
+                            ? 'اضافه نمودن  کتاب'
                             : 'Add Book');
                     ?>
 
@@ -574,7 +604,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -621,7 +651,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                            <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
                         </label>
 
                         <input type="text"
@@ -714,7 +744,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'صفحات' : 'Pages'; ?>
+                            <?= ($lang == 'fa') ? ' تعداد صفحات' : 'Pages'; ?>
                         </label>
 
                         <input type="number"
@@ -762,23 +792,31 @@ if (isset($_GET['search'])) {
                             value="<?php echo $edit_publish_date; ?>">
 
                     </div>
+                    <div class="form-buttons">
+                        <button type="submit"
+                            class="save-btn"
+                            name="<?= isset($_GET['edit'])
+                                        ? 'update_book'
+                                        : 'save_book'; ?>">
 
-                    <button type="submit"
-                        class="save-btn"
-                        name="<?= isset($_GET['edit'])
-                                    ? 'update_book'
-                                    : 'save_book'; ?>">
+                            <?= isset($_GET['edit'])
+                                ? (($lang == 'fa')
+                                    ? 'تغییر دادن کتاب'
+                                    : 'Update Book')
+                                : (($lang == 'fa')
+                                    ? 'ذخیره کتاب'
+                                    : 'Save Book'); ?>
 
-                        <?= isset($_GET['edit'])
-                            ? (($lang == 'fa')
-                                ? 'بروزرسانی کتاب'
-                                : 'Update Book')
-                            : (($lang == 'fa')
-                                ? 'ذخیره کتاب'
-                                : 'Save Book'); ?>
+                        </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='books.php'">
 
-                    </button>
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
 
+                        </button>
+                    </div>
                 </form>
 
             </div>

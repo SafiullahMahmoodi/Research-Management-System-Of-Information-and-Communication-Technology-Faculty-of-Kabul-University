@@ -31,7 +31,7 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        <?= ($lang == 'fa') ? 'گزارش سیستم' : 'System Report'; ?>
+        <?= ($lang == 'fa') ? 'راپور  سیستم' : 'System Report'; ?>
     </title>
 
     <link rel="stylesheet" href="../css/bootstrap.min.css">
@@ -52,19 +52,18 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
             <!-- TITLE -->
             <h2 class="report-title">
                 <?= ($lang == 'fa')
-                    ? 'گزارش سیستم مدیریت تحقیقات'
+                    ? 'راپور  سیستم مدیریت تحقیقات'
                     : 'Research Management System Report';
                 ?>
             </h2>
 
-            <!-- BUTTONS -->
-            <div class="no-print mb-3" style="text-align: <?= ($lang == 'fa') ? 'left' : 'left'; ?>;">
 
-                <button class="btn btn-success">
-                    <?= ($lang == 'fa') ? 'پرنت گزارش' : 'Print Report'; ?>
-                </button>
+            <!-- PDF BUTTON -->
+            <div class="no-print mb-3 text-end">
 
-                <a href="system_report_pdf.php" class="btn btn-danger">
+                <a href="system_report_pdf.php?<?= http_build_query($_GET); ?>"
+                    class="btn btn-danger">
+                    <i class="fas fa-file-pdf"></i>
                     <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
                 </a>
 
@@ -75,15 +74,15 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
 
                 <thead>
                     <tr>
-                        <th><?= ($lang == 'fa') ? 'ماژول' : 'Module'; ?></th>
-                        <th><?= ($lang == 'fa') ? 'تعداد' : 'Total Records'; ?></th>
+                        <th><?= ($lang == 'fa') ? 'جدول ها' : 'Module'; ?></th>
+                        <th><?= ($lang == 'fa') ? ' تعداد دیتا' : 'Total Records'; ?></th>
                     </tr>
                 </thead>
 
                 <tbody>
 
                     <tr>
-                        <td><?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?></td>
+                        <td><?= ($lang == 'fa') ? 'استفاده کننده گان' : 'Users'; ?></td>
                         <td><?= $users; ?></td>
                     </tr>
 
@@ -118,7 +117,7 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
                     </tr>
 
                     <tr>
-                        <td><?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesis'; ?></td>
+                        <td><?= ($lang == 'fa') ? 'مونوگراف ها' : 'Thesis'; ?></td>
                         <td><?= $thesis; ?></td>
                     </tr>
 
@@ -130,7 +129,7 @@ $total_all = $users + $teachers + $students + $departments + $articles + $books 
 
             <!-- TOTAL -->
             <h5>
-                <?= ($lang == 'fa') ? 'مجموع کل سیستم' : 'Total Records in System'; ?> :
+                <?= ($lang == 'fa') ? 'مجموع دیتای کل سیستم' : 'Total Records in System'; ?> :
                 <?= $total_all; ?>
             </h5>
 

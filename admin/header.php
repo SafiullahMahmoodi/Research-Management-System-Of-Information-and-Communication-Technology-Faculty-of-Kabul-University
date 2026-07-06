@@ -143,7 +143,7 @@ $lang = $_SESSION['lang'] ?? 'en';
         <a href="users.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'users.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?>
+            <?= ($lang == 'fa') ? 'استفاده کننده گان' : 'Users'; ?>
 
         </a>
 
@@ -192,13 +192,13 @@ $lang = $_SESSION['lang'] ?? 'en';
         <a href="thesises.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesises'; ?>
+            <?= ($lang == 'fa') ? 'مونوگراف ها' : 'Thesises'; ?>
 
         </a>
 
         <a href="../reports/systemreports.php">
 
-            <?= ($lang == 'fa') ? 'گزارش‌ها' : 'Reports'; ?>
+            <?= ($lang == 'fa') ? 'راپور ها' : 'Reports'; ?>
 
         </a>
 

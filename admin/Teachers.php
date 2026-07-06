@@ -207,6 +207,36 @@ if (isset($_GET['search'])) {
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <style>
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         html[dir="rtl"] .main-wrapper,
         html[dir="rtl"] .table-section,
         html[dir="rtl"] .form-section,
@@ -294,12 +324,12 @@ if (isset($_GET['search'])) {
 
                         <tr>
 
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
                             <th><?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?></th>
                             <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
                             <th><?= ($lang == 'fa') ? 'تماس' : 'Contact'; ?></th>
-                            <th><?= ($lang == 'fa') ? 'مدرک تحصیلی' : 'Degree'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'درجه تحصیلی' : 'Degree'; ?></th>
                             <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
                             <th width="160"><?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?></th>
 
@@ -369,12 +399,12 @@ if (isset($_GET['search'])) {
         <div class="form-section">
 
             <div class="form-card">
-                <div class="form-title">
+                <div class="form-title" style="text-align: center;">
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? (($lang == 'fa') ? 'ویرایش استاد' : 'Edit Teacher')
-                        : (($lang == 'fa') ? 'افزودن استاد' : 'Add Teacher');
+                        ? (($lang == 'fa') ? 'تغییر دادن استاد' : 'Edit Teacher')
+                        : (($lang == 'fa') ? 'اضافه نمودن استاد' : 'Add Teacher');
                     ?>
 
                 </div>
@@ -391,7 +421,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -499,7 +529,7 @@ if (isset($_GET['search'])) {
                     <div class="mb-3">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'مدرک تحصیلی' : 'Degree'; ?>
+                            <?= ($lang == 'fa') ? 'درجه تحصیلی' : 'Degree'; ?>
                         </label>
 
                         <input type="text"
@@ -552,21 +582,30 @@ if (isset($_GET['search'])) {
                     </div>
 
                     <!-- Button -->
+                    <div class="form-buttons">
+                        <button class="save-btn"
+                            name="<?php
+                                    echo isset($_GET['edit'])
+                                        ? 'update_teacher'
+                                        : 'save_teacher';
+                                    ?>">
 
-                    <button class="save-btn"
-                        name="<?php
-                                echo isset($_GET['edit'])
-                                    ? 'update_teacher'
-                                    : 'save_teacher';
-                                ?>">
+                            <?php
+                            echo isset($_GET['edit'])
+                                ? (($lang == 'fa') ? 'تغییر دادن استاد' : 'Update Teacher')
+                                : (($lang == 'fa') ? 'ذخیره استاد' : 'Save Teacher');
+                            ?>
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? (($lang == 'fa') ? 'بروزرسانی استاد' : 'Update Teacher')
-                            : (($lang == 'fa') ? 'ذخیره استاد' : 'Save Teacher');
-                        ?>
+                        </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='Teachers.php'">
 
-                    </button>
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+                    </div>
 
                 </form>
 

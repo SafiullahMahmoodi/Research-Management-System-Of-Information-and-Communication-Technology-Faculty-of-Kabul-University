@@ -133,7 +133,7 @@ while ($row = $thesis_result->fetch_assoc()) {
 
     <header class="main-header">
 
-        <div class="header-title">
+        <div class="header-title" style="font-size: 18px;">
 
             <?= ($lang == 'fa')
                 ? 'سیستم مدیریت تحقیقات پوهنځی تکنالوژی معلوماتی و مخابراتی'
@@ -251,14 +251,12 @@ while ($row = $thesis_result->fetch_assoc()) {
                     <div class="graph-top">
 
                         <div class="graph-title">
-
-                            Articles By Category
-
+                            <?= $lang === 'fa' ? 'مقالات بر اساس کتگوری' : 'Articles By Category'; ?>
                         </div>
 
                         <div class="graph-count">
 
-                            Total: <?php echo $total_articles; ?>
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_articles; ?>
 
                         </div>
 
@@ -276,13 +274,13 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Books By Category
+                            <?= $lang === 'fa' ? 'کتاب‌ها بر اساس کتگوری' : 'Books By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
 
-                            Total: <?php echo $total_books; ?>
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_books; ?>
 
                         </div>
 
@@ -300,14 +298,12 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Translated Books
+                            <?= $lang === 'fa' ? 'کتاب‌های ترجمه‌شده به اساس کتگوری' : 'Translated Books'; ?>
 
                         </div>
 
                         <div class="graph-count">
-
-                            Total: <?php echo $total_translate; ?>
-
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_translate; ?>
                         </div>
 
                     </div>
@@ -324,14 +320,12 @@ while ($row = $thesis_result->fetch_assoc()) {
 
                         <div class="graph-title">
 
-                            Thesis By Category
+                            <?= $lang === 'fa' ? 'مونوگراف ها بر اساس کتگوری' : 'Thesis By Category'; ?>
 
                         </div>
 
                         <div class="graph-count">
-
-                            Total: <?php echo $total_thesis; ?>
-
+                            <?= ($lang == "fa" ? "مجموع: " : "Total: ") . $total_thesis; ?>
                         </div>
 
                     </div>
@@ -380,25 +374,50 @@ while ($row = $thesis_result->fetch_assoc()) {
                     pointRadius: 4
                 }]
             },
-
             options: {
-
                 responsive: true,
                 maintainAspectRatio: false,
 
                 plugins: {
-
                     title: {
-
                         display: true,
+                        text: '<?= ($lang == "fa") ? "مقالات براساس کتگوری" : "Articles By Category"; ?>',
+                        color: '#333333',
+                        font: {
+                            size: 18,
 
-                        text: '<?= ($lang == "fa") ? "مقالات براساس کتگوری" : "Articles By Category"; ?>'
-
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 16
+                            }
+                        }
                     }
+                },
 
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور X
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور Y
+                            }
+                        }
+                    }
                 }
-
             }
+
         });
 
         // ==========================
@@ -428,24 +447,30 @@ while ($row = $thesis_result->fetch_assoc()) {
                     ]
                 }]
             },
-
             options: {
-
                 responsive: true,
                 maintainAspectRatio: false,
 
                 plugins: {
-
                     title: {
-
                         display: true,
+                        text: '<?= ($lang == "fa") ? "کتاب‌ها براساس کتگوری" : "Books By Category"; ?>',
+                        color: '#333333',
+                        font: {
+                            size: 18, // فقط فونت عنوان بزرگ‌تر
 
-                        text: '<?= ($lang == "fa") ? "کتاب‌ها براساس کتگوری" : "Books By Category"; ?>'
+                        }
+                    },
 
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 14 // فقط فونت Legend بزرگ‌تر
+                            }
+                        }
                     }
-
                 }
-
             }
         });
 
@@ -476,24 +501,30 @@ while ($row = $thesis_result->fetch_assoc()) {
                     ]
                 }]
             },
-
             options: {
-
                 responsive: true,
                 maintainAspectRatio: false,
 
                 plugins: {
-
                     title: {
-
                         display: true,
+                        text: '<?= ($lang == "fa") ? "کتاب‌های ترجمه‌شده براساس کتگوری" : "Translated Books By Category"; ?>',
+                        color: '#333333',
+                        font: {
+                            size: 18, // فقط فونت عنوان بزرگ‌تر
 
-                        text: '<?= ($lang == "fa") ? "کتاب‌های ترجمه‌شده براساس کتگوری" : "Translated Books By Category"; ?>'
+                        }
+                    },
 
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 18 // فقط فونت Legend بزرگ‌تر
+                            }
+                        }
                     }
-
                 }
-
             }
         });
         // ==========================
@@ -527,22 +558,46 @@ while ($row = $thesis_result->fetch_assoc()) {
             },
 
             options: {
-
                 responsive: true,
                 maintainAspectRatio: false,
-
                 plugins: {
-
                     title: {
-
                         display: true,
+                        text: '<?= ($lang == "fa") ? "مونوگراف‌ها براساس کتگوری" : "Thesis By Category"; ?>',
+                        color: '#333333',
+                        font: {
+                            size: 18, // فقط فونت عنوان بزرگ‌تر
 
-                        text: '<?= ($lang == "fa") ? "مونوگراف‌ها براساس کتگوری" : "Thesis By Category"; ?>'
+                        }
+                    },
 
+                    legend: {
+                        labels: {
+                            color: '#555555',
+                            font: {
+                                size: 18 // فقط فونت Legend بزرگ‌تر
+                            }
+                        }
                     }
-
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور X
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#555555',
+                            font: {
+                                size: 13 // فونت محور Y
+                            }
+                        }
+                    }
                 }
-
             }
         });
     </script>

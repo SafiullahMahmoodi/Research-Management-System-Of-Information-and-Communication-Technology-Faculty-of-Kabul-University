@@ -165,6 +165,36 @@ $department_result = $conn->query($department_query);
     <script src="../js/bootstrap.bundle.min.js"></script>
 
     <style>
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         /* Persian Language */
 
         html[dir="rtl"] .table,
@@ -245,7 +275,7 @@ $department_result = $conn->query($department_query);
                         <tr>
 
                             <th width="100">
-                                <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                                <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                             </th>
 
                             <th>
@@ -277,7 +307,7 @@ $department_result = $conn->query($department_query);
                                         <a href="departments.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
+                                            <?= ($lang == 'fa') ? 'تغییر آوری' : 'Edit'; ?>
 
                                         </a>
 
@@ -313,12 +343,12 @@ $department_result = $conn->query($department_query);
         <div class="form-section">
 
             <div class="form-card">
-                <div class="form-title">
+                <div class="form-title" style="text-align: center;">
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? (($lang == 'fa') ? 'ویرایش دیپارتمنت' : 'Edit Department')
-                        : (($lang == 'fa') ? 'افزودن دیپارتمنت' : 'Add Department');
+                        ? (($lang == 'fa') ? 'تغییر آوردن دیپارتمنت' : 'Edit Department')
+                        : (($lang == 'fa') ? 'اضافه نمودن دیپارتمنت' : 'Add Department');
                     ?>
 
                 </div>
@@ -330,7 +360,7 @@ $department_result = $conn->query($department_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -370,22 +400,32 @@ $department_result = $conn->query($department_query);
                     </div>
 
                     <!-- Save Button -->
+                    <div class="form-buttons">
+                        <button type="submit"
+                            class="save-btn"
+                            name="<?php
+                                    echo isset($_GET['edit'])
+                                        ? 'update_department'
+                                        : 'save_department';
+                                    ?>">
 
-                    <button type="submit"
-                        class="save-btn"
-                        name="<?php
-                                echo isset($_GET['edit'])
-                                    ? 'update_department'
-                                    : 'save_department';
-                                ?>">
+                            <?php
+                            echo isset($_GET['edit'])
+                                ? (($lang == 'fa') ? 'تغییر آوری دیپارتمنت' : 'Update Department')
+                                : (($lang == 'fa') ? 'ذخیره دیپارتمنت' : 'Save Department');
+                            ?>
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? (($lang == 'fa') ? 'بروزرسانی دیپارتمنت' : 'Update Department')
-                            : (($lang == 'fa') ? 'ذخیره دیپارتمنت' : 'Save Department');
-                        ?>
+                        </button>
 
-                    </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='departments.php'">
+
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+                    </div>
 
                 </form>
 

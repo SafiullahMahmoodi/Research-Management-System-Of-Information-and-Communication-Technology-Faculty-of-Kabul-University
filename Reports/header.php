@@ -91,35 +91,35 @@ $lang = $_SESSION['lang'] ?? 'en';
         <a href="systemreports.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'systemreports.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'گزارش سیستم' : 'System Report'; ?>
+            <?= ($lang == 'fa') ? 'راپور سیستم' : 'System Report'; ?>
 
         </a>
 
         <a href="articles_report.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'articles_report.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'گزارش مقالات' : 'Articles Report'; ?>
+            <?= ($lang == 'fa') ? 'راپور مقالات' : 'Articles Report'; ?>
 
         </a>
 
         <a href="books_report.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'books_report.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'گزارش کتاب‌ها' : 'Books Report'; ?>
+            <?= ($lang == 'fa') ? 'راپور کتاب‌ها' : 'Books Report'; ?>
 
         </a>
 
         <a href="translatedbooks_report.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'translatedbooks_report.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'کتاب‌های ترجمه شده' : 'Translated Books Report'; ?>
+            <?= ($lang == 'fa') ? 'راپور کتاب های ترجمه شده' : 'Translated Books Report'; ?>
 
         </a>
 
         <a href="thesis_report.php"
             class="<?= basename($_SERVER['PHP_SELF']) == 'thesis_report.php' ? 'active' : ''; ?>">
 
-            <?= ($lang == 'fa') ? 'پایان‌نامه‌ها' : 'Thesis Report'; ?>
+            <?= ($lang == 'fa') ? 'راپور مونوگراف ها' : 'Thesis Report'; ?>
 
         </a>
 

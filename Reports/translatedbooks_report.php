@@ -5,7 +5,7 @@ include('../db_connection.php');
 $lang = $_SESSION['lang'] ?? 'en';
 $isFa = ($lang === 'fa');
 
-$title = $isFa ? 'گزارش کتاب‌های ترجمه شده' : 'Translated Books Report';
+$title = $isFa ? 'راپور کتاب‌های ترجمه شده' : 'Translated Books Report';
 
 $translator_text = $isFa ? 'مترجم' : 'Translator';
 $category_text   = $isFa ? 'کتگوری' : 'Category';
@@ -23,7 +23,7 @@ $th_department = $isFa ? 'دیپارتمنت' : 'Department';
 $th_pages      = $isFa ? 'صفحات' : 'Pages';
 $th_date       = $isFa ? 'تاریخ نشر' : 'Publish Date';
 
-$btn_print  = $isFa ? 'پرنت گزارش' : 'Print Report';
+$btn_print  = $isFa ? 'پرنت راپور' : 'Print Report';
 $btn_pdf    = $isFa ? 'دانلود PDF' : 'Download PDF';
 $btn_filter = $isFa ? 'فیلتر' : 'Filter Report';
 
@@ -136,6 +136,61 @@ $total = $totalResult->fetch_assoc()['total'] ?? 0;
     <title><?= e($title); ?></title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+        }
+
+        .filter-card .row {
+            row-gap: 18px;
+        }
+
+        .filter-card .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .filter-card .form-control,
+        .filter-card .form-select {
+            width: 100%;
+            height: 45px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .filter-card .form-control:focus,
+        .filter-card .form-select:focus {
+            border-color: #0f9d58;
+            box-shadow: 0 0 0 .15rem rgba(15, 157, 88, .18);
+        }
+
+        .filter-card .btn {
+            min-width: 150px;
+            height: 42px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        html[dir="rtl"] .filter-card {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="ltr"] .filter-card {
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body dir="<?= $isFa ? 'rtl' : 'ltr'; ?>">
@@ -149,64 +204,88 @@ $total = $totalResult->fetch_assoc()['total'] ?? 0;
 
             <h2 class="report-title"><?= e($title); ?></h2>
 
-            <div class="mb-3 no-print">
-                <button class="btn btn-success" onclick="window.print()">
-                    <?= e($btn_print); ?>
-                </button>
+            <!-- PDF BUTTON -->
+            <div class="no-print mb-3 text-end">
 
-                <a href="translatedbooks_report_pdf.php?<?= e(http_build_query($_GET)); ?>" class="btn btn-danger">
-                    <?= e($btn_pdf); ?>
+                <a href="translatedbooks_report_PDF.php?<?= http_build_query($_GET); ?>"
+                    class="btn btn-danger">
+                    <i class="fas fa-file-pdf"></i>
+                    <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
                 </a>
+
             </div>
 
-            <form method="GET" class="row mb-3 no-print">
-                <div class="col-md-3">
-                    <label class="form-label"><?= e($translator_text); ?></label>
-                    <select name="translator" class="form-control">
-                        <option value=""><?= e($all_text); ?></option>
-                        <?php
-                        $teacher = $conn->query("SELECT ID, Name FROM teacher ORDER BY Name");
-                        while ($t = $teacher->fetch_assoc()) {
-                            echo '<option value="' . e($t['ID']) . '" ' . selected($filters['translator'], $t['ID']) . '>' . e($t['Name']) . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
+            <!-- FILTER CARD START -->
+            <div class="filter-card no-print">
+                <form method="GET">
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= e($category_text); ?></label>
-                    <input type="text" name="category" class="form-control" value="<?= e($filters['category']); ?>">
-                </div>
+                    <div class="row">
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= e($department_text); ?></label>
-                    <select name="department" class="form-control">
-                        <option value=""><?= e($all_text); ?></option>
-                        <?php
-                        $dep = $conn->query("SELECT ID, Name FROM department ORDER BY Name");
-                        while ($d = $dep->fetch_assoc()) {
-                            echo '<option value="' . e($d['ID']) . '" ' . selected($filters['department'], $d['ID']) . '>' . e($d['Name']) . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><?= e($translator_text); ?></label>
+                            <select name="translator" class="form-control">
+                                <option value=""><?= e($all_text); ?></option>
+                                <?php
+                                $teacher = $conn->query("SELECT ID, Name FROM teacher ORDER BY Name");
+                                while ($t = $teacher->fetch_assoc()) {
+                                    echo '<option value="' . e($t['ID']) . '" ' .
+                                        selected($filters['translator'], $t['ID']) . '>' .
+                                        e($t['Name']) .
+                                        '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= e($date_from_text); ?></label>
-                    <input type="date" name="date_from" class="form-control" value="<?= e($filters['date_from']); ?>">
-                </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><?= e($category_text); ?></label>
+                            <input type="text" name="category" class="form-control"
+                                value="<?= e($filters['category']); ?>">
+                        </div>
 
-                <div class="col-md-2">
-                    <label class="form-label"><?= e($date_to_text); ?></label>
-                    <input type="date" name="date_to" class="form-control" value="<?= e($filters['date_to']); ?>">
-                </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><?= e($department_text); ?></label>
+                            <select name="department" class="form-control">
+                                <option value=""><?= e($all_text); ?></option>
+                                <?php
+                                $dep = $conn->query("SELECT ID, Name FROM department ORDER BY Name");
+                                while ($d = $dep->fetch_assoc()) {
+                                    echo '<option value="' . e($d['ID']) . '" ' .
+                                        selected($filters['department'], $d['ID']) . '>' .
+                                        e($d['Name']) .
+                                        '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                <div class="col-md-12 mt-2">
-                    <button class="btn btn-primary" type="submit">
-                        <?= e($btn_filter); ?>
-                    </button>
-                </div>
-            </form>
+                        <div class="col-md-3">
+                            <label class="form-label"><?= e($date_from_text); ?></label>
+                            <input type="date" name="date_from" class="form-control"
+                                value="<?= e($filters['date_from']); ?>">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label"><?= e($date_to_text); ?></label>
+                            <input type="date" name="date_to" class="form-control"
+                                value="<?= e($filters['date_to']); ?>">
+                        </div>
+
+                        <!-- BUTTONS -->
+                        <div class="col-12 text-center mt-3">
+                            <button type="submit" class="btn btn-success px-4">
+                                <?= ($lang == 'fa') ? 'اعمال فیلتر' : 'Apply Filter'; ?>
+                            </button>
+
+                            <a href="translatedbooks_report.php" class="btn btn-secondary px-4">
+                                <?= ($lang == 'fa') ? 'پاک کردن' : 'Reset'; ?>
+                            </a>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <!-- FILTER CARD END -->
 
             <table class="table table-bordered table-striped">
                 <thead>

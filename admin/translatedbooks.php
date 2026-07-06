@@ -371,6 +371,36 @@ ORDER BY translated_books.ID DESC
     <script src="../js/bootstrap.bundle.min.js"></script>
 
     <style>
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         html[dir="rtl"] .main-wrapper,
         html[dir="rtl"] .table-section,
         html[dir="rtl"] .form-section,
@@ -457,12 +487,12 @@ ORDER BY translated_books.ID DESC
                     <thead>
 
                         <tr>
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
                             <th><?= ($lang == 'fa') ? 'نویسنده' : 'Author'; ?></th>
                             <th><?= ($lang == 'fa') ? 'مترجم' : 'Translator'; ?></th>
-                            <th><?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
                             <th><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></th>
                             <th><?= ($lang == 'fa') ? 'تعداد صفحات' : 'Pages'; ?></th>
                             <th><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></th>
@@ -514,7 +544,7 @@ ORDER BY translated_books.ID DESC
                                         <a href="translatedbooks.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
+                                            <?= ($lang == 'fa') ? 'تغییر دادن' : 'Edit'; ?>
 
                                         </a>
 
@@ -547,16 +577,18 @@ ORDER BY translated_books.ID DESC
         <div class="form-section">
 
             <div class="form-card">
+                <div class="form-title" style="text-align: center;">
 
-                <?php
-                echo isset($_GET['edit'])
-                    ? (($lang == 'fa')
-                        ? 'ویرایش کتاب ترجمه‌شده'
-                        : 'Edit Translated Book')
-                    : (($lang == 'fa')
-                        ? 'افزودن کتاب ترجمه‌شده'
-                        : 'Add Translated Book');
-                ?>
+                    <?php
+                    echo isset($_GET['edit'])
+                        ? (($lang == 'fa')
+                            ? 'تغییر دادن کتاب ترجمه‌شده'
+                            : 'Edit Translated Book')
+                        : (($lang == 'fa')
+                            ? 'اضافه نمودن کتاب ترجمه‌شده'
+                            : 'Add Translated Book');
+                    ?>
+                </div>
 
                 <form method="POST"
                     enctype="multipart/form-data">
@@ -564,7 +596,7 @@ ORDER BY translated_books.ID DESC
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -662,7 +694,7 @@ ORDER BY translated_books.ID DESC
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'دسته‌بندی' : 'Category'; ?>
+                            <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
                         </label>
 
                         <input type="text"
@@ -677,7 +709,7 @@ ORDER BY translated_books.ID DESC
                     <div class="mb-2">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'بخش' : 'Department'; ?>
+                            <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
                         </label>
 
                         <select name="department"
@@ -754,22 +786,31 @@ ORDER BY translated_books.ID DESC
                             value="<?php echo $edit_publish_date; ?>">
 
                     </div>
+                    <div class="form-buttons">
+                        <button type="submit"
+                            class="save-btn"
+                            name="<?= isset($_GET['edit'])
+                                        ? 'update_book'
+                                        : 'save_book'; ?>">
 
-                    <button type="submit"
-                        class="save-btn"
-                        name="<?= isset($_GET['edit'])
-                                    ? 'update_book'
-                                    : 'save_book'; ?>">
+                            <?= isset($_GET['edit'])
+                                ? (($lang == 'fa')
+                                    ? 'تغییر دادن کتاب'
+                                    : 'Update Book')
+                                : (($lang == 'fa')
+                                    ? 'ذخیره کتاب'
+                                    : 'Save Book'); ?>
 
-                        <?= isset($_GET['edit'])
-                            ? (($lang == 'fa')
-                                ? 'بروزرسانی کتاب'
-                                : 'Update Book')
-                            : (($lang == 'fa')
-                                ? 'ذخیره کتاب'
-                                : 'Save Book'); ?>
+                        </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='translatedbooks.php'">
 
-                    </button>
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+                    </div>
 
                 </form>
 

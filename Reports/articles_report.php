@@ -94,7 +94,64 @@ $total = $conn->query("SELECT COUNT(*) AS total FROM articles")
 
     <link rel="stylesheet" href="style.css">
 
+    <style>
+        /* ==========================
+   FILTER CARD
+========================== */
+        .filter-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+        }
 
+        .filter-card .row {
+            row-gap: 18px;
+        }
+
+        .filter-card .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .filter-card .form-control,
+        .filter-card .form-select {
+            width: 100%;
+            height: 45px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .filter-card .form-control:focus,
+        .filter-card .form-select:focus {
+            border-color: #0f9d58;
+            box-shadow: 0 0 0 .15rem rgba(15, 157, 88, .18);
+        }
+
+        .filter-card .btn {
+            min-width: 150px;
+            height: 42px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        html[dir="rtl"] .filter-card {
+            direction: rtl;
+            text-align: right;
+        }
+
+        html[dir="ltr"] .filter-card {
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
@@ -109,112 +166,99 @@ $total = $conn->query("SELECT COUNT(*) AS total FROM articles")
 
             <!-- TITLE -->
             <h2 class="report-title">
-                <?= ($lang == 'fa') ? 'گزارش مقالات' : 'Articles Report'; ?>
+                <?= ($lang == 'fa') ? 'راپور مقالات' : 'Articles Report'; ?>
             </h2>
 
-            <!-- BUTTONS -->
-            <div class="no-print mb-3">
 
-                <button class="btn btn-success" onclick="window.print()">
-                    <?= ($lang == 'fa') ? 'پرنت گزارش' : 'Print Report'; ?>
-                </button>
+            <!-- PDF BUTTON -->
+            <div class="no-print mb-3 text-end">
 
                 <a href="articles_report_pdf.php?<?= http_build_query($_GET); ?>"
                     class="btn btn-danger">
+                    <i class="fas fa-file-pdf"></i>
                     <?= ($lang == 'fa') ? 'دانلود PDF' : 'Download PDF'; ?>
                 </a>
 
             </div>
 
-            <!-- FILTER FORM -->
-            <form method="GET" class="row mb-3 no-print">
+            <div class="filter-card no-print">
 
-                <!-- Teacher -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?>
-                    </label>
-                    <select name="teacher" class="form-control">
-                        <option value="">
-                            <?= ($lang == 'fa') ? 'همه استادان' : 'All Teachers'; ?>
-                        </option>
-                        <?php
-                        $teacher = $conn->query("SELECT * FROM teacher");
-                        while ($t = $teacher->fetch_assoc()) {
-                            echo "<option value='{$t['ID']}'>{$t['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                <form method="GET" class="row g-3">
 
-                <!-- Student -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'محصل' : 'Student'; ?>
-                    </label>
-                    <select name="student" class="form-control">
-                        <option value="">
-                            <?= ($lang == 'fa') ? 'همه محصلین' : 'All Students'; ?>
-                        </option>
-                        <?php
-                        $student = $conn->query("SELECT * FROM students");
-                        while ($s = $student->fetch_assoc()) {
-                            echo "<option value='{$s['ID']}'>{$s['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label"><?= ($lang == 'fa') ? 'استاد' : 'Teacher'; ?></label>
+                        <select name="teacher" class="form-select">
+                            <option value="">
+                                <?= ($lang == 'fa') ? 'همه استادان' : 'All Teachers'; ?>
+                            </option>
+                            <?php
+                            $teacher = $conn->query("SELECT * FROM teacher");
+                            while ($t = $teacher->fetch_assoc()) {
+                                echo "<option value='{$t['ID']}'>{$t['Name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <!-- Category -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>
-                    </label>
-                    <input type="text" name="category" class="form-control"
-                        placeholder="<?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?>">
-                </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label"><?= ($lang == 'fa') ? 'محصل' : 'Student'; ?></label>
+                        <select name="student" class="form-select">
+                            <option value="">
+                                <?= ($lang == 'fa') ? 'همه محصلین' : 'All Students'; ?>
+                            </option>
+                            <?php
+                            $student = $conn->query("SELECT * FROM students");
+                            while ($s = $student->fetch_assoc()) {
+                                echo "<option value='{$s['ID']}'>{$s['Name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label"><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></label>
+                        <input type="text" name="category" class="form-control">
+                    </div>
 
-                <!-- Department -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?>
-                    </label>
-                    <select name="department" class="form-control">
-                        <option value="">
-                            <?= ($lang == 'fa') ? 'همه دیپارتمنت‌ها' : 'All Departments'; ?>
-                        </option>
-                        <?php
-                        $dep = $conn->query("SELECT * FROM department");
-                        while ($d = $dep->fetch_assoc()) {
-                            echo "<option value='{$d['ID']}'>{$d['Name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label"><?= ($lang == 'fa') ? 'دیپارتمنت' : 'Department'; ?></label>
+                        <select name="department" class="form-select">
+                            <option value="">
+                                <?= ($lang == 'fa') ? 'همه دیپارتمنت‌ها' : 'All Departments'; ?>
+                            </option>
+                            <?php
+                            $dep = $conn->query("SELECT * FROM department");
+                            while ($d = $dep->fetch_assoc()) {
+                                echo "<option value='{$d['ID']}'>{$d['Name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <!-- Date From -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'از تاریخ' : 'Date From'; ?>
-                    </label>
-                    <input type="date" name="date_from" class="form-control">
-                </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label"><?= ($lang == 'fa') ? 'تا تاریخ' : 'Date To'; ?></label>
+                        <input type="date" name="date_to" class="form-control">
+                    </div>
 
-                <!-- Date To -->
-                <div class="col-md-2">
-                    <label class="form-label">
-                        <?= ($lang == 'fa') ? 'تا تاریخ' : 'Date To'; ?>
-                    </label>
-                    <input type="date" name="date_to" class="form-control">
-                </div>
+                    <div class="col-lg-4 col-md-6">
+                        <label class="form-label"><?= ($lang == 'fa') ? 'از تاریخ' : 'Date From'; ?></label>
+                        <input type="date" name="date_from" class="form-control">
+                    </div>
 
-                <div class="col-md-12 mt-2">
-                    <button type="submit" class="btn btn-primary">
-                        <?= ($lang == 'fa') ? 'فیلتر گزارش' : 'Filter Report'; ?>
-                    </button>
-                </div>
 
-            </form>
+
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-success px-4">
+                            <?= ($lang == 'fa') ? 'اعمال فیلتر' : 'Apply Filter'; ?>
+                        </button>
+
+                        <a href="articles_report.php" class="btn btn-secondary px-4">
+                            <?= ($lang == 'fa') ? 'پاک کردن' : 'Reset'; ?>
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
 
             <!-- TABLE -->
             <table class="table table-bordered table-striped">

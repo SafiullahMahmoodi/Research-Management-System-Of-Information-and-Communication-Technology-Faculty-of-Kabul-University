@@ -189,6 +189,36 @@ $student_result = $conn->query($student_query);
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <style>
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         html[dir="rtl"] .main-wrapper,
         html[dir="rtl"] .table-section,
         html[dir="rtl"] .form-section,
@@ -266,7 +296,7 @@ $student_result = $conn->query($student_query);
 
                         <tr>
 
-                            <th><?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
 
@@ -311,7 +341,7 @@ $student_result = $conn->query($student_query);
                                         <a href="students.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
+                                            <?= ($lang == 'fa') ? 'تغییر دادن' : 'Edit'; ?>
 
                                         </a>
 
@@ -349,12 +379,12 @@ $student_result = $conn->query($student_query);
 
             <div class="form-card">
 
-                <div class="form-title">
+                <div class="form-title" style="text-align: center;">
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? (($lang == 'fa') ? 'ویرایش محصل' : 'Edit Student')
-                        : (($lang == 'fa') ? 'افزودن محصل' : 'Add Student');
+                        ? (($lang == 'fa') ? 'تغییر داد محصل' : 'Edit Student')
+                        : (($lang == 'fa') ? 'اضافه نمودن محصل' : 'Add Student');
                     ?>
 
                 </div>
@@ -370,7 +400,7 @@ $student_result = $conn->query($student_query);
 
                     <div class="mb-3">
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'شناسه' : 'ID'; ?>
+                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
                         <input type="text"
@@ -514,21 +544,30 @@ $student_result = $conn->query($student_query);
                     </div>
 
                     <!-- BUTTON -->
+                    <div class="form-buttons">
+                        <button class="save-btn"
+                            name="<?php
+                                    echo isset($_GET['edit'])
+                                        ? 'update_student'
+                                        : 'save_student';
+                                    ?>">
 
-                    <button class="save-btn"
-                        name="<?php
-                                echo isset($_GET['edit'])
-                                    ? 'update_student'
-                                    : 'save_student';
-                                ?>">
+                            <?php
+                            echo isset($_GET['edit'])
+                                ? (($lang == 'fa') ? 'تغییر دادن محصل' : 'Update Student')
+                                : (($lang == 'fa') ? 'ذخیره محصل' : 'Save Student');
+                            ?>
 
-                        <?php
-                        echo isset($_GET['edit'])
-                            ? (($lang == 'fa') ? 'بروزرسانی محصل' : 'Update Student')
-                            : (($lang == 'fa') ? 'ذخیره محصل' : 'Save Student');
-                        ?>
+                        </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='students.php'">
 
-                    </button>
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+                    </div>
 
                 </form>
 

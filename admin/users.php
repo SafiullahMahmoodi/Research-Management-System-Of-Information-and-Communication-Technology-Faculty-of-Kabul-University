@@ -164,7 +164,8 @@ $user_result = $conn->query($user_query);
         content="width=device-width, initial-scale=1.0">
 
     <title><?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="style.css">
     <link rel="stylesheet"
         href="../css/bootstrap.min.css">
 
@@ -183,18 +184,18 @@ $user_result = $conn->query($user_query);
 
         .form-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .form-buttons button {
-            flex: 1;
-            padding: 12px;
+            flex: 1 1 0;
+            padding: 10px;
             border: none;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 12px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         .save-btn {
@@ -280,7 +281,7 @@ $user_result = $conn->query($user_query);
                     <input type="text"
                         name="search"
                         class="search-input"
-                        placeholder="<?= ($lang == 'fa') ? 'جستجوی کاربران...' : 'Search users...'; ?>"
+                        placeholder="<?= ($lang == 'fa') ? 'جستجوی استفاده کننده گان...' : 'Search users...'; ?>"
                         value="<?= htmlspecialchars($search ?? '') ?>">
 
                     <button type="submit" class="search-btn">
@@ -303,11 +304,11 @@ $user_result = $conn->query($user_query);
 
 
 
-                            <th><?= ($lang == 'fa') ? 'نام کاربری' : 'Username'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'نام استفاده کننده' : 'Username'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'ایمیل' : 'Email'; ?></th>
 
-                            <th><?= ($lang == 'fa') ? 'نوع کاربر' : 'User Type'; ?></th>
+                            <th><?= ($lang == 'fa') ? 'نوع استفاده کننده' : 'User Type'; ?></th>
 
                             <th width="160">
                                 <?= ($lang == 'fa') ? 'عملیات' : 'Action'; ?>
@@ -338,14 +339,14 @@ $user_result = $conn->query($user_query);
                                         <a href="users.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
 
-                                            <?= ($lang == 'fa') ? 'ویرایش' : 'Edit'; ?>
+                                            <?= ($lang == 'fa') ? 'تغییر آوردن' : 'Edit'; ?>
 
                                         </a>
                                         <a href="users.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
 
                                             onclick="return confirm('<?= ($lang == 'fa')
-                                                                            ? 'آیا مطمئن هستید که می‌خواهید این کاربر را حذف کنید؟'
+                                                                            ? 'آیا مطمئن هستید که می‌خواهید این استفاده کننده را حذف کنید؟'
                                                                             : 'Are you sure you want to delete this user?'; ?>')">
 
                                             <?= ($lang == 'fa') ? 'حذف' : 'Delete'; ?>
@@ -380,8 +381,8 @@ $user_result = $conn->query($user_query);
 
                     <?php
                     echo isset($_GET['edit'])
-                        ? (($lang == 'fa') ? 'ویرایش کاربر' : 'Edit User')
-                        : (($lang == 'fa') ? 'افزودن کاربر' : 'Add User');
+                        ? (($lang == 'fa') ? 'تغییر آوردن استفاده کننده' : 'Edit User')
+                        : (($lang == 'fa') ? 'اضافه نمودن استفاده کننده' : 'Add User');
                     ?>
 
                 </div>
@@ -399,7 +400,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'نام کاربری' : 'Username'; ?>
+                            <?= ($lang == 'fa') ? 'نام استفاده کننده' : 'Username'; ?>
                         </label>
 
                         <input type="text"
@@ -408,9 +409,7 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'نام کاربری را وارد کنید'
-                                                : 'Enter username'; ?>"
+
 
                             value="<?php echo $edit_username; ?>"
 
@@ -432,9 +431,6 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'ایمیل را وارد کنید'
-                                                : 'Enter email'; ?>"
 
                             value="<?php echo $edit_email; ?>"
 
@@ -447,7 +443,7 @@ $user_result = $conn->query($user_query);
                     <div class="mb-3">
 
                         <label class="form-label">
-                            <?= ($lang == 'fa') ? 'نوع کاربر' : 'User Type'; ?>
+                            <?= ($lang == 'fa') ? 'نوع استفاده کننده' : 'User Type'; ?>
                         </label>
 
                         <select name="user_type"
@@ -463,7 +459,7 @@ $user_result = $conn->query($user_query);
                             <option value="User"
                                 <?php if ($edit_type == "User") echo "selected"; ?>>
 
-                                <?= ($lang == 'fa') ? 'کاربر' : 'User'; ?>
+                                <?= ($lang == 'fa') ? 'استفاده کننده عادی' : 'User'; ?>
 
                             </option>
 
@@ -485,9 +481,6 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'رمز عبور را وارد کنید'
-                                                : 'Enter password'; ?>"
 
                             required>
 
@@ -516,9 +509,6 @@ $user_result = $conn->query($user_query);
 
                             class="form-control"
 
-                            placeholder="<?= ($lang == 'fa')
-                                                ? 'تأیید رمز عبور'
-                                                : 'Confirm password'; ?>"
 
                             required>
 
@@ -541,8 +531,8 @@ $user_result = $conn->query($user_query);
 
                             <?php
                             echo $isEdit
-                                ? ($lang == 'fa' ? 'بروزرسانی کاربر' : 'Update User')
-                                : ($lang == 'fa' ? 'ذخیره کاربر' : 'Save User');
+                                ? ($lang == 'fa' ? 'تغییر آوری استفاده کننده' : 'Update User')
+                                : ($lang == 'fa' ? 'ذخیره استفاده کننده' : 'Save User');
                             ?>
 
                         </button>
