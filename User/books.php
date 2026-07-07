@@ -3,7 +3,7 @@
 include('../auth.php');
 $lang = $_SESSION['lang'] ?? 'en';
 include('../db_connection.php');
-
+$error = "";
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -80,8 +80,24 @@ if (isset($_POST['save_book'])) {
     // ===========================
     // INSERT
     // ===========================
+    // ===========================
+    // CHECK DUPLICATE ID
+    // ===========================
 
-    $conn->query("
+    $check = mysqli_query($conn, "SELECT ID FROM books WHERE ID='$id'");
+
+    if (mysqli_num_rows($check) > 0) {
+
+        $error = ($lang == 'fa')
+            ? "این آی دی قبلاً ثبت شده است."
+            : "This ID already exists.";
+    } else {
+
+        // ===========================
+        // INSERT
+        // ===========================
+
+        $conn->query("
     INSERT INTO books
     (
         ID,
@@ -94,7 +110,6 @@ if (isset($_POST['save_book'])) {
         PDF_File,
         Publish_Date
     )
-
     VALUES
     (
         '$id',
@@ -109,8 +124,9 @@ if (isset($_POST['save_book'])) {
     )
     ");
 
-    header("Location: books.php");
-    exit();
+        header("Location: books.php");
+        exit();
+    }
 }
 
 
@@ -328,6 +344,36 @@ if (isset($_GET['search'])) {
             text-align: right;
             direction: rtl;
         }
+
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
     </Style>
 
 </head>
@@ -461,16 +507,21 @@ if (isset($_GET['search'])) {
                 <form method="POST"
                     enctype="multipart/form-data">
 
+                    <?php if (!empty($error)) { ?>
+                        <div class="alert alert-danger py-2 mb-2">
+                            <?= $error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-2">
 
                         <label class="form-label">
                             <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
-
                         <input type="text"
                             name="id"
                             class="form-control"
-                            required>
+                            required
+                            value="<?= isset($_POST['id']) ? htmlspecialchars($_POST['id']) : ''; ?>">
                     </div>
 
                     <div class="mb-2">
@@ -616,13 +667,22 @@ if (isset($_GET['search'])) {
 
                     </div>
 
-                    <button type="submit"
-                        class="save-btn"
-                        name="save_book">
 
-                        <?= ($lang == 'fa') ? 'ذخیره کتاب' : 'Save Book'; ?>
+                    <div class="form-buttons">
 
-                    </button>
+                        <button type="submit"
+                            class="save-btn"
+                            name="save_book">
+                            <?= ($lang == 'fa') ? 'ذخیره کتاب' : 'Save Book'; ?>
+                        </button>
+
+                        <button type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='books.php'">
+                            <?= ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+                        </button>
+
+                    </div>
 
                 </form>
 

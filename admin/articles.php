@@ -7,6 +7,7 @@ $lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
 $error = "";
+$id_error = "";
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -23,6 +24,7 @@ if (!file_exists("../PDF_File")) {
 if (isset($_POST['save_article'])) {
 
     $id          = mysqli_real_escape_string($conn, $_POST['id']);
+
     $title       = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $category    = mysqli_real_escape_string($conn, $_POST['category']);
@@ -31,6 +33,14 @@ if (isset($_POST['save_article'])) {
     $department  = mysqli_real_escape_string($conn, $_POST['department']);
     $date        = mysqli_real_escape_string($conn, $_POST['date']);
 
+    // Check if ID already exists
+    $check = $conn->query("SELECT ID FROM articles WHERE ID='$id'");
+
+    if ($check->num_rows > 0) {
+        $id_error = ($lang == 'fa')
+            ? 'این آی دی قبلاً ثبت شده است.'
+            : 'This ID already exists.';
+    }
     // ===========================
     // CHECK TEACHER OR STUDENT
     // ===========================
@@ -53,6 +63,7 @@ if (isset($_POST['save_article'])) {
             die("Selected Teacher does not exist.");
         }
     }
+
 
     // ===========================
     // CHECK STUDENT
@@ -126,8 +137,9 @@ if (isset($_POST['save_article'])) {
     // ===========================
     // INSERT
     // ===========================
+    if (empty($id_error) && empty($error)) {
 
-    $conn->query("
+        $conn->query("
     INSERT INTO articles
     (
         ID,
@@ -140,7 +152,6 @@ if (isset($_POST['save_article'])) {
         PDF_File,
         Date
     )
-
     VALUES
     (
         '$id',
@@ -155,8 +166,9 @@ if (isset($_POST['save_article'])) {
     )
     ");
 
-    header("Location: articles.php");
-    exit();
+        header("Location: articles.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -807,21 +819,24 @@ ORDER BY articles.ID DESC
                     enctype="multipart/form-data"
                     onsubmit="return validateForm()">
 
+                    <?php if (!empty($id_error)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $id_error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-2">
 
                         <label class="form-label">
                             <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
-                        <input type="text"
-
+                        <input
+                            type="text"
                             name="id"
-
                             class="form-control"
-
-                            required
-
-                            value="<?php echo $edit_id; ?>">
+                            value="<?= $edit_id; ?>"
+                            <?= isset($_GET['edit']) ? 'readonly' : ''; ?>
+                            required>
 
                     </div>
 

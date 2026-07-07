@@ -5,7 +5,7 @@ $lang = $_SESSION['lang'] ?? 'en';
 // ===========================
 // Message
 // ===========================
-
+$id_error = "";
 $message = "";
 $message_type = "";
 
@@ -14,39 +14,48 @@ $message_type = "";
 // ===========================
 if (isset($_POST['save_teacher'])) {
 
-    $id          = $_POST['id'];
-    $name        = $_POST['name'];
-    $lastname    = $_POST['lastname'];
-    $email       = $_POST['email'];
-    $contact     = $_POST['contact'];
-    $education   = $_POST['education'];
-    $department  = $_POST['department'];
+    $id         = $_POST['id'];
+    $name       = $_POST['name'];
+    $lastname   = $_POST['lastname'];
+    $email      = $_POST['email'];
+    $contact    = $_POST['contact'];
+    $education  = $_POST['education'];
+    $department = $_POST['department'];
 
-    $conn->query("INSERT INTO teacher
-    (
-        ID,
-        Name,
-        Last_Name,
-        Email,
-        Contact,
-        Education,
-        Department
-    )
+    // Check duplicate ID
+    $check = $conn->query("SELECT ID FROM teacher WHERE ID='$id'");
 
-    VALUES
+    if ($check->num_rows > 0) {
 
-    (
-        '$id',
-        '$name',
-        '$lastname',
-        '$email',
-        '$contact',
-        '$education',
-        '$department'
-    )");
+        $id_error = ($lang == 'fa')
+            ? 'این آی دی قبلاً ثبت شده است.'
+            : 'This ID already exists.';
+    } else {
 
-    header("Location: teachers.php");
-    exit();
+        $conn->query("INSERT INTO teacher
+        (
+            ID,
+            Name,
+            Last_Name,
+            Email,
+            Contact,
+            Education,
+            Department
+        )
+        VALUES
+        (
+            '$id',
+            '$name',
+            '$lastname',
+            '$email',
+            '$contact',
+            '$education',
+            '$department'
+        )");
+
+        header("Location: teachers.php");
+        exit();
+    }
 }
 // ===========================
 // Delete
@@ -524,7 +533,11 @@ if (isset($_GET['search'])) {
 
                         value="<?php echo $edit_id; ?>">
                     <!-- ID -->
-
+                    <?php if (!empty($id_error)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $id_error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-3">
 
                         <label class="form-label">

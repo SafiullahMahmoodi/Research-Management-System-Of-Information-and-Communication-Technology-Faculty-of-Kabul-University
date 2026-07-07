@@ -4,6 +4,7 @@ include('../auth.php');
 
 include('../db_connection.php');
 $lang = $_SESSION['lang'] ?? 'en';
+$id_error = "";
 // ===========================
 // Insert Student
 // ===========================
@@ -11,6 +12,14 @@ $lang = $_SESSION['lang'] ?? 'en';
 if (isset($_POST['save_student'])) {
 
     $id          = $_POST['id'];
+    // Check if ID already exists
+    $check = $conn->query("SELECT ID FROM students WHERE ID='$id'");
+
+    if ($check->num_rows > 0) {
+        $id_error = ($lang == 'fa')
+            ? 'این آی دی قبلاً ثبت شده است.'
+            : 'This ID already exists.';
+    }
     $name        = $_POST['name'];
     $lastname    = $_POST['lastname'];
     $email       = $_POST['email'];
@@ -38,10 +47,13 @@ VALUES
     '$department'
 )";
 
-    $conn->query($insert_query);
+    if (empty($id_error)) {
 
-    header("Location: students.php");
-    exit();
+        $conn->query($insert_query);
+
+        header("Location: students.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -498,7 +510,11 @@ $student_result = $conn->query($student_query);
 
                         value="<?php echo $edit_id; ?>">
                     <!-- ID -->
-
+                    <?php if (!empty($id_error)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $id_error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-3">
                         <label class="form-label">
                             <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>

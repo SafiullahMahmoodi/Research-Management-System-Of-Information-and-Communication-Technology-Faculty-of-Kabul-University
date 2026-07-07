@@ -7,6 +7,7 @@ $lang = $_SESSION['lang'] ?? 'en';
 
 
 include('../db_connection.php');
+$id_error = "";
 
 // ===========================
 // Insert Department
@@ -16,18 +17,26 @@ if (isset($_POST['save_department'])) {
 
     $id         = $_POST['id'];
     $department = $_POST['department'];
+    // Check if ID already exists
+    $check = $conn->query("SELECT ID FROM department WHERE ID='$id'");
 
-    $insert_query = "INSERT INTO department
+    if ($check->num_rows > 0) {
+        $id_error = ($lang == 'fa')
+            ? 'این آی دی قبلاً ثبت شده است.'
+            : 'This ID already exists.';
+    }
+    if (empty($id_error)) {
+
+        $insert_query = "INSERT INTO department
     (ID, Name)
-
     VALUES
-
     ('$id','$department')";
 
-    $conn->query($insert_query);
+        $conn->query($insert_query);
 
-    header("Location: departments.php");
-    exit();
+        header("Location: departments.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -446,6 +455,11 @@ $department_result = $conn->query($department_query);
                 <form method="POST">
 
                     <!-- ID -->
+                    <?php if (!empty($id_error)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $id_error; ?>
+                        </div>
+                    <?php } ?>
 
                     <div class="mb-3">
 

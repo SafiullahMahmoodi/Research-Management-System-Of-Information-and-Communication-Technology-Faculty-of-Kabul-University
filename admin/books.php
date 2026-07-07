@@ -5,6 +5,7 @@ include('../auth.php');
 
 include('../db_connection.php');
 $lang = $_SESSION['lang'] ?? 'en';
+$id_error = "";
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -21,6 +22,14 @@ if (!file_exists("../PDF_File")) {
 if (isset($_POST['save_book'])) {
 
     $id            = mysqli_real_escape_string($conn, $_POST['id']);
+    // Check duplicate ID
+    $check_id = $conn->query("SELECT ID FROM books WHERE ID='$id'");
+
+    if ($check_id->num_rows > 0) {
+        $id_error = ($lang == 'fa')
+            ? 'این آی دی قبلاً ثبت شده است.'
+            : 'This ID already exists.';
+    }
     $title         = mysqli_real_escape_string($conn, $_POST['title']);
     $description   = mysqli_real_escape_string($conn, $_POST['description']);
     $category      = mysqli_real_escape_string($conn, $_POST['category']);
@@ -84,21 +93,21 @@ if (isset($_POST['save_book'])) {
     // ===========================
     // INSERT
     // ===========================
+    if (empty($id_error)) {
 
-    $conn->query("
+        $conn->query("
     INSERT INTO books
     (
         ID,
-        title,
+        Title,
         Description,
         Category,
         Author,
         Department,
-        pages,
+        Pages,
         PDF_File,
         Publish_Date
     )
-
     VALUES
     (
         '$id',
@@ -113,10 +122,10 @@ if (isset($_POST['save_book'])) {
     )
     ");
 
-    header("Location: books.php");
-    exit();
+        header("Location: books.php");
+        exit();
+    }
 }
-
 // ===========================
 // DELETE BOOK
 // ===========================
@@ -705,22 +714,29 @@ if (isset($_GET['search'])) {
 
                 <form method="POST"
                     enctype="multipart/form-data">
-
+                    <?php if (!empty($id_error)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $id_error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-2">
 
-                        <label class="form-label">
-                            <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
-                        </label>
 
-                        <input type="text"
+                        <div class="mb-2">
 
-                            name="id"
+                            <label class="form-label">
+                                <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
+                            </label>
 
-                            class="form-control"
+                            <input
+                                type="text"
+                                name="id"
+                                class="form-control"
+                                value="<?php echo $edit_id; ?>"
+                                <?php echo isset($_GET['edit']) ? 'readonly' : ''; ?>
+                                required>
 
-                            required
-
-                            value="<?php echo $edit_id; ?>">
+                        </div>
 
                     </div>
 

@@ -6,6 +6,7 @@ include('../auth.php');
 $lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
+$error = "";
 
 // ===========================
 // CREATE PDF FOLDER
@@ -30,6 +31,8 @@ if (isset($_POST['save_article'])) {
     $student_id  = mysqli_real_escape_string($conn, $_POST['student_id']);
     $department  = mysqli_real_escape_string($conn, $_POST['department']);
     $date        = mysqli_real_escape_string($conn, $_POST['date']);
+
+
 
     // ===========================
     // CHECK TEACHER OR STUDENT
@@ -57,6 +60,7 @@ if (isset($_POST['save_article'])) {
             die("Selected Teacher does not exist.");
         }
     }
+
 
     // ===========================
     // CHECK STUDENT
@@ -127,37 +131,47 @@ if (isset($_POST['save_article'])) {
     // ===========================
     // INSERT
     // ===========================
+    $check = mysqli_query($conn, "SELECT ID FROM articles WHERE ID='$id'");
 
-    $conn->query("
-    INSERT INTO articles
-    (
-        ID,
-        Title,
-        Description,
-        Category,
-        Teacher_ID,
-        Student_ID,
-        Department,
-        PDF_File,
-        Date
-    )
+    if (mysqli_num_rows($check) > 0) {
 
-    VALUES
-    (
-        '$id',
-        '$title',
-        '$description',
-        '$category',
-        $teacher_value,
-        $student_value,
-        '$department',
-        '$pdf_file',
-        '$date'
-    )
+        $error = ($lang == 'fa')
+            ? "این آی دی قبلاً ثبت شده است."
+            : "This ID already exists.";
+    } else {
+
+        // INSERT QUERY HERE
+
+        $conn->query("
+        INSERT INTO articles
+        (
+            ID,
+            Title,
+            Description,
+            Category,
+            Teacher_ID,
+            Student_ID,
+            Department,
+            PDF_File,
+            Date
+        )
+        VALUES
+        (
+            '$id',
+            '$title',
+            '$description',
+            '$category',
+            $teacher_value,
+            $student_value,
+            '$department',
+            '$pdf_file',
+            '$date'
+        )
     ");
 
-    header("Location: articles.php");
-    exit();
+        header("Location: articles.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -386,6 +400,36 @@ if (isset($_GET['search'])) {
         html[dir="rtl"] .table td {
             text-align: right;
         }
+
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
     </Style>
 </head>
 
@@ -508,7 +552,11 @@ if (isset($_GET['search'])) {
 
                 <form method="POST"
                     enctype="multipart/form-data">
-
+                    <?php if (!empty($error)) { ?>
+                        <div class="alert alert-danger py-2 mb-2">
+                            <?= $error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-2">
 
                         <label class="form-label">
@@ -518,7 +566,8 @@ if (isset($_GET['search'])) {
                         <input type="text"
                             name="id"
                             class="form-control"
-                            required>
+                            required
+                            value="<?= isset($_POST['id']) ? htmlspecialchars($_POST['id']) : ''; ?>">
 
                     </div>
 
@@ -686,13 +735,21 @@ if (isset($_GET['search'])) {
 
                     </div>
 
-                    <button type="submit"
-                        class="save-btn"
-                        name="save_article">
+                    <div class="form-buttons">
 
-                        <?= ($lang == 'fa') ? 'ذخیره مقاله' : 'Save Article'; ?>
+                        <button type="submit"
+                            class="save-btn"
+                            name="save_article">
+                            <?= ($lang == 'fa') ? 'ذخیره مقاله' : 'Save Article'; ?>
+                        </button>
 
-                    </button>
+                        <button type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='articles.php'">
+                            <?= ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+                        </button>
+
+                    </div>
 
                 </form>
 

@@ -401,30 +401,38 @@ textarea {
   padding: 10px !important;
 }
 
-/* =========================
-   SAVE BUTTON
-========================= */
-.save-btn {
-  font-size: 16px;
-  padding: 12px;
+/* ==========================
+   FORM BUTTONS
+========================== */
+.form-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
 }
+
+.form-buttons button {
+  flex: 1 1 0;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 400;
+}
+
 .save-btn {
-  width: 100%;
   background: #0f9d58;
   color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-top: 10px;
-  transition: 0.3s;
 }
 
 .save-btn:hover {
   background: #0c7c45;
 }
 
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+}
 /* =========================
    GRAPH
 ========================= */

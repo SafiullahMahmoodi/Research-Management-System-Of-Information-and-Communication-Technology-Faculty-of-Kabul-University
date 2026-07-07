@@ -28,7 +28,15 @@ if (isset($_POST['save_thesis'])) {
     $instructor    = mysqli_real_escape_string($conn, $_POST['instructor']);
     $department    = mysqli_real_escape_string($conn, $_POST['department']);
     $publish_date  = mysqli_real_escape_string($conn, $_POST['publish_date']);
+    $id = mysqli_real_escape_string($conn, $_POST['id']);
 
+    $check = $conn->query("SELECT ID FROM thesis WHERE ID='$id'");
+
+    if ($check->num_rows > 0) {
+        $id_error = ($lang == 'fa')
+            ? 'این آی دی قبلاً ثبت شده است.'
+            : 'This ID already exists.';
+    }
     // CHECK STUDENT
 
     $check_student = $conn->query("
@@ -91,8 +99,9 @@ if (isset($_POST['save_thesis'])) {
     }
 
     // INSERT
+    if (empty($id_error)) {
 
-    $conn->query("
+        $conn->query("
     INSERT INTO thesis
     (
         ID,
@@ -105,7 +114,6 @@ if (isset($_POST['save_thesis'])) {
         PDF_File,
         Publish_Date
     )
-
     VALUES
     (
         '$id',
@@ -120,8 +128,9 @@ if (isset($_POST['save_thesis'])) {
     )
     ");
 
-    header("Location: thesis.php");
-    exit();
+        header("Location: thesises.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -715,19 +724,23 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                 <form method="POST"
                     enctype="multipart/form-data">
-
+                    <?php if (!empty($id_error)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $id_error; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-2">
 
                         <label class="form-label">
                             <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
                         </label>
 
-                        <input type="text"
+                        <input
+                            type="text"
                             name="id"
                             class="form-control"
-
-                            required
-                            value="<?php echo $edit_id; ?>">
+                            value="<?= $edit_id; ?>"
+                            <?= isset($_GET['edit']) ? 'readonly' : 'required'; ?>>
 
                     </div>
 
