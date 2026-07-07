@@ -370,6 +370,7 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                             <th><?= ($lang == 'fa') ? 'آی‌دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
@@ -384,11 +385,13 @@ if (isset($_GET['search'])) {
                     </thead>
 
                     <tbody>
+                        <?php $no = 1; ?>
 
                         <?php while ($row = $thesis_result->fetch_assoc()) { ?>
 
                             <tr>
 
+                                <td><?= $no++; ?></td>
                                 <td><?= $row['ID']; ?></td>
                                 <td><?= $row['Title']; ?></td>
                                 <td><?= $row['Description']; ?></td>

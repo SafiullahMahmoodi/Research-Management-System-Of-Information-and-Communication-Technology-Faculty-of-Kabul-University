@@ -375,7 +375,7 @@ $user_result = $conn->query($user_query);
 
                         <tr>
 
-
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'نام استفاده کننده' : 'Username'; ?></th>
 
@@ -393,11 +393,11 @@ $user_result = $conn->query($user_query);
 
                     <tbody>
 
+                        <?php $no = 1; ?>
                         <?php while ($row = $user_result->fetch_assoc()) { ?>
 
                             <tr>
-
-
+                                <td><?php echo $no++; ?></td>
 
                                 <td><?php echo $row['Username']; ?></td>
 

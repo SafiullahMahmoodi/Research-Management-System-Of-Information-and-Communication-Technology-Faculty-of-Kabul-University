@@ -288,6 +288,7 @@ $totalText = $isFa ? 'تعداد کل مونوگراف ها' : 'Total Thesis';
 
                 <thead>
                     <tr>
+                        <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                         <th><?= $th_id ?></th>
                         <th><?= $th_title ?></th>
                         <th><?= $th_category ?></th>
@@ -299,10 +300,12 @@ $totalText = $isFa ? 'تعداد کل مونوگراف ها' : 'Total Thesis';
                 </thead>
 
                 <tbody>
+                    <?php $no = 1; ?>
 
                     <?php while ($row = $thesis_result->fetch_assoc()) { ?>
 
                         <tr>
+                            <td><?= $no++; ?></td>
                             <td><?= $row['ID'] ?></td>
                             <td><?= $row['Title'] ?></td>
                             <td><?= $row['Category'] ?></td>

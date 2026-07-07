@@ -426,7 +426,7 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
-
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                             <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
                             <th><?= ($lang == 'fa') ? 'تخلص' : 'Last Name'; ?></th>
@@ -441,10 +441,14 @@ if (isset($_GET['search'])) {
                     </thead>
 
                     <tbody>
+                        <?php $no = 1; ?>
+
 
                         <?php while ($row = $teacher_result->fetch_assoc()) { ?>
 
                             <tr>
+
+                                <td><?php echo $no++; ?></td>
 
                                 <td><?php echo $row['ID']; ?></td>
 

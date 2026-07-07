@@ -270,6 +270,7 @@ $total = $conn->query("SELECT COUNT(*) AS total FROM articles")
 
                 <thead>
                     <tr>
+                        <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                         <th><?= ($lang == 'fa') ? 'آی‌دی' : 'ID'; ?></th>
                         <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                         <th><?= ($lang == 'fa') ? 'کتگوری' : 'Category'; ?></th>
@@ -281,8 +282,10 @@ $total = $conn->query("SELECT COUNT(*) AS total FROM articles")
                 </thead>
 
                 <tbody>
+                    <?php $no = 1; ?>
                     <?php while ($row = $article_result->fetch_assoc()) { ?>
                         <tr>
+                            <td><?= $no++; ?></td>
                             <td><?= $row['ID']; ?></td>
                             <td><?= $row['Title']; ?></td>
                             <td><?= $row['Category']; ?></td>

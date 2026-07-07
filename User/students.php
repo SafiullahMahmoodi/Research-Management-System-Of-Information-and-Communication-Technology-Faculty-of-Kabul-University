@@ -271,6 +271,8 @@ $student_result = $conn->query($student_query);
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
+
                             <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'نام' : 'Name'; ?></th>
@@ -290,10 +292,12 @@ $student_result = $conn->query($student_query);
                     </thead>
 
                     <tbody>
+                        <?php $no = 1; ?>
 
                         <?php while ($row = $student_result->fetch_assoc()) { ?>
 
                             <tr>
+                                <td><?= $no++; ?></td>
 
                                 <td><?php echo $row['ID']; ?></td>
 

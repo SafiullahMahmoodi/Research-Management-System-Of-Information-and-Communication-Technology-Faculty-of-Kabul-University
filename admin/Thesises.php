@@ -595,7 +595,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                     <thead>
 
                         <tr>
-
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                             <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
@@ -613,9 +613,12 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                     <tbody>
 
+                        <?php $no = 1; ?>
                         <?php while ($row = $thesis_result->fetch_assoc()) { ?>
 
                             <tr>
+
+                                <td><?php echo $no++; ?></td>
 
                                 <td><?php echo $row['ID']; ?></td>
 

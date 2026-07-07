@@ -366,6 +366,9 @@ if (isset($_GET['search'])) {
                     <thead>
 
                         <tr>
+
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
+
                             <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
 
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
@@ -388,10 +391,12 @@ if (isset($_GET['search'])) {
                     </thead>
 
                     <tbody>
+                        <?php $no = 1; ?>
 
                         <?php while ($row = $book_result->fetch_assoc()) { ?>
 
                             <tr>
+                                <td><?= $no++; ?></td>
 
                                 <td><?php echo $row['ID']; ?></td>
 

@@ -588,6 +588,7 @@ ORDER BY translated_books.ID DESC
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                             <th><?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?></th>
                             <th><?= ($lang == 'fa') ? 'عنوان' : 'Title'; ?></th>
                             <th><?= ($lang == 'fa') ? 'توضیحات' : 'Description'; ?></th>
@@ -605,10 +606,11 @@ ORDER BY translated_books.ID DESC
 
                     <tbody>
 
+                        <?php $no = 1; ?>
                         <?php while ($row = $book_result->fetch_assoc()) { ?>
 
                             <tr>
-
+                                <td><?php echo $no++; ?></td>
                                 <td><?php echo $row['ID']; ?></td>
                                 <td><?php echo $row['Title']; ?></td>
                                 <td><?php echo $row['Description']; ?></td>

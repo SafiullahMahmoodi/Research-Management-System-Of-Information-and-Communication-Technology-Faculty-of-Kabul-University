@@ -294,6 +294,7 @@ $total = $totalResult->fetch_assoc()['total'] ?? 0;
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
                             <th><?= e($th_id); ?></th>
                             <th><?= e($th_title); ?></th>
                             <th><?= e($th_author); ?></th>
@@ -306,8 +307,10 @@ $total = $totalResult->fetch_assoc()['total'] ?? 0;
                     </thead>
 
                     <tbody>
+                        <?php $no = 1; ?>
                         <?php while ($row = $book_result->fetch_assoc()) { ?>
                             <tr>
+                                <td><?= $no++; ?></td>
                                 <td><?= e($row['ID']); ?></td>
                                 <td><?= e($row['Title']); ?></td>
                                 <td><?= e($row['Author']); ?></td>

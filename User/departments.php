@@ -244,6 +244,7 @@ $department_result = $conn->query($department_query);
                     <thead>
 
                         <tr>
+                            <th><?= ($lang == 'fa') ? 'شماره' : 'No.'; ?></th>
 
                             <th width="100">
                                 <?= ($lang == 'fa') ? 'آی دی' : 'ID'; ?>
@@ -261,9 +262,12 @@ $department_result = $conn->query($department_query);
 
                     <tbody>
 
+                        <?php $no = 1; ?>
                         <?php while ($row = $department_result->fetch_assoc()) { ?>
 
                             <tr>
+
+                                <td><?= $no++; ?></td>
 
                                 <td><?php echo $row['ID']; ?></td>
 
