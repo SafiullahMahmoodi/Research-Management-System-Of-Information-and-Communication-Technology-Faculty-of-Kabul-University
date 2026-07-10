@@ -206,7 +206,7 @@ if (isset($_GET['search'])) {
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <style>
+    <!-- <style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -374,9 +374,30 @@ if (isset($_GET['search'])) {
             background: #6c757d;
             color: white;
         }
-    </Style>
+    </Style> -->
 
 </head>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension = file.name
+                .split('.')
+                .pop()
+                .toLowerCase();
+
+            if (extension !== "pdf") {
+
+                alert("<?= ($lang == 'fa') ? 'فقط فایل PDF مجاز است.' : 'Only PDF files are allowed!'; ?>");
+
+                input.value = "";
+            }
+        }
+    }
+</script>
 
 <body>
 
@@ -468,7 +489,7 @@ if (isset($_GET['search'])) {
                                             target="_blank"
                                             class="pdf-btn">
 
-                                            <?= ($lang == 'fa') ? 'نمایش PDF' : 'View PDF'; ?>
+                                            <?= ($lang == 'fa') ? ' PDF' : ' PDF'; ?>
 
                                         </a>
 
@@ -642,15 +663,19 @@ if (isset($_GET['search'])) {
 
                     </div>
 
-                    <div class="mb-2">
+                    <div class="mb-3">
 
                         <label class="form-label">
                             <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
                         </label>
 
-                        <input type="file"
+                        <input
+                            type="file"
                             name="pdf_file"
-                            class="form-control">
+                            id="pdf_file"
+                            class="form-control form-control-sm"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
 
                     </div>
 

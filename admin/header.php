@@ -182,17 +182,17 @@ $lang = $_SESSION['lang'] ?? 'en';
 
         </a>
 
-        <a href="translatedbooks.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'translatedbooks.php' ? 'active' : ''; ?>">
-
-            <?= ($lang == 'fa') ? 'کتاب‌های ترجمه‌شده' : 'Translated Books'; ?>
-
-        </a>
-
         <a href="thesises.php"
             class="<?php echo basename($_SERVER['PHP_SELF']) == 'thesises.php' ? 'active' : ''; ?>">
 
             <?= ($lang == 'fa') ? 'مونوگراف ها' : 'Thesises'; ?>
+
+        </a>
+
+        <a href="translatedbooks.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'translatedbooks.php' ? 'active' : ''; ?>">
+
+            <?= ($lang == 'fa') ? 'کتاب‌های ترجمه‌شده' : 'Translated Books'; ?>
 
         </a>
 

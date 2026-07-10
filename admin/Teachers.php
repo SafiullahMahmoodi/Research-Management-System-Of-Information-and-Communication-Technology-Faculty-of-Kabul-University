@@ -181,6 +181,7 @@ if (isset($_GET['search'])) {
     OR teacher.Email LIKE '%$search%'
     OR teacher.Contact LIKE '%$search%'
     OR teacher.Education LIKE '%$search%'
+    OR department.Name LIKE '%$search%'
     ");
 } else {
 
@@ -215,7 +216,7 @@ if (isset($_GET['search'])) {
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -377,7 +378,7 @@ if (isset($_GET['search'])) {
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 
 <body>
@@ -428,7 +429,7 @@ if (isset($_GET['search'])) {
 
             <!-- TABLE -->
 
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -712,7 +713,7 @@ if (isset($_GET['search'])) {
 
                             <?php
                             echo isset($_GET['edit'])
-                                ? (($lang == 'fa') ? 'تغییر دادن استاد' : 'Update Teacher')
+                                ? (($lang == 'fa') ? 'ذخیره تغییرات' : 'Save Changes')
                                 : (($lang == 'fa') ? 'ذخیره استاد' : 'Save Teacher');
                             ?>
 

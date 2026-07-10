@@ -4,29 +4,38 @@ include('../auth.php');
 $lang = $_SESSION['lang'] ?? 'en';
 
 include('../db_connection.php');
-
+$message = "";
 // ===========================
 // Insert Teacher
 // ===========================
 if (isset($_POST['save_teacher'])) {
 
-    $id          = $_POST['id'];
-    $name        = $_POST['name'];
-    $lastname    = $_POST['lastname'];
-    $email       = $_POST['email'];
-    $contact     = $_POST['contact'];
-    $education   = $_POST['education'];
-    $department  = $_POST['department'];
+    $id         = trim($_POST['id']);
+    $name       = trim($_POST['name']);
+    $lastname   = trim($_POST['lastname']);
+    $email      = trim($_POST['email']);
+    $contact    = trim($_POST['contact']);
+    $education  = trim($_POST['education']);
+    $department = trim($_POST['department']);
 
-    $conn->query("INSERT INTO teacher
-    (Name, Last_Name, Email, Contact, Education, Department)
+    // Check duplicate ID
+    $check = $conn->query("SELECT ID FROM teacher WHERE ID='$id'");
 
-    VALUES
+    if ($check->num_rows > 0) {
 
-    ( '  $id '  ,'$name','$lastname','$email','$contact','$education','$department')");
+        $message = ($lang == 'fa')
+            ? "این آی دی قبلاً ثبت شده است."
+            : "This ID already exists.";
+    } else {
 
-    header("Location: teachers.php");
-    exit();
+        $conn->query("INSERT INTO teacher
+        (ID, Name, Last_Name, Email, Contact, Education, Department)
+        VALUES
+        ('$id','$name','$lastname','$email','$contact','$education','$department')");
+
+        header("Location: teachers.php");
+        exit();
+    }
 }
 
 // ===========================
@@ -86,7 +95,8 @@ if (isset($_GET['search'])) {
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <style>
+    <!-- <style>
+        
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -165,6 +175,36 @@ if (isset($_GET['search'])) {
             color: #0f9d58;
         }
 
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         /* English */
 
         html[dir="ltr"] .search-form {
@@ -215,7 +255,7 @@ if (isset($_GET['search'])) {
         html[dir="rtl"] .mb-4 {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 
 <body>
@@ -321,6 +361,11 @@ if (isset($_GET['search'])) {
                 </div>
 
                 <form method="POST">
+                    <?php if (!empty($message)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $message; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-3">
 
                         <label class="form-label">
@@ -488,17 +533,27 @@ if (isset($_GET['search'])) {
                         </select>
 
                     </div>
+                    <!-- save and cancel button -->
+                    <div class="form-buttons">
 
-                    <!-- Button -->
+                        <button type="submit"
+                            class="save-btn"
+                            name="save_teacher">
 
-                    <button class="save-btn"
-                        name="save_teacher">
+                            <?php echo ($lang == 'fa') ? 'ذخیره استاد' : 'Save Teacher'; ?>
 
-                        <?= ($lang == 'fa')
-                            ? 'ذخیره استاد'
-                            : 'Save Teacher'; ?>
+                        </button>
 
-                    </button>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='Teachers.php'">
+
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+
+                    </div>
 
                 </form>
 

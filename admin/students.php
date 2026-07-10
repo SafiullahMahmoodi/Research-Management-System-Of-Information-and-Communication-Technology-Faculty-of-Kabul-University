@@ -200,7 +200,7 @@ $student_result = $conn->query($student_query);
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -362,7 +362,7 @@ $student_result = $conn->query($student_query);
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 
 </head>
 
@@ -397,7 +397,7 @@ $student_result = $conn->query($student_query);
 
             <!-- TABLE -->
 
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -671,7 +671,7 @@ $student_result = $conn->query($student_query);
 
                             <?php
                             echo isset($_GET['edit'])
-                                ? (($lang == 'fa') ? 'تغییر دادن محصل' : 'Update Student')
+                                ? (($lang == 'fa') ? 'ذخیره تغییرات' : 'Save Changes')
                                 : (($lang == 'fa') ? 'ذخیره محصل' : 'Save Student');
                             ?>
 

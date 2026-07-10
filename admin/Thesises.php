@@ -166,7 +166,7 @@ if (isset($_GET['delete'])) {
     WHERE ID='$id'
     ");
 
-    header("Location: thesis.php");
+    header("Location: thesises.php");
     exit();
 }
 
@@ -293,7 +293,7 @@ if (isset($_POST['update_thesis'])) {
 
     $conn->query($query);
 
-    header("Location: thesis.php");
+    header("Location: thesises.php");
     exit();
 }
 
@@ -387,7 +387,7 @@ OR thesis.Publish_Date LIKE '%$search%'
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -549,7 +549,7 @@ OR thesis.Publish_Date LIKE '%$search%'
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 <script>
     function checkPDF(input) {
@@ -597,7 +597,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                 </form>
 
             </div>
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -670,14 +670,14 @@ OR thesis.Publish_Date LIKE '%$search%'
 
                                     <div class="action-icons">
 
-                                        <a href="thesis.php?edit=<?php echo $row['ID']; ?>"
+                                        <a href="thesises.php?edit=<?php echo $row['ID']; ?>"
                                             class="edit-btn">
                                             <?= ($lang == 'fa')
                                                 ? 'تغییر دادن'
                                                 : 'Edit'; ?>
                                         </a>
 
-                                        <a href="thesis.php?delete=<?php echo $row['ID']; ?>"
+                                        <a href="thesises.php?delete=<?php echo $row['ID']; ?>"
                                             class="delete-btn"
                                             onclick="return confirm('<?= ($lang == 'fa')
                                                                             ? 'آیا از حذف این پایان‌نامه مطمئن هستید؟'
@@ -766,8 +766,7 @@ OR thesis.Publish_Date LIKE '%$search%'
                         </label>
 
                         <textarea name="description"
-                            class="form-control"
-                            required><?php echo $edit_description; ?></textarea>
+                            class="form-control"><?php echo $edit_description; ?></textarea>
 
                     </div>
 
@@ -953,8 +952,8 @@ OR thesis.Publish_Date LIKE '%$search%'
                             <?php
                             echo isset($_GET['edit'])
                                 ? (($lang == 'fa')
-                                    ? 'تغییر دادن مونوگراف '
-                                    : 'Update Thesis')
+                                    ? 'ذخیره تغییرات'
+                                    : 'Save Changes')
                                 : (($lang == 'fa')
                                     ? 'ذخیره مونوگراف'
                                     : 'Save Thesis');

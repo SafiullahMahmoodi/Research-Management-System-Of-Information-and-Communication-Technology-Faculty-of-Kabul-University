@@ -2,26 +2,33 @@
    RESET
 ========================= */
 
-/* ==========================
-   MODERN SEARCH BOX
-========================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   SEARCH BOX
+========================================================== */
 
 .search-wrapper {
   display: flex;
   justify-content: center;
-  margin: 13px 0;
+  margin: 10px 0px;
 }
 
 .search-form {
-  width: 100%;
-  max-width: 450px;
   display: flex;
   align-items: center;
+  width: 100%;
+  height: 43px;
+  max-width: 520px;
   background: #fff;
-  border: 2px solid #3d3d3d;
-  border-radius: 50px;
+  border: 1px solid #aca7a7;
+  border-radius: 10px;
   overflow: hidden;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .search-form:focus-within {
@@ -29,20 +36,13 @@
   box-shadow: 0 0 15px rgba(15, 157, 88, 0.18);
 }
 
-/* Input */
-
 .search-input {
   flex: 1;
-
+  padding: 10px 14px;
   border: none;
   outline: none;
-
   background: transparent;
-
-  padding: 10px 15px;
-
-  font-size: 13px;
-
+  font-size: 14px;
   color: #222;
 }
 
@@ -50,31 +50,27 @@
   color: #777;
 }
 
-/* Button */
-
 .search-btn {
-  width: 60px;
-  height: 60px;
-
-  border: none;
-  background: transparent;
-
-  cursor: pointer;
-
-  font-size: 26px;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  transition: 0.25s;
+  width: 60px;
+  height: 43px;
+  border: none;
+  background: #0f9d58;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .search-btn:hover {
-  color: #0f9d58;
+  background: #0c7c45;
 }
 
-/* English */
+/* ==========================================================
+   LTR
+========================================================== */
 
 html[dir="ltr"] .search-form {
   flex-direction: row;
@@ -88,7 +84,13 @@ html[dir="ltr"] .search-btn {
   border-left: 1px solid #ddd;
 }
 
-/* Persian */
+/* ==========================================================
+   RTL
+========================================================== */
+
+html[dir="rtl"] {
+  direction: rtl;
+}
 
 html[dir="rtl"] .search-form {
   flex-direction: row-reverse;
@@ -102,141 +104,140 @@ html[dir="rtl"] .search-input {
 html[dir="rtl"] .search-btn {
   border-right: 1px solid #ddd;
 }
+/* ==========================================================
+   GLOBAL RESET
+========================================================== */
 
-html[dir="rtl"] {
-  direction: rtl;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+/* ==========================================================
+   FORM BUTTONS
+========================================================== */
 
 .form-buttons {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .form-buttons button {
-  flex: 1 1 0;
+  flex: 1;
   padding: 10px;
   border: none;
   border-radius: 6px;
   font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  font-weight: 400;
+  transition: all 0.3s ease;
 }
+
+/* Save Button */
 
 .save-btn {
   background: #0f9d58;
-  color: white;
+  color: #fff;
 }
 
 .save-btn:hover {
   background: #0c7c45;
 }
 
+/* Cancel Button */
+
 .cancel-btn {
   background: #6c757d;
-  color: white;
+  color: #fff;
 }
 
+.cancel-btn:hover {
+  background: #5a6268;
+}
+
+/* ==========================================================
+   RTL (Persian / Arabic)
+========================================================== */
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] .table,
+html[dir="rtl"] .table th,
+html[dir="rtl"] .table td,
 html[dir="rtl"] .table-card,
 html[dir="rtl"] .form-card,
-html[dir="rtl"] .search-form,
-html[dir="rtl"] .table,
-html[dir="rtl"] .form-control,
-html[dir="rtl"] .custom-select,
 html[dir="rtl"] .form-label,
 html[dir="rtl"] .form-title {
   text-align: right;
 }
 
-html[dir="rtl"] .action-icons {
-  justify-content: flex-start;
-}
-
-html[dir="rtl"] .search-wrapper {
-  direction: rtl;
-}
-
-html[dir="rtl"] .table th,
-html[dir="rtl"] .table td {
-  text-align: right;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-/* Persian Language */
-
-html[dir="rtl"] .table,
-html[dir="rtl"] .table th,
-html[dir="rtl"] .table td {
-  text-align: right;
-}
-
 html[dir="rtl"] .form-label {
   display: block;
-  text-align: right;
 }
 
 html[dir="rtl"] .form-control,
+html[dir="rtl"] .custom-select,
 html[dir="rtl"] .search-input {
   text-align: right;
 }
 
+html[dir="rtl"] .search-wrapper,
 html[dir="rtl"] .search-form {
   direction: rtl;
-}
-
-html[dir="rtl"] .form-card {
-  text-align: right;
 }
 
 html[dir="rtl"] .action-icons {
   justify-content: flex-start;
 }
 
-/* English Language */
+/* ==========================================================
+   LTR (English)
+========================================================== */
 
 html[dir="ltr"] .table,
 html[dir="ltr"] .table th,
-html[dir="ltr"] .table td {
-  text-align: left;
-}
-
+html[dir="ltr"] .table td,
 html[dir="ltr"] .form-card {
   text-align: left;
 }
-
-/* =========================
+/* ==========================================================
    BODY
-========================= */
+========================================================== */
 
 body {
   background: #eef2f7;
-  font-family:
-    Segoe UI,
-    sans-serif;
+  font-family: "Segoe UI", sans-serif;
   overflow: hidden;
 }
 
-/* =========================
+/* ==========================================================
    HEADER
-========================= */
+========================================================== */
+
+/* Header Container */
 
 .main-header {
-  background: #0f9d58;
-  height: 65px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 65px;
   padding: 0 22px;
-  color: white;
+  background: #0f9d58;
+  color: #fff;
 }
+
+/* Header Title */
 
 .header-title {
   font-size: 14px;
   font-weight: 600;
 }
+
+/* Navigation Menu */
 
 .header-menu {
   display: flex;
@@ -244,20 +245,22 @@ body {
 }
 
 .header-menu a {
+  padding: 8px 14px;
   color: #d1fae5;
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
-  padding: 8px 14px;
   border-radius: 8px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .header-menu a:hover,
 .header-menu a.active {
-  background: white;
+  background: #fff;
   color: #0f9d58;
 }
+
+/* Header Buttons */
 
 .header-buttons {
   display: flex;
@@ -266,14 +269,14 @@ body {
 
 .header-btn,
 .logout-btn {
-  background: white;
+  padding: 7px 16px;
+  background: #fff;
   color: #0f9d58;
   text-decoration: none;
-  padding: 7px 16px;
-  border-radius: 10px;
   font-size: 12px;
   font-weight: 700;
-  transition: 0.3s;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
 .header-btn:hover,
@@ -282,9 +285,11 @@ body {
   color: #0c7c45;
 }
 
-/* =========================
+/* ==========================================================
    MAIN LAYOUT
-========================= */
+========================================================== */
+
+/* Main Content Wrapper */
 
 .main-wrapper {
   display: flex;
@@ -293,23 +298,28 @@ body {
   height: calc(100vh - 65px);
 }
 
+/* Sidebar + Content Container */
+
 .main-container {
   display: flex;
   height: calc(100vh - 55px);
 }
-
-/* =========================
+/* ==========================================================
    SIDEBAR
-========================= */
+========================================================== */
+
+/* Sidebar Container */
 
 .sidebar {
   width: 210px;
-  background: white;
-  border-right: 1px solid #d1d5db;
-  padding: 14px 10px;
   flex-shrink: 0;
+  padding: 14px 10px;
+  background: #fff;
+  border-right: 1px solid #d1d5db;
   overflow-y: auto;
 }
+
+/* Sidebar Menu */
 
 .sidebar-menu {
   list-style: none;
@@ -323,30 +333,36 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  text-decoration: none;
-  color: #374151;
   padding: 8px 10px;
-  border-radius: 8px;
+  color: #374151;
+  text-decoration: none;
   font-size: 12px;
   font-weight: 500;
-  transition: 0.3s;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
+/* Sidebar Icons */
+
 .sidebar-menu a i {
-  font-size: 14px;
   min-width: 18px;
+  font-size: 14px;
   text-align: center;
 }
+
+/* Active & Hover State */
 
 .sidebar-menu a:hover,
 .sidebar-menu .active {
   background: #0f9d58;
-  color: white;
+  color: #fff;
 }
 
-/* =========================
+/* ==========================================================
    CONTENT
-========================= */
+========================================================== */
+
+/* Main Content Area */
 
 .content {
   flex: 1;
@@ -354,178 +370,129 @@ body {
   overflow: hidden;
 }
 
+/* Page Title */
+
 .page-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1f2937;
   margin-bottom: 12px;
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 700;
 }
 
-/* =========================
+/* ==========================================================
    TABLE SECTION
-========================= */
+========================================================== */
+
+/* Table Layout */
 
 .table-section {
-  width: 78%;
   display: flex;
   flex-direction: column;
+  width: 78%;
   overflow: hidden;
 }
 
+/* Table Card */
+
 .table-card {
-  background: white;
-  border-radius: 18px;
-  padding: 15px;
-  overflow: auto;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
   flex: 1;
+  max-height: 520px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+/* Remove Bootstrap Bottom Margin */
+
+.table-card table {
+  margin-bottom: 10px;
+}
+
+/* Table */
 
 .table {
   border: 1px solid #d1d5db;
 }
 
+/* Table Header */
+
 .table thead {
   background: #0f9d58;
-  color: white;
+  color: #fff;
 }
+
+/* Sticky Header */
+
+.table-card thead th {
+  position: sticky;
+  top: 0;
+  z-index:;
+  background: #fff;
+}
+
+/* Table Cells */
 
 .table th,
 .table td {
+  padding: 10px;
   border: 1px solid #d1d5db !important;
   vertical-align: middle;
   font-size: 12px;
-  padding: 10px;
+}
+/* Scrollable Table */
+
+.table-scroll {
+  max-height: 520px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-/* =========================
-   SEARCH
+.table-scroll table {
+  margin-bottom: 0;
+}
+
+.table-scroll thead th {
+  background: #0f9d58;
+  color: #fff;
+}
+/* SEARCH
 ========================= */
 /* ==========================
    MODERN SEARCH BOX
 ========================== */
 
-.search-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 18px 0;
-}
+/* ==========================================================
+   ACTION BUTTONS
+========================================================== */
 
-.search-form {
-  width: 100%;
-  max-width: 520px;
-  display: flex;
-  align-items: center;
-
-  background: #fff;
-
-  border: 2px solid #3d3d3d;
-  border-radius: 50px;
-
-  overflow: hidden;
-
-  transition: 0.3s;
-}
-
-.search-form:focus-within {
-  border-color: #0f9d58;
-  box-shadow: 0 0 15px rgba(15, 157, 88, 0.18);
-}
-
-/* Input */
-
-.search-input {
-  flex: 1;
-
-  border: none;
-  outline: none;
-
-  background: transparent;
-
-  padding: 14px 20px;
-
-  font-size: 16px;
-
-  color: #222;
-}
-
-.search-input::placeholder {
-  color: #777;
-}
-
-/* Button */
-
-.search-btn {
-  width: 60px;
-  height: 60px;
-
-  border: none;
-  background: transparent;
-
-  cursor: pointer;
-
-  font-size: 26px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  transition: 0.25s;
-}
-
-.search-btn:hover {
-  color: #0f9d58;
-}
-
-/* English */
-
-html[dir="ltr"] .search-form {
-  flex-direction: row;
-}
-
-html[dir="ltr"] .search-input {
-  text-align: left;
-}
-
-html[dir="ltr"] .search-btn {
-  border-left: 1px solid #ddd;
-}
-
-/* Persian */
-
-html[dir="rtl"] .search-form {
-  flex-direction: row-reverse;
-}
-
-html[dir="rtl"] .search-input {
-  direction: rtl;
-  text-align: right;
-}
-
-html[dir="rtl"] .search-btn {
-  border-right: 1px solid #ddd;
-}
-
-/* =========================
-   BUTTONS
-========================= */
+/* Action Buttons Container */
 
 .action-icons {
   display: flex;
   gap: 8px;
 }
 
+/* Common Button Styles */
+
 .edit-btn,
 .delete-btn,
 .pdf-btn {
-  color: white;
+  display: inline-block;
   padding: 6px 12px;
-  border-radius: 7px;
+  color: #fff;
   text-decoration: none;
   font-size: 11px;
   font-weight: 700;
-  transition: 0.3s;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
+
+/* Edit Button */
 
 .edit-btn {
   background: #2563eb;
@@ -533,26 +500,33 @@ html[dir="rtl"] .search-btn {
 
 .edit-btn:hover {
   background: #1d4ed8;
-  color: white;
 }
 
+/* Delete Button */
+
 .delete-btn {
-  border: none;
   background: #dc2626;
-  cursor: pointer;
 }
 
 .delete-btn:hover {
   background: #b91c1c;
 }
 
+/* PDF Button */
+
 .pdf-btn {
   background: #f59e0b;
 }
 
-/* =========================
+.pdf-btn:hover {
+  background: #d97706;
+}
+
+/* ==========================================================
    FORM SECTION
-========================= */
+========================================================== */
+
+/* Form Container */
 
 .form-section {
   width: 22%;
@@ -560,87 +534,100 @@ html[dir="rtl"] .search-btn {
   height: 100%;
 }
 
+/* Form Card */
+
 .form-card {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
-  height: 100%;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
 }
 
+/* Form Title */
+
 .form-title {
+  margin-bottom: 15px;
+  color: #0f172a;
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 15px;
   text-align: center;
 }
 
+/* Form Label */
+
 .form-label {
-  font-size: 12px;
-  font-weight: 700;
+  display: block;
   margin-bottom: 6px;
   color: #374151;
+  font-size: 12px;
+  font-weight: 700;
 }
 
-/* =========================
+/* ==========================================================
    FORM INPUTS
-========================= */
+========================================================== */
 
 .form-control,
 .custom-select {
   width: 100%;
   height: 40px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 12px;
-  background: white;
   padding: 0 10px;
-  transition: 0.3s;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.3s ease;
 }
 
 .form-control:focus,
 .custom-select:focus {
+  outline: none;
   border-color: #0f9d58;
   box-shadow: 0 0 0 0.15rem rgba(15, 157, 88, 0.15);
-  outline: none;
 }
+
+/* Textarea */
 
 textarea {
-  resize: none;
   height: 70px !important;
   padding: 10px !important;
+  resize: none;
 }
 
-/* =========================
-   SAVE BUTTON
-========================= */
+/* ==========================================================
+   FORM BUTTONS
+========================================================== */
+
 .form-buttons {
   display: flex;
   gap: 10px;
   margin-top: 15px;
 }
 
+/* Common Form Button Styles */
+
 .save-btn,
 .cancel-btn {
-  flex: 0 0 auto;
+  flex: 1;
   min-width: 80px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
   border-radius: 6px;
-  font-size: 9px;
+  color: #fff;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 /* Save Button */
+
 .save-btn {
   background: #0f9d58;
-  color: white;
 }
 
 .save-btn:hover {
@@ -649,35 +636,39 @@ textarea {
 }
 
 /* Cancel Button */
+
 .cancel-btn {
   background: #7d7d7d;
-  color: white;
 }
 
 .cancel-btn:hover {
   background: #6e6e6e;
   transform: translateY(-2px);
-}
+} /* ==========================================================
+   GRAPH SECTION
+========================================================== */
 
-/* =========================
-   GRAPH
-========================= */
+/* Graph Layout */
 
 .graph-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   height: calc(100vh - 100px);
 }
 
+/* Graph Card */
+
 .graph-card {
-  background: white;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
+  padding: 12px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+
+/* Graph Header */
 
 .graph-top {
   display: flex;
@@ -686,34 +677,44 @@ textarea {
   margin-bottom: 8px;
 }
 
+/* Graph Title */
+
 .graph-title {
+  color: #1f2937;
   font-size: 14px;
   font-weight: 600;
-  color: #1f2937;
 }
 
+/* Graph Counter */
+
 .graph-count {
-  background: #0f9d58;
-  color: white;
   padding: 3px 10px;
+  background: #0f9d58;
+  color: #fff;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
 }
+
+/* Chart Canvas */
 
 .graph-card canvas {
   width: 100% !important;
   height: 220px !important;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
 
 @media (max-width: 992px) {
+  /* Body */
+
   body {
     overflow: auto;
   }
+
+  /* Main Layout */
 
   .main-wrapper,
   .main-container {
@@ -721,83 +722,54 @@ textarea {
     height: auto;
   }
 
+  /* Full Width Sections */
+
+  .sidebar,
   .table-section,
-  .form-section,
-  .sidebar {
+  .form-section {
     width: 100%;
   }
+
+  /* Content */
+
+  .content,
+  .form-card {
+    height: auto;
+    overflow: auto;
+  }
+
+  /* Header */
+
+  .main-header {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+    padding: 15px;
+  }
+
+  .header-menu {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Graph */
 
   .graph-grid {
     grid-template-columns: 1fr;
     height: auto;
   }
 
-  .content,
-  .form-card {
-    overflow: auto;
-    height: auto;
-  }
+  /* RTL Support */
 
-  .header-menu {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .main-header {
-    flex-direction: column;
-    height: auto;
-    gap: 10px;
-    padding: 15px;
-  }
   html[dir="rtl"] {
     direction: rtl;
   }
 
+  html[dir="rtl"] table,
   html[dir="rtl"] .form-label,
   html[dir="rtl"] .form-control,
   html[dir="rtl"] .custom-select,
   html[dir="rtl"] .search-input {
     text-align: right;
-  }
-
-  html[dir="rtl"] table {
-    text-align: right;
-  }
-  .search-wrapper[dir="rtl"] {
-    text-align: right;
-  }
-
-  .search-wrapper[dir="rtl"] .search-form {
-    flex-direction: row-reverse;
-  }
-  .search-wrapper[dir="rtl"] input {
-    text-align: right;
-  }
-  .search-btn {
-    padding: 8px 14px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .search-wrapper[dir="rtl"] .search-form {
-    flex-direction: row-reverse;
-  }
-  /* LTR حالت عادی */
-  .search-input {
-    border-radius: 0 8px 8px 0;
-  }
-
-  .search-btn {
-    border-radius: 8px 0 0 8px;
-  }
-
-  /* RTL فارسی */
-  .search-wrapper[dir="rtl"] .search-input {
-    border-radius: 8px 0 0 8px;
-  }
-
-  .search-wrapper[dir="rtl"] .search-btn {
-    border-radius: 0 8px 8px 0;
   }
 }

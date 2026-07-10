@@ -172,7 +172,7 @@ $department_result = $conn->query($department_query);
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-
+    <!-- 
     <Style>
         /* ==========================
    MODERN SEARCH BOX
@@ -335,7 +335,7 @@ $department_result = $conn->query($department_query);
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 
 <body>
@@ -365,7 +365,7 @@ $department_result = $conn->query($department_query);
 
             </div>
 
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -515,7 +515,7 @@ $department_result = $conn->query($department_query);
 
                             <?php
                             echo isset($_GET['edit'])
-                                ? (($lang == 'fa') ? 'تغییر آوری دیپارتمنت' : 'Update Department')
+                                ? (($lang == 'fa') ? 'ذخیره تغییرات' : 'Save Changes')
                                 : (($lang == 'fa') ? 'ذخیره دیپارتمنت' : 'Save Department');
                             ?>
 

@@ -2,7 +2,7 @@
 include('../auth.php');
 $lang = $_SESSION['lang'] ?? 'en';
 include('../db_connection.php');
-
+$message = "";
 // ===========================
 // CREATE PDF FOLDER
 // ===========================
@@ -28,54 +28,63 @@ if (isset($_POST['save_book'])) {
     $pages          = (int)$_POST['pages'];
     $publish_date   = mysqli_real_escape_string($conn, $_POST['publish_date']);
 
-    // CHECK TRANSLATOR
+    // Check duplicate ID
+    $check_id = $conn->query("SELECT ID FROM translated_books WHERE ID='$id'");
 
-    $check_teacher = $conn->query("
+    if ($check_id->num_rows > 0) {
+
+        $message = ($lang == 'fa')
+            ? "این آی‌دی قبلاً ثبت شده است."
+            : "This ID already exists.";
+    } else {
+        // CHECK TRANSLATOR
+
+        $check_teacher = $conn->query("
     SELECT ID
     FROM teacher
     WHERE ID='$translated_by'
     ");
 
-    if ($check_teacher->num_rows == 0) {
+        if ($check_teacher->num_rows == 0) {
 
-        die("Selected Translator does not exist.");
-    }
-
-    // PDF FILE
-
-    $pdf_file = "";
-
-    if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != "") {
-
-        $file_name = $_FILES['pdf_file']['name'];
-        $file_tmp  = $_FILES['pdf_file']['tmp_name'];
-        $file_size = $_FILES['pdf_file']['size'];
-
-        $extension = strtolower(
-            pathinfo($file_name, PATHINFO_EXTENSION)
-        );
-
-        if ($extension != "pdf") {
-
-            die("Only PDF files are allowed.");
+            die("Selected Translator does not exist.");
         }
 
-        if ($file_size > 209715200) {
+        // PDF FILE
 
-            die("File size must be less than 200MB.");
+        $pdf_file = "";
+
+        if (isset($_FILES['pdf_file']) && $_FILES['pdf_file']['name'] != "") {
+
+            $file_name = $_FILES['pdf_file']['name'];
+            $file_tmp  = $_FILES['pdf_file']['tmp_name'];
+            $file_size = $_FILES['pdf_file']['size'];
+
+            $extension = strtolower(
+                pathinfo($file_name, PATHINFO_EXTENSION)
+            );
+
+            if ($extension != "pdf") {
+
+                die("Only PDF files are allowed.");
+            }
+
+            if ($file_size > 209715200) {
+
+                die("File size must be less than 200MB.");
+            }
+
+            $pdf_file = time() . "_" . $file_name;
+
+            move_uploaded_file(
+                $file_tmp,
+                "../PDF_File/" . $pdf_file
+            );
         }
 
-        $pdf_file = time() . "_" . $file_name;
+        // INSERT
 
-        move_uploaded_file(
-            $file_tmp,
-            "../PDF_File/" . $pdf_file
-        );
-    }
-
-    // INSERT
-
-    $conn->query("
+        $conn->query("
     INSERT INTO translated_books
     (
         ID,
@@ -105,10 +114,10 @@ if (isset($_POST['save_book'])) {
     )
     ");
 
-    header("Location: translatedbooks.php");
-    exit();
+        header("Location: translatedbooks.php");
+        exit();
+    }
 }
-
 // ===========================
 // SEARCH
 // ===========================
@@ -183,7 +192,7 @@ if (isset($_GET['search'])) {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <style>
+    <!-- <style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -262,6 +271,36 @@ if (isset($_GET['search'])) {
             color: #0f9d58;
         }
 
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         /* English */
 
         html[dir="ltr"] .search-form {
@@ -312,8 +351,28 @@ if (isset($_GET['search'])) {
         html[dir="rtl"] .mb-4 {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension =
+                file.name.split('.').pop().toLowerCase();
+
+            if (extension !== "pdf") {
+                alert("<?= ($lang == 'fa')
+                            ? 'فقط فایل PDF مجاز است!'
+                            : 'Only PDF files are allowed!'; ?>");
+
+                input.value = "";
+            }
+        }
+    }
+</script>
 
 <body dir="<?= ($lang == 'fa') ? 'rtl' : 'ltr'; ?>">
 
@@ -386,7 +445,7 @@ if (isset($_GET['search'])) {
                                         <a href="../PDF_File/<?= $row['PDF_File']; ?>"
                                             target="_blank"
                                             class="pdf-btn">
-                                            View PDF
+                                            PDF
                                         </a>
                                     <?php } else { ?>
                                         <?= ($lang == 'fa') ? 'ندارد' : 'No File'; ?>
@@ -415,7 +474,11 @@ if (isset($_GET['search'])) {
                 </div>
 
                 <form method="POST" enctype="multipart/form-data">
-
+                    <?php if (!empty($message)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $message; ?>
+                        </div>
+                    <?php } ?>
                     <div class="mb-2">
                         <label class="form-label"><?= ($lang == 'fa') ? 'آی‌دی' : 'ID'; ?></label>
                         <input type="text" name="id" class="form-control">
@@ -488,18 +551,42 @@ if (isset($_GET['search'])) {
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label"><?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?></label>
-                        <input type="file" name="pdf_file" class="form-control">
+
+                        <label class="form-label">
+                            <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
+                        </label>
+
+                        <input type="file"
+                            name="pdf_file"
+                            class="form-control"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label"><?= ($lang == 'fa') ? 'تاریخ نشر' : 'Publish Date'; ?></label>
                         <input type="date" name="publish_date" class="form-control" required>
                     </div>
+                    <div class="form-buttons">
 
-                    <button type="submit" class="save-btn" name="save_book">
-                        <?= ($lang == 'fa') ? 'ذخیره کتاب' : 'Save Book'; ?>
-                    </button>
+                        <button type="submit"
+                            class="save-btn"
+                            name="save_book">
+
+                            <?php echo ($lang == 'fa') ? 'ذخیره کتاب' : 'Save Book'; ?>
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='translatedbooks.php'">
+
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+
+                    </div>
 
                 </form>
 

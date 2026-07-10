@@ -368,7 +368,7 @@ if (isset($_GET['search'])) {
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -530,7 +530,7 @@ if (isset($_GET['search'])) {
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 <script>
     function checkPDF(input) {
@@ -579,7 +579,7 @@ if (isset($_GET['search'])) {
                 </form>
 
             </div>
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -643,7 +643,7 @@ if (isset($_GET['search'])) {
                                             target="_blank"
                                             class="pdf-btn">
 
-                                            <?= ($lang == 'fa') ? 'مشاهده PDF' : 'View PDF'; ?>
+                                            <?= ($lang == 'fa') ? ' PDF' : ' PDF'; ?>
 
                                         </a>
 
@@ -922,8 +922,8 @@ if (isset($_GET['search'])) {
 
                             <?= isset($_GET['edit'])
                                 ? (($lang == 'fa')
-                                    ? 'تغییر دادن کتاب'
-                                    : 'Update Book')
+                                    ? 'ذخیره تغییرات'
+                                    : ' Save Changes')
                                 : (($lang == 'fa')
                                     ? 'ذخیره کتاب'
                                     : 'Save Book'); ?>

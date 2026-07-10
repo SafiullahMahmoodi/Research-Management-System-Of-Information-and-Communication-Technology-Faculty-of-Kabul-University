@@ -107,27 +107,28 @@ if (isset($_POST['save_article'])) {
         $extension = strtolower(
             pathinfo($file_name, PATHINFO_EXTENSION)
         );
-
         if ($extension != "pdf") {
 
-            die("Only PDF files are allowed.");
+            $error = ($lang == 'fa')
+                ? "فقط فایل PDF مجاز است."
+                : "Only PDF files are allowed.";
+        } else {
+
+            // MAX 200MB
+
+            if ($file_size > 209715200) {
+
+                die("File size must be less than 200MB.");
+            }
+
+            $pdf_file = time() . "_" . $file_name;
+
+            move_uploaded_file(
+                $file_tmp,
+                "../PDF_File/" . $pdf_file
+            );
         }
-
-        // MAX 200MB
-
-        if ($file_size > 209715200) {
-
-            die("File size must be less than 200MB.");
-        }
-
-        $pdf_file = time() . "_" . $file_name;
-
-        move_uploaded_file(
-            $file_tmp,
-            "../PDF_File/" . $pdf_file
-        );
     }
-
     // ===========================
     // INSERT
     // ===========================
@@ -260,7 +261,7 @@ if (isset($_GET['search'])) {
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -430,10 +431,55 @@ if (isset($_GET['search'])) {
             background: #6c757d;
             color: white;
         }
-    </Style>
+    </Style> -->
 </head>
+<script>
+    function validateForm() {
+
+        let teacher =
+            document.querySelector('[name="teacher_id"]').value;
+
+        let student =
+            document.querySelector('[name="student_id"]').value;
+
+        if (teacher === "" && student === "") {
+
+            alert("<?= ($lang == 'fa')
+                        ? 'حداقل یک استاد یا محصل را انتخاب کنید.'
+                        : 'Please select at least one Teacher or Student.'; ?>");
+
+            return false;
+        }
+
+        return true;
+    }
+</script>
+<script>
+    function checkPDF(input) {
+
+        if (input.files.length > 0) {
+
+            let file = input.files[0];
+
+            let extension = file.name
+                .split('.')
+                .pop()
+                .toLowerCase();
+
+            if (extension !== "pdf") {
+
+                alert("<?= ($lang == 'fa')
+                            ? 'فقط فایل PDF مجاز است.'
+                            : 'Only PDF files are allowed!'; ?>");
+
+                input.value = "";
+            }
+        }
+    }
+</script>
 
 <body>
+
     <?php include('header.php'); ?>
 
     <div class="main-wrapper">
@@ -512,7 +558,7 @@ if (isset($_GET['search'])) {
                                         <a href="../PDF_File/<?php echo $row['PDF_File']; ?>"
                                             target="_blank"
                                             class="pdf-btn">
-                                            <?= ($lang == 'fa') ? 'نمایش PDF' : 'View PDF'; ?>
+                                            <?= ($lang == 'fa') ? ' PDF' : ' PDF'; ?>
 
                                         </a>
 
@@ -709,16 +755,19 @@ if (isset($_GET['search'])) {
                         </select>
 
                     </div>
-
-                    <div class="mb-2">
+                    <div class="mb-3">
 
                         <label class="form-label">
                             <?= ($lang == 'fa') ? 'فایل PDF' : 'PDF File'; ?>
                         </label>
 
-                        <input type="file"
+                        <input
+                            type="file"
                             name="pdf_file"
-                            class="form-control">
+                            id="pdf_file"
+                            class="form-control form-control-sm"
+                            accept=".pdf"
+                            onchange="checkPDF(this)">
 
                     </div>
 

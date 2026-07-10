@@ -169,7 +169,7 @@ while ($row = $thesis_result->fetch_assoc()) {
                 <li>
                     <a href="users.php">
                         <i class="bi bi-people-fill"></i>
-                        <?= ($lang == 'fa') ? 'کاربران' : 'Users'; ?>
+                        <?= ($lang == 'fa') ? 'استفاده کنندگان' : 'Users'; ?>
                     </a>
                 </li>
 

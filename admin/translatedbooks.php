@@ -381,7 +381,7 @@ ORDER BY translated_books.ID DESC
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -543,7 +543,7 @@ ORDER BY translated_books.ID DESC
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 <script>
     function checkPDF(input) {
@@ -592,7 +592,7 @@ ORDER BY translated_books.ID DESC
 
             </div>
 
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -748,8 +748,7 @@ ORDER BY translated_books.ID DESC
                         </label>
 
                         <textarea name="description"
-                            class="form-control"
-                            required><?php echo $edit_description; ?></textarea>
+                            class="form-control"><?php echo $edit_description; ?></textarea>
 
                     </div>
 
@@ -913,8 +912,8 @@ ORDER BY translated_books.ID DESC
 
                             <?= isset($_GET['edit'])
                                 ? (($lang == 'fa')
-                                    ? 'تغییر دادن کتاب'
-                                    : 'Update Book')
+                                    ? 'ذخیره تغییرات'
+                                    : 'Save Changes')
                                 : (($lang == 'fa')
                                     ? 'ذخیره کتاب'
                                     : 'Save Book'); ?>

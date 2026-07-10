@@ -133,23 +133,18 @@ $search = "";
 
 if (isset($_GET['search'])) {
 
-    $search = $_GET['search'];
+    $search = mysqli_real_escape_string($conn, $_GET['search']);
 
     $user_query = "SELECT * FROM users
-
-    WHERE
-
-  
-    OR Username LIKE '%$search%'
-    OR Email LIKE '%$search%'
-    OR usertype LIKE '%$search%'";
+                   WHERE Username LIKE '%$search%'
+                   OR Email LIKE '%$search%'
+                   OR usertype LIKE '%$search%'";
 } else {
 
     $user_query = "SELECT * FROM users";
 }
 
 $user_result = $conn->query($user_query);
-
 ?>
 
 <!DOCTYPE html>
@@ -170,7 +165,7 @@ $user_result = $conn->query($user_query);
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -332,7 +327,7 @@ $user_result = $conn->query($user_query);
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 
 </head>
 
@@ -367,7 +362,7 @@ $user_result = $conn->query($user_query);
 
             <!-- TABLE -->
 
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 

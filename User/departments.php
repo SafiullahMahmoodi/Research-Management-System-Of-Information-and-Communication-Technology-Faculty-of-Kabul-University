@@ -5,29 +5,35 @@ include('../auth.php');
 
 $lang = $_SESSION['lang'] ?? 'en';
 
-
 include('../db_connection.php');
-
+$message = "";
 // ===========================
 // Insert Department
 // ===========================
 
 if (isset($_POST['save_department'])) {
 
-    $id         = $_POST['id'];
-    $department = $_POST['department'];
+    $id = trim($_POST['id']);
+    $department = trim($_POST['department']);
 
-    $insert_query = "INSERT INTO department
-    (ID, Name)
+    // بررسی وجود ID
+    $check = $conn->query("SELECT ID FROM department WHERE ID='$id'");
 
-    VALUES
+    if ($check->num_rows > 0) {
 
-    ('$id','$department')";
+        $message = ($lang == 'fa')
+            ? "این آی دی قبلاً ثبت شده است."
+            : "This ID already exists.";
+    } else {
 
-    $conn->query($insert_query);
+        $insert_query = "INSERT INTO department (ID, Name)
+                         VALUES ('$id','$department')";
 
-    header("Location: departments.php");
-    exit();
+        $conn->query($insert_query);
+
+        header("Location: departments.php");
+        exit();
+    }
 }
 
 
@@ -73,7 +79,7 @@ $department_result = $conn->query($department_query);
         href="../css/bootstrap.min.css">
 
     <script src="../js/bootstrap.bundle.min.js"></script>
-    <style>
+    <!-- <style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -152,6 +158,36 @@ $department_result = $conn->query($department_query);
             color: #0f9d58;
         }
 
+        .form-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .form-buttons button {
+            flex: 1 1 0;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .save-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0c7c45;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
         /* English */
 
         html[dir="ltr"] .search-form {
@@ -207,7 +243,7 @@ $department_result = $conn->query($department_query);
         html[dir="rtl"] .search-input {
             text-align: right;
         }
-    </style>
+    </style> -->
 
 </head>
 
@@ -302,6 +338,11 @@ $department_result = $conn->query($department_query);
                 <form method="POST">
 
                     <!-- ID -->
+                    <?php if (!empty($message)) { ?>
+                        <div class="alert alert-danger">
+                            <?= $message; ?>
+                        </div>
+                    <?php } ?>
 
                     <div class="mb-3">
 
@@ -348,18 +389,26 @@ $department_result = $conn->query($department_query);
                     </div>
 
                     <!-- Save Button -->
+                    <div class="form-buttons">
 
-                    <button type="submit"
+                        <button type="submit"
+                            class="save-btn"
+                            name="save_department">
 
-                        class="save-btn"
+                            <?php echo ($lang == 'fa') ? 'ذخیره' : 'Save'; ?>
 
-                        name="save_department">
+                        </button>
 
-                        <?= ($lang == 'fa')
-                            ? 'ذخیره دیپارتمنت'
-                            : 'Save Department'; ?>
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="window.location.href='departments.php'">
 
-                    </button>
+                            <?php echo ($lang == 'fa') ? 'لغو' : 'Cancel'; ?>
+
+                        </button>
+
+                    </div>
 
                 </form>
 

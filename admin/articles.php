@@ -439,7 +439,7 @@ ORDER BY articles.ID DESC
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
-    <Style>
+    <!-- <Style>
         /* ==========================
    MODERN SEARCH BOX
 ========================== */
@@ -513,6 +513,8 @@ ORDER BY articles.ID DESC
 
             color: #0f9d58;
         }
+
+
 
         /* English */
 
@@ -601,7 +603,7 @@ ORDER BY articles.ID DESC
         html[dir="rtl"] .table td {
             text-align: right;
         }
-    </Style>
+    </Style> -->
 </head>
 <script>
     function validateForm() {
@@ -656,7 +658,6 @@ ORDER BY articles.ID DESC
         <!-- TABLE -->
 
         <div class="table-section">
-
             <div class="search-wrapper">
 
                 <form method="GET" class="search-form">
@@ -676,7 +677,7 @@ ORDER BY articles.ID DESC
 
             </div>
 
-            <div class="table-card">
+            <div class="table-card table-scroll">
 
                 <table class="table table-hover">
 
@@ -736,7 +737,7 @@ ORDER BY articles.ID DESC
                                             target="_blank"
                                             class="pdf-btn">
 
-                                            <?= ($lang == 'fa') ? 'مشاهده PDF' : 'View PDF'; ?>
+                                            <?= ($lang == 'fa') ? ' PDF' : ' PDF'; ?>
 
                                         </a>
 
@@ -1048,8 +1049,8 @@ ORDER BY articles.ID DESC
 
                             <?= isset($_GET['edit'])
                                 ? (($lang == 'fa')
-                                    ? 'تغییر دادن مقاله'
-                                    : 'Update Article')
+                                    ? 'ذخیره تغییرات'
+                                    : ' Save Changes')
                                 : (($lang == 'fa')
                                     ? 'ذخیره مقاله'
                                     : 'Save Article'); ?>
